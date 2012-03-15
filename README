@@ -1,0 +1,6 @@
+This directory includes the google app engine files for nextclimate.org.
+
+nextclimate: top level directory
+
+nextclimate/static: contains images and style sheets that are not changing
+nextclimate/skeleton: contains the skeleton style sheets

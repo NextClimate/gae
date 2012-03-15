@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>Our shared climate future</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
+
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="sixteen columns">
+      <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1>
+      <h5>The climate is changing at an unprecedented pace. What does this mean for where you live?</h5>
+      <hr />
+    {% for zipcode in zipcodes %}
+     <p>You entered {{zipcode.zipcode}}, the zip code for {{zipcode.city}}, {{zipcode.state}}</p>
+    <p>Here are the number of days in a year that the temperature exceeds 90 degrees.</p> 
+    <p>During our parents' generation (1950 -- 1990): <b>{{zipcode.maxTobs_1990}}</b> days over 90 degrees per year</p> 
+    <p>During our childrens' generation (2040 -- 2060): <b>{{zipcode.maxTa1_2050}}</b> days over 90 degrees per year</p> 
+    <p>During our grandchildrens' generation (2080 -- 2100): <b>{{zipcode.maxTa1_2090}}</b> days over 90 degrees per year.
+    {{place}}.</p>
+    <p>If we <a href="http://www.google.com">act now</a>, future generations will only see <b>{{zipcode.maxTb2_2090}}</b> days above 90 degrees per year.
+    {% endfor %}
+<hr>
+    <form action="/" method="get">
+      Enter a zip code: <input type="text" name="zipcode_value" rows="1" cols="7">
+<!--       <div><input type="submit" value="Tell me about climate change"></div> -->
+    <button type="submit">Tell me about climate change</button>
+    </form>
+
+    </div>
+  </div>
+  </body>
+</html>
+
+<!-- <html> -->
+<!--   <body> -->
+<!--     {% for greeting in greetings %} -->
+<!--       {% if greeting.author %} -->
+<!--         <b>{{ greeting.author.nickname }}</b> wrote: -->
+<!--       {% else %} -->
+<!--         An anonymous person wrote: -->
+<!--       {% endif %} -->
+<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
+<!--     {% endfor %} -->
+
+<!--     <form action="/sign" method="post"> -->
+<!--       <div><textarea name="content" rows="3" cols="60"></textarea></div> -->
+<!--       <div><input type="submit" value="Sign Guestbook"></div> -->
+<!--     </form> -->
+
+<!--     <a href="{{ url }}">{{ url_linktext }}</a> -->
+
+<!--   </body> -->
+<!-- </html> -->
