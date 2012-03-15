@@ -1,6 +1,13 @@
 This directory includes the google app engine files for nextclimate.org.
 
-nextclimate: top level directory
+nextclimate: top level directory for google app engine
 
 nextclimate/static: contains images and style sheets that are not changing
 nextclimate/skeleton: contains the skeleton style sheets
+
+
+zip2gae: uploads a chunk of zip code records to google app engine
+
+
+zip2netcdf: reads in the netcdf files, calculates metrics, creates a zip code database
+
