@@ -71,7 +71,7 @@
 
 
     <style>
-      body { font-family: georgia; font-size: 14px }
+      body {  }
       #container {
         margin: 20 auto;
         width: 730px;
@@ -141,19 +141,21 @@
 
   <div class="container">
 
-    <div class="row clearfix">
-      <div class="eight columns topfirst">
-	<a href='/'><img src="images/nextclimate_logo_transparent.png"/></a>
-      </div>
-
-    <div class="row clearfix">
-      <div class="sixteen columns toprest">
-	<p style="toprest"><a href='static/about.html'>About</a> | 
-	  <a href='static/science.html'>Science</a> |
-	  <a href='static/share.html'>Share</a> |
-	  <a href='/actnow?zipcode_value={{zipcode}}'>Act Now</a> |
-	  <a href='static/donate.html'>Support</a></p>
-    </div>
+    <div class="row sixteen columns">
+      <header>
+	<div class="six columns">
+	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
+	</div>
+	<div class="eight columns">
+      	<ul>
+      	  <li class='s2'><a href='static/about.html'>About</a> </li>
+      	  <li class='s2'><a href='static/science.html'>Science</a> </li>
+	  <!-- <li class='s2'><a href="/actnow?zipcode_value={{zipcode}}">Act Now</a></li> -->
+      	  <li class='s2'><a href='static/share.html'>Share</a> </li>
+      	  <li class='s2'><a href='static/donate.html'>Support</a></li>
+      	</ul>
+	</div>
+      </header>
     </div>
 
     <div class="sixteen columns">
@@ -194,12 +196,13 @@
     {% endfor %}
     <br>
 
+    <div class="six columns">    
     <form action="/" method="get">
       Enter a zip code: <input type="text" name="zipcode_value" rows="1" cols="7">
 <!--       <div><input type="submit" value="Tell me about climate change"></div> -->
     <button type="submit">Tell me about climate change</button>
     </form>
-
+    </div>
     </div>
   </div>
   </body>

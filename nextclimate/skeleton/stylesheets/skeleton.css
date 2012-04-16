@@ -18,6 +18,18 @@
 
 
 
+  header{margin-top:10px; margin:0px}
+  .logo{width:320px; margin-top:0px; float:left}
+  header ul {list-style-type:none;margin:0;padding:0px;overflow:hidden; float:right}
+  header ul li {float:left}
+  .s1{width:340px;margin-left:0px}
+  .s2{width:70px;text-align:right}
+  header ul li a:link,a:visited{display:block;font-weight:bold;color:#444444;text-align:center;padding:4px;text-decoration:none;line-height:20px; font-size:1.2em; padding-top:10px}
+  header ul li a:hover,a:active {color:#000000}
+
+
+
+
 /* #Base 960 Grid
 ================================================== */
 

@@ -26,6 +26,9 @@ handlers:
 - url: /actnow
   script: actnow.py
 
+- url: /fbjs
+  script: fbjs.py
+
 - url: /stylesheets
   static_dir: skeleton/stylesheets
 

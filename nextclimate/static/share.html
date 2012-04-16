@@ -40,10 +40,10 @@
 
 	<!-- CSS
   ================================================== -->
-	<link rel="stylesheet" href="stylesheets/base.css">
-	<link rel="stylesheet" href="stylesheets/skeleton.css">
-	<link rel="stylesheet" href="stylesheets/layout.css">
-	<link rel="stylesheet" href="stylesheets/tufte-graph.css" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="../stylesheets/base.css">
+	<link rel="stylesheet" href="../stylesheets/skeleton.css">
+	<link rel="stylesheet" href="../stylesheets/layout.css">
+
 	<!-- Favicons
 	================================================== -->
 	<link rel="shortcut icon" href="images/favicon.ico">
@@ -82,38 +82,6 @@
 	</style>
 
 
-    <style>
-      body { font-family: georgia; font-size: 14px }
-      #container {
-        margin: 20 auto;
-        width: 730px;
-      }
-      .download {
-        float: right;
-        font-size: 1.5em;
-      }
-      .footer {
-        width: 100%;
-        text-align: center;
-        color: #999999;
-        font-size: 0.8em;
-        margin-top: 30px;
-      }
-
-      
-      .intro { font-size: 1.4em; }
-      .differences { clear: both; }
-
-      span.doc { color: green; font-weight: bold; }
-      a { color: black; }
-      a:visited { color: gray; }
-      .example { float: left; }
-      h2 { clear: both; }
-
-      .temperature .graph-header { width: 370px; }
-
-      li { margin-bottom: 3px; }
-    </style>
 
 
 <script type="text/javascript">
@@ -133,61 +101,107 @@
 
 </head>
 <body>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-  <div class="container">
 
-    <div class="row clearfix">
-      <div class="eight columns topfirst">	<a href="../"><img src="../images/nextclimate_logo_transparent.png"/></A></div>
+    <!--   <div class="row clearfix"> -->
+    <!-- 	<div class="sixteen columns"> -->
+    <!-- 	  <p style="toprest"> -->
+    <!-- 	</div> -->
+    <!--   </div> -->
+    <!-- </div> -->
 
-    <div class="row clearfix">
-      <div class="sixteen columns">
-	<p style="toprest"><a href='about.html'>About</a> | 
-	  <a href='science.html'>Science</a> |
-	  <a href='share.html'>Share</a> |
-	  <a href='donate.html'>Support</a></p>
+
+    <div id="fb-root"></div>
+    <script>
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+
+      // Init the SDK upon load
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '179716018816396', // App ID
+          channelUrl : '//'+window.location.hostname+'/fbjs', // Path to your Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+
+        // listen for and handle auth.statusChange events
+        FB.Event.subscribe('auth.statusChange', function(response) {
+          if (response.authResponse) {
+            // user has auth'd your app and is logged into Facebook
+            FB.api('/me', function(me){
+              if (me.name) {
+                document.getElementById('auth-displayname').innerHTML = me.name;
+              }
+            })
+            document.getElementById('auth-loggedout').style.display = 'none';
+            document.getElementById('auth-loggedin').style.display = 'block';
+          } else {
+            // user has not auth'd your app, or is not logged into Facebook
+            document.getElementById('auth-loggedout').style.display = 'block';
+            document.getElementById('auth-loggedin').style.display = 'none';
+          }
+        });
+
+        // respond to clicks on the login and logout links
+        document.getElementById('auth-loginlink').addEventListener('click', function(){
+          FB.login();
+        });
+        document.getElementById('auth-logoutlink').addEventListener('click', function(){
+          FB.logout();
+        }); 
+      } 
+    </script>
+
+<div class="container">
+
+    <div class="row sixteen columns">
+      <header>
+	<div class="six columns">
+	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
+	</div>
+	<div class="eight columns">
+      	<ul>
+      	  <li class='s2'><a href='about.html'>About</a> </li>
+      	  <li class='s2'><a href='science.html'>Science</a> </li>
+      	  <li class='s2'><a href='share.html'>Share</a> </li>
+      	  <li class='s2'><a href='donate.html'>Support</a></li>
+      	</ul>
+	</div>
+      </header>
     </div>
+
+
+
+<div class='content'>
+
+
+    <br><br class="clear"/>
+
+
+    <div class="row clearfix twelve columns">
+      <h3 class="strapline">Login to facebook to share</h3>
+      <p> Here is some more text</p>
+      <div id="auth-status">
+        <div id="auth-loggedout">
+          <button href="#" id="auth-loginlink">Login</button>
+        </div>
+        <div id="auth-loggedin" style="display:none">
+          Hi, <span id="auth-displayname"></span>  
+          <button href="#" id="auth-logoutlink">logout</button>
+	</div>
+      </div>
+
     </div>
+</div>
 
-<!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
-<h3>Spread the word</h3>
-    <div class="five columns toprest">
-      <!--- this is set up here: http://developers.facebook.com/docs/reference/plugins/like/ --->
-      <fb:like href="http://www.nextclimate.org" send="true" width="320" show_faces="true" font="verdana"></fb:like>
-
-<br>
-<!--       <h3>Our team</h3> -->
-<!--       <p>Rob Pinder, CEO</p> -->
-
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.nextclimate.org" data-text="Discover what climate change means for you." data-via="NextClimate" data-count="none">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-
-<br>
-
-<!-- Place this tag where you want the +1 button to render -->
-<g:plusone annotation="none" width="320"></g:plusone>
-
-<!-- Place this render call where appropriate -->
-<script type="text/javascript">
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
-
-
-  </div>
-  </div>
-  </div>
-  </body>
+</body>
 </html>
 
 <!-- <html> -->
