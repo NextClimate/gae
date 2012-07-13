@@ -13,21 +13,11 @@ from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-
-class Zipcode(db.Model):
-  """Models an individual zipcode associated with climate change values"""
-  zipcode=db.StringProperty()
-  city = db.StringProperty(multiline=False)
-  state = db.StringProperty(multiline=False)
-  maxTobs_1990 = db.IntegerProperty()
-  maxTa1_2050 = db.IntegerProperty()
-  maxTa1_2090 = db.IntegerProperty()    
-  maxTb2_2090 = db.IntegerProperty()
-    
-def zipcode_key(zipcode_value=None):
-  """Constructs a datastore key for a Zipcode entity with zipcode_value."""
-  return db.Key.from_path('Zipcode', zipcode_value or 'default_zipcode')
-
+ 
+# this is a class for mapping zip codes to MSA (metro areas)
+# this is not used yet, but at some point, it would likely
+# make sense to show people data in their MSA, rather
+# than zip code.
 
 class ZipMSA(db.Model):
   """Models an individual zipcode associated with a metropolitan area"""
@@ -39,35 +29,20 @@ def zipmsa_key(zipmsa_value=None):
   return db.Key.from_path('ZipMSA', zipmsa_value or 'default_zipcode')
 
 
+# this class is called when there is a request to /actnow page.
+# it renders userInfo.html, which asks the user a series of
+# questions about energy use in order to develop an energy profile
+# that is specific to this user. The user is then directed to
+# /energy to look at the impact of their energy choices.
 
 class ActNowPage(webapp.RequestHandler):
     def get(self):
         zipcode_value=self.request.get('zipcode_value')
-# 	qTrue  = 0
-# 	if (len(zipcode_value) > 0):
-# 	    qTrue = 1
-#         zipcode_query = Zipcode.all()
-#         zipcodes = zipcode_query.filter("zipcode =",zipcode_value)
-# 	results = zipcodes.fetch(1)
-# 	place = "not good"
-	template_values = {}
-# 	    template_values = {
-# 	    'qTrue':range(qTrue),
-#             'zipcode': v.zipcode,
-# 	    'city': string.capwords(v.city),
-# 	    'state': v.state,
-# 	    'maxTobs_1990': v.maxTobs_1990,
-# 	    'maxTa1_2050':v.maxTa1_2050,
-# 	    'maxTa1_2090':v.maxTa1_2090,	    
-# 	    'maxTb2_2090':v.maxTb2_2090,	    
-#              'place': place,
-# 	     }
+	template_values = {'zipcode':zipcode_value}
 
-        path = os.path.join(os.path.dirname(__file__), 'actnow.html')
+	path = os.path.join(os.path.dirname(__file__), 'userInfo.html')
+	
         self.response.out.write(template.render(path, template_values))
-
-	#class ZipcodeShow(webapp.RequestHandler):
-	#def 
 
 
 application = webapp.WSGIApplication([
