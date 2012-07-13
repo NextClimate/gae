@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html xmlns:fb="http://ogp.me/ns/fb#" itemscope itemtype="http://schema.org/Organization">
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
@@ -9,6 +9,9 @@
   ================================================== -->
 	<meta charset="utf-8">
 	<title>Our shared climate future</title>
+	<meta property="og:image" content="http://www.nextclimate.org/images/circle_logo_transparent_128.png"/>
+	<meta property="fb:app_id" content="179716018816396"/>
+
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<!--[if lt IE 9]>
@@ -136,8 +139,110 @@
   })();
 
 </script>
+
 </head>
 <body>
+
+    <div id="fb-root"></div>
+    <script>
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+
+      // Init the SDK upon load
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '179716018816396', // App ID
+          channelUrl : '//'+window.location.hostname+'/fbjs', // Path to your Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+      
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+         // the user is logged in and has authenticated your
+         // app, and response.authResponse supplies
+         // the user's ID, a valid access token, a signed
+         // request, and the time the access token 
+         // and signed request each expire
+          var uid = response.authResponse.userID;
+          var accessToken = response.authResponse.accessToken;
+          FB.api('/me', function(me){
+            if (me.name) {
+              document.getElementById('auth-displayname').innerHTML = me.name;
+            }
+          })
+        } else {
+         // the user isn't logged in to Facebook.
+          window.top.location='http://www.nextclimate.org/';          
+        }
+      }, true);
+
+
+
+
+        // listen for and handle auth.statusChange events
+        FB.Event.subscribe('auth.statusChange', function(response) {
+          if (response.authResponse) {
+            // user has auth'd your app and is logged into Facebook
+            FB.api('/me', function(me){
+              if (me.name) {
+                document.getElementById('auth-displayname').innerHTML = me.name;
+              }
+            })
+            document.getElementById('auth-loggedout').style.display = 'none';
+            document.getElementById('auth-loggedin').style.display = 'block';
+          } else {
+            // user has not auth'd your app, or is not logged into Facebook
+            window.top.location='http://www.nextclimate.org/';
+            document.getElementById('auth-loggedout').style.display = 'block';
+            document.getElementById('auth-loggedin').style.display = 'none';
+          }
+        });
+
+        // respond to clicks on the login and logout links
+        document.getElementById('auth-loginlink').addEventListener('click', function(){
+          FB.login();
+        });
+        document.getElementById('auth-logoutlink').addEventListener('click', function(){
+          FB.logout();
+        }); 
+
+      }
+      function fbSharePage() {
+        <!-- var body = document.getElementById('fbMessage').value; -->
+
+	FB.ui({
+          method: 'feed',
+          name: 'Learn more about what climate change means for you.',
+	  description: '{{place}}.',
+          link: 'http://www.nextclimate.org',
+	  picture: 'http://www.nextclimate.org/images/circle_logo_transparent_128.png'
+         });
+      }
+     
+      var popupWindow = null;
+      function centeredPopup(){
+	url='https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org&text={{place}}. Learn more at ';
+	w = '500';
+	h = '300';
+	scroll='yes';
+	winName='myWindow';
+	LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+	TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+	settings =
+	'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+	popupWindow = window.open(url,winName,settings)
+      } 
+    </script>
+
+
 
   <div class="container">
 
@@ -149,10 +254,11 @@
 	<div class="eight columns">
       	<ul>
       	  <li class='s2'><a href='static/about.html'>About</a> </li>
-      	  <li class='s2'><a href='static/science.html'>Science</a> </li>
+      	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
 	  <!-- <li class='s2'><a href="/actnow?zipcode_value={{zipcode}}">Act Now</a></li> -->
-      	  <li class='s2'><a href='static/share.html'>Share</a> </li>
+      	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
+      	  <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li>
       	</ul>
 	</div>
       </header>
@@ -178,9 +284,7 @@
 
     <div class="six columns ex">
     
-    <h5> Our generation will choose the climate for our children and
-      grandchildren. Right now, we are on path towards unprecedented
-      changes. {{place}}.  By reducing our dependence on fossil fuels,
+    <h5> {{place}}.  By reducing our dependence on fossil fuels,
       future warming in your area can be limited to {{maxTb2_2090}}
       days per year above 90 degrees. If
       we <a href="/actnow?zipcode_value={{zipcode}}">act now</a>, we can protect
@@ -191,19 +295,41 @@
       <h4>Act Now!</h4></button>
     </form>
 
+    <!-- twitter and facebook buttons -->
+    <div class="one columns">
+    <div id="custom-fb-button">
+      <button onclick='fbSharePage()'>
+	<img style="padding-top:2px" src="../images/facebook-icon.ico">
+	<span style="padding-left:5px; vertical-align:top; padding-top:0px">Share</span>
+      </button>
+    </div>	      
+    </div>
+
+    <div class="one columns">
+    <div id="custom-tweet-button">
+<!-- href="https://twitter.com/share?url=https%3A%2F%2Fwww.nextclimate.org" -->
+      <button onclick='centeredPopup()'>
+	<img style="padding-top:2px" src="http://a4.twimg.com/images/favicon.ico"><span style="padding-left:5px; vertical-align:top; padding-top:0px">Tweet</span></button>
+    </div>
+    </div>
+    </div>
+
     </div>
     </div>
     {% endfor %}
     <br>
 
     <div class="six columns">    
-    <form action="/" method="get">
+    <form action="/queryZip" method="get">
       Enter a zip code: <input type="text" name="zipcode_value" rows="1" cols="7">
 <!--       <div><input type="submit" value="Tell me about climate change"></div> -->
     <button type="submit">Tell me about climate change</button>
     </form>
     </div>
     </div>
+<hr>
+ <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
+
   </div>
   </body>
 </html>
