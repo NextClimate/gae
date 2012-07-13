@@ -1,0 +1,373 @@
+<!DOCTYPE html xmlns:fb="http://ogp.me/ns/fb#" itemscope itemtype="http://schema.org/Organization">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<!-- These comments above are not just comments, they are key to getting the css to work right in internet explorer -->
+
+<head>
+
+<!-- This page will first query the user for a zip code, and then after submiting one, 
+     will render a bar chart and display text describing what this means in that
+     zip code. The user can press Act Now to find out what can be done, or 
+     enter another zip code, or post to twitter / facebook. -->
+
+
+
+<!-- This sets up the grid format for the css. The style is called skeleton. Learn more here http://www.getskeleton.com/ -->
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>Our shared climate future</title>
+
+
+<!-- meta-data for facebook -->
+	<meta property="og:image" content="http://www.nextclimate.org/images/circle_logo_transparent_128.png"/>
+	<meta property="fb:app_id" content="179716018816396"/>
+
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- javascript
+  ================================================== -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/raphael.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.enumerable.js"></script>
+    <!-- this sets up tufte like bar graph -->
+    <script type="text/javascript" src="javascripts/jquery.tufte-graph.js"></script>
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
+	<!-- this sets up tufte like bar graph -->
+	<link rel="stylesheet" href="stylesheets/tufte-graph.css" type="text/css" media="screen" charset="utf-8" />
+
+
+	<!-- Favicons needs to be updated. -->
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+	<!-- this exists to help render better on mobile devices. should be updated -->
+	<style type="text/css">
+	  div.ex
+	  {
+	  width:320px;
+	  padding:0px;
+	  margin:10px;
+	  }
+	</style>
+
+<!-- sets up the footer across the bottom of the page;
+     custom css to make this page render nicer. Could
+     be updated. -->
+    <style>
+      body {  }
+      #container {
+        margin: 20 auto;
+        width: 730px;
+      }
+      .download {
+        float: right;
+        font-size: 1.5em;
+      }
+      .footer {
+        width: 100%;
+        text-align: center;
+        color: #999999;
+        font-size: 0.8em;
+        margin-top: 30px;
+      }
+
+      
+      .intro { font-size: 1.4em; }
+      .differences { clear: both; }
+
+      span.doc { color: green; font-weight: bold; }
+      a { color: black; }
+      a:visited { color: gray; }
+      .example { float: left; }
+      h2 { clear: both; }
+
+      .temperature .graph-header { width: 320px; }
+
+      li { margin-bottom: 3px; }
+    </style>
+
+    <!-- this populates the data and formats the tufte like bar graph -->
+    <script type="text/javascript">
+      $(document).ready(function () {
+        jQuery('#temperature-graph').tufteBar({
+          data: [
+            [{{maxTobs_1990}}, {label: 'Our parent\'s generation '}],
+            [{{maxTa1_2050}}, {label: 'Our children\'s generation'}],
+            [{{maxTa1_2090}}, {label: 'Our grandchildren\'s generation'}],
+          ],
+          barWidth: 0.8,
+          barLabel:  function(index) { return this[0] + ' days' },
+          axisLabel: function(index) { return this[1].label },
+          color:     function(index) { return ['#FFE600', '#FF9900', '#F02311'][index] }
+        });
+   });
+   </script>
+
+<!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-29277261-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+
+
+
+<body>
+
+    <div id="fb-root"></div>
+    
+    <!-- This section hanldes the facebook check. 
+	 It both sets up the buttons that allow you to login
+	 and initializes the facebook code.
+	 Kicks the users back to welcome page if not logged in 
+	 to facebook. -->
+
+    <script>
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+
+      // Init the SDK upon load
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '179716018816396', // App ID
+          channelUrl : '//'+window.location.hostname+'/fbjs', // Path to your Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+      
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+         // the user is logged in and has authenticated your
+         // app, and response.authResponse supplies
+         // the user's ID, a valid access token, a signed
+         // request, and the time the access token 
+         // and signed request each expire
+          var uid = response.authResponse.userID;
+          var accessToken = response.authResponse.accessToken;
+          FB.api('/me', function(me){
+            if (me.name) {
+              document.getElementById('auth-displayname').innerHTML = me.name;
+            }
+          })
+        } else {
+         // the user isn't logged in to Facebook, redirect to welcome
+          window.top.location='http://www.nextclimate.org/';          
+        }
+      }, true);
+
+
+
+      <!-- if the users logs out, kick them back to welcome -->
+        // listen for and handle auth.statusChange events
+        FB.Event.subscribe('auth.statusChange', function(response) {
+          if (response.authResponse) {
+            // user has auth'd your app and is logged into Facebook
+            FB.api('/me', function(me){
+              if (me.name) {
+                document.getElementById('auth-displayname').innerHTML = me.name;
+              }
+            })
+            document.getElementById('auth-loggedout').style.display = 'none';
+            document.getElementById('auth-loggedin').style.display = 'block';
+          } else {
+            // user has not auth'd your app, or is not logged into Facebook
+            window.top.location='http://www.nextclimate.org/';
+            document.getElementById('auth-loggedout').style.display = 'block';
+            document.getElementById('auth-loggedin').style.display = 'none';
+          }
+        });
+
+        // respond to clicks on the login and logout links
+        document.getElementById('auth-loginlink').addEventListener('click', function(){
+          FB.login();
+        });
+        document.getElementById('auth-logoutlink').addEventListener('click', function(){
+          FB.logout();
+        }); 
+
+      }
+
+
+      <!-- This code is called if the user clicks to post to facebook -->
+      <!-- Handles initializing the facebook ui and populating it with  -->
+      <!-- site specific information. -->
+      function fbSharePage() {
+	FB.ui({
+          method: 'feed',
+          name: 'Learn more about what climate change means for you.',
+	  description: '{{place}}.',
+          link: 'http://www.nextclimate.org',
+	  picture: 'http://www.nextclimate.org/images/circle_logo_transparent_128.png'
+         });
+      }
+
+      <!-- This code is called if the users clicks to post to twitter. Handles -->
+      <!-- initializing the twitter ui and populating it with NextClimate info -->
+      var popupWindow = null;
+      function centeredPopup(){
+	url='https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org&text={{place}}. Learn more at ';
+	w = '500';
+	h = '300';
+	scroll='yes';
+	winName='myWindow';
+	LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+	TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+	settings =
+	'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+	popupWindow = window.open(url,winName,settings)
+      } 
+    </script>
+
+
+<!-- Now, actually start the content of the page -->
+
+  <div class="container">
+
+    <div class="row sixteen columns">
+
+<!-- Render the header at the top of the page 
+     (NextClimate logo, about, support, etc.) -->
+
+      <header>
+	<div class="six columns">
+	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
+	</div>
+	<div class="eight columns">
+      	<ul>
+      	  <li class='s2'><a href='static/about.html'>About</a> </li>
+      	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
+	  <!-- <li class='s2'><a href="/actnow?zipcode_value={{zipcode}}">Act Now</a></li> -->
+      	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
+      	  <li class='s2'><a href='static/donate.html'>Support</a></li>
+	  <!-- if the user clicks logout, call FB.logout routine defined above -->
+      	  <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li>
+      	</ul>
+	</div>
+      </header>
+    </div>
+
+    <div class="sixteen columns">
+<!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
+    <div class="twelve columns">
+      <h3>The climate is changing at an unprecedented pace. What does this mean for where you live?</h3>
+      <br> 
+      </div>
+
+    <!-- This part is tricky. Basically, here is the logic that shows just the 
+	 zip code input if you haven't entered a zip code, and shows the 
+	 barchart and text if you have entered a zip code. 
+
+	 qTrue will be greater than 0 if the zip code returns a successful
+	 area, and then this code will be executed  -->
+
+    {% for i in qTrue %}
+      <br>
+      <div class="row clearfix">
+      <div class="eight columns temperature">
+<!--     <div class='temperature'> -->
+      <div class='graph-header'>
+        <h5>The number of days in a year that are hotter than 90 degrees in {{city}}, {{state}}</h5>
+      </div>
+
+      <!-- create the tufte like bar graph -->
+      <div id='temperature-graph' class='graph' style='width: 320px; height: 200px;'></div>
+      <br>
+      </div>
+
+    <div class="six columns ex">
+      <!-- text about climate change in your local area -->
+    <h5> {{place}}.  By reducing our dependence on fossil fuels,
+      future warming in your area can be limited to {{maxTb2_2090}}
+      days per year above 90 degrees. If
+      we <a href="/actnow?zipcode_value={{zipcode}}">act now</a>, we can protect
+      our children and grandchildren from dangerous climate
+      change. </h5><p></p>
+
+    <!-- render Act Now button -->
+    <form action="/actnow" method="get">
+    <button type="submit" class="full-width button" name="zipcode_value" value={{zipcode}}>
+      <h4>Act Now!</h4></button>
+    </form>
+
+    <!-- render twitter and facebook buttons -->
+    <div class="one columns">
+    <div id="custom-fb-button">
+      <button onclick='fbSharePage()'>
+	<img style="padding-top:2px" src="../images/facebook-icon.ico">
+	<span style="padding-left:5px; vertical-align:top; padding-top:0px">Share</span>
+      </button>
+    </div>	      
+    </div>
+
+    <div class="one columns">
+    <div id="custom-tweet-button">
+<!-- href="https://twitter.com/share?url=https%3A%2F%2Fwww.nextclimate.org" -->
+      <button onclick='centeredPopup()'>
+	<img style="padding-top:2px" src="http://a4.twimg.com/images/favicon.ico"><span style="padding-left:5px; vertical-align:top; padding-top:0px">Tweet</span></button>
+    </div>
+    </div>
+    </div>
+
+    </div>
+    </div>
+    {% endfor %}
+    <!-- this is the end of the logic that only shows the barchart if a zip code
+	 has been entered by the user -->
+    <br>
+
+
+    <!-- here is the query box for the user to enter a zip code -->
+    <div class="six columns">    
+    <form action="/queryZip" method="get">
+      Enter a zip code: <input type="text" name="zipcode_value" rows="1" cols="7">
+    <button type="submit">Tell me about climate change</button>
+    </form>
+    </div>
+    </div>
+<hr>
+
+<!-- this footer is on every page -->
+ <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
+
+  </div>
+  </body>
+</html>
+

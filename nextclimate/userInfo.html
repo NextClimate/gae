@@ -3,7 +3,18 @@
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<!-- These comments above are not just comments, they are key to getting the css to work right in internet explorer -->
+
 <head>
+
+<!-- The user is directed to this page after pressing Act Now, and directed to 
+     /actnow.  We ask the users some easy to answer questions to get enough
+     information to develop the user's energy profile on the following
+     page. Then the user is directed to /energy -->
+
+
+
+<!-- This sets up the grid format for the css. The style is called skeleton. Learn more here http://www.getskeleton.com/ -->
 
 	<!-- Basic Page Needs
   ================================================== -->
@@ -39,40 +50,9 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
-	<style type="text/css">
-	  div.ex
-	  {
-	  width:320px;
-	  padding:0px;
-	  margin:10px;
-	  }
-	</style>
-
-	<style type="text/css">
-	  div.topfirst
-	  {
-	  width:320px;
-	  padding:0px;
-	  margin:1px;
-	  background-color:"black";
-	  background-image:url('');
-	  }
-	</style>
-	<style type="text/css">
-	  div.toprest
-	  {
-	  width:320px;
-	  padding:0px;
-	  margin:1px;
-	  }
-	  p { color:"white";  background-color:"black";}
-	  a {link:text-decoration:none;}
-	</style>
 
 
-
-
-
+<!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -88,7 +68,17 @@
 </script>
 
 </head>
+
+
 <body>
+
+
+    <!-- This section hanldes the facebook check. 
+	 It both sets up the buttons that allow you to login
+	 and initializes the facebook code.
+	 Kicks the users back to welcome page if not logged in 
+	 to facebook. -->
+
     <div id="fb-root"></div>
     <script>
       // Load the SDK Asynchronously
@@ -164,9 +154,15 @@
       
     </script>
 
+<!-- now, finally, start the page content -->
+
   <div class="container">
 
     <div class="row sixteen columns">
+
+<!-- Render the header at the top of the page 
+     (NextClimate logo, about, support, etc.) -->
+
       <header>
 	<div class="six columns">
 	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
@@ -182,87 +178,50 @@
 	</div>
       </header>
       </div>
+
+<!-- ask questions, post to /energy -->
       
     <div class="sixteen columns">
 <!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
-      <div class="fourteen columns">
-	<h2>Act Now!</h2>
-       <h4>Take advantage of these energy-saving
+      <div class="eight columns">
+	<h2>What can you do?</h2>
+       <h4>First, let us know a bit about you. We'll use this
+       information to help you identify energy-saving
 	 opportunities. You can both save money and help protect
-	 future generations from dangerous climate change. Here are
-	 some suggestions for your area.</h4>
+	 future generations from dangerous climate change.</h4>
        <br> 
-      </div>
+       <form action="/energy" method="post">
+	 <label for="electricity">What is your highest monthly electricity bill?</label>
+	 <select id="electricity" name="electricity">
+	   <option value="low">Less than $100</option>
+	   <option value="medium">Between $100 and $200</option>
+	   <option value="high">More than $200</option>
+	 </select>
+	 <br>
+	 <label for="heat">What is your highest monthly home gas or heating oil bill?</label>
+	 <select id="heat" name="heat">
+	   <option value="NA">I don't have this</option>
+	   <option value="low">Less than $100</option>
+	   <option value="medium">Between $100 and $200</option>
+	   <option value="high">More than $200</option>
+	 </select>
 
+	   <!-- pre-populate zip code with what the user entered earlier -->
+	   <label for="zipcode">What is your zipcode?</label>
+	   <input type="text" id="zipcode" name="zipcode" value="{{zipcode}}" />
 
-      <br>
-      <div class="row">
-	<div class="five columns">
-	  <h3>Conserve.</h3>
-	  <h4>Energy-saving light bulbs</h4>
-	  <p>Available <a href="http://www.duke-energy.com/freecfls/?utm_source=webpromo&utm_medium=web&utm_campaign=IVRWEB">free</a> from your power company</p>
-	  <h4>Smart heating and cooling</h4>
-	  <p>On when you need it, off when you don't.</p>
-	  <h4>Get a Personalized Energy Report</h4>
-	  <p>Put your <a href="http://www.duke-energy.com/personalized-energy-report/"> power company</a> to work for you.
-	</div>
-
-	<div class="five columns">
-	  <h3>Generate.</h3>
-	  <h4>Solar water heater</h4>
-	  <p>Enjoy <a href="http://www.solarconsultants.com/">hot showers</a>; save money!</p>
-	  <h4>Roof-top solar panels</h4>
-	  <p><a href="http://www.sunrunhome.com">Make</a> your own electricity.</p>
-	  <h4>Radient heating</h4>
-	  <p>Let the sun warm your home.</p>
-	</div>
-
-	<div class="five columns">
-	  <h3>Save.</h3>	  
-	  <h4>Fuel efficient commute</h4>
-	  <p>Gas isn't getting <a href="http://southeast.buyatoyota.com/prius">cheaper</a>.</p>
-	  <h4>Public transit</h4>
-	  <p>Let someone else do the driving.</p>
-	  <h4>Live in a walkable community</h4>
-	  <p><a href="http://www.walkscore.com"> Walkscore</a> can help.</p>
-	</div>
-
-
-    </div>
-
-    <br>
-
-    <form action="/" method="get">
-      Enter another zip code: <input type="text" name="zipcode_value" rows="1" cols="7">
-<!--       <div><input type="submit" value="Tell me about climate change"></div> -->
-    <button type="submit">Tell me about climate change</button>
+      <div><input type="submit" value="Done!"></div>
     </form>
+
+      </div>
 
     </div>
 <hr>
+
+<!-- this footer is on every page -->
  <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
 
   </div>
   </body>
 </html>
 
-<!-- <html> -->
-<!--   <body> -->
-<!--     {% for greeting in greetings %} -->
-<!--       {% if greeting.author %} -->
-<!--         <b>{{ greeting.author.nickname }}</b> wrote: -->
-<!--       {% else %} -->
-<!--         An anonymous person wrote: -->
-<!--       {% endif %} -->
-<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
-<!--     {% endfor %} -->
-
-<!--     <form action="/sign" method="post"> -->
-<!--       <div><textarea name="content" rows="3" cols="60"></textarea></div> -->
-<!--       <div><input type="submit" value="Sign Guestbook"></div> -->
-<!--     </form> -->
-
-<!--     <a href="{{ url }}">{{ url_linktext }}</a> -->
-
-<!--   </body> -->
-<!-- </html> -->

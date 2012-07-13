@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<!-- These comments above are not just comments, they are key to getting the css to work right in internet explorer -->
+
+<head>
+
+<!-- This page provides the user with a variety of energy saving options
+     and lets the user explore what the impacts of those energy savings
+     have on their GHG emissions. The users can select to learn more about
+     one of the options. The main idea is for the user to build an 
+     intuitive understanding of (a) that their energy use is composed of
+     several parts of their home and (b) get a sense for the relative 
+     improvement for each option.
+
+     Ultimately, the user will be able to add an energy saving option
+     to this table. We need to decide how to keep this table manageable
+     or add some controls to make it easy to interact with.
+
+     The table and bar chart are from the google chart api. There are some
+     hacks here to make this work together. But the basic idea is that
+     they have event listeners that are called when the user selects 
+     a line in the table.
+-->
+
+
+<!-- This sets up the grid format for the css. The style is called skeleton. Learn more here http://www.getskeleton.com/ -->
+
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>Our shared climate future</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- javascript
+  ================================================== -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/raphael.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.enumerable.js"></script>
+
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
+
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+
+
+
+<!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-29277261-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+    <!-- This sets up the barchart and table using google chart api -->
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1.1', {packages: ['corechart', 'table']});
+    </script>
+    <script type="text/javascript">
+      function drawVisualization() {
+        // Prepare the data
+
+      <!-- The user's energy use is divided into four sections: heating
+	   and cooling, water, lighting, and appliances. Each energy
+	   saving option reduces the user's energy use / GHGs by a factor
+	   for each of these four categories. For example, unplug electronics
+	   has a factor for appliances that is less than one, but has a factor 
+	   of 1 for the other three categories. 
+
+	   The bar chart has three bars -- average for your area, your baseline,
+	   and your GHGs after implementing selected action. The average for your
+	   area is set to a default value, but could be varied by location.
+	   Your baseline is the average for your area multiplied by a factor based
+	   on the answers on the prior page. Your GHG emissions after implementing 
+	   a selected action is your baseline multiplied by the factors described 
+	   in the prior paragraph.
+	   
+	   Right now, these are all hard coded, but at some point this should 
+	   come from a database.
+	-->
+
+        var data = google.visualization.arrayToDataTable([
+        ['Action','heating and cooling','water','lighting','appliances','savings', 'Act!'],
+        ['No action',            1,   1,    1,   1, ' ', ' '],
+        ['Solar photovoltaics', 0.15, 0.15, 0.15, 0.15, ' $$$',' '],
+        ['Solar water heater',   1, 0.1,    1,   1, ' $$', ' '],
+        ['Efficient lighting',   1,   1, 0.15,   1, '$', ' '],
+        ['Fix air leaks',      0.9,   1,    1,   1, '$', ' '],
+        ['Unplug electronics' ,  1,   1,    1, 0.7, '$', ' '],
+        ['Average in {{city}}', 6,   2,    1,    1, 'NA', 'NA'],
+        ['Your baseline',          1,   1,  1,  1, 'NA', 'NA']
+      ]);
+
+      
+      var i = 0;
+       for (i = 1; i <= data.getNumberOfRows()-3; i = i+1) {
+	 data.setCell(i,6,"<form action='/selectAct' method='get'><button type='submit' name='type' value='"+ data.getValue(i,0) +"'>Learn more</button></form>");
+	}
+
+       for (i = 1; i <= 4; i = i+1) {
+	data.setCell(data.getNumberOfRows()-1,i,
+		     data.getValue(data.getNumberOfRows()-2,i) * {{elecMod}});
+	}
+
+       for (i = 1; i <= 4; i = i+1) {
+	data.setCell(0,i,
+		     data.getValue(data.getNumberOfRows()-2,i) * {{elecMod}});
+	}
+
+      <!-- The DataTable above has both the energy saving options, as well as the 
+	   three bars in the barchart. This is so they can be keyed off the same
+	   events more easily, an implementation hack. So to form the Table,
+	   you have to hide the columns and rows that are used to populate
+	   the barchart, and for the barchart, you only include the first and
+	   last two rows of the DataTable.
+      -->
+      var viewTable = new google.visualization.DataView(data);
+      viewTable.hideColumns([1,2,3,4]);
+      viewTable.hideRows([6,7]);
+
+      var viewBar = new google.visualization.DataView(data);
+      viewBar.hideColumns([5,6]);
+      viewBar.setRows([0,7,6 ]);
+
+      <!-- The visual options for the barchart are below. -->
+
+      var options = {isStacked:true, height: 420,width:450,fontName:'Georgia',
+                     legend: {position:'bottom'},
+                     colors: ['#BB1111','#CC4444','#DD8888','#CCBBBB'],
+                     title:'  Your Greenhouse Gas Emissions',titlePosition:'out',
+                     titleTextStyle: {fontName:'Georgia',fontSize: 16},
+                     hAxis:{textStyle: {fontSize: 16}},
+                     chartArea:{left:20,top:20,width:"80%",height:"75%"},
+                     vAxis: {minValue:0, maxValue:16, textPosition:'in', gridlines: {count:4,color:'#F8F8F8' }}
+                    };
+
+      var barchart = new google.visualization.ColumnChart(document.getElementById('chart1'));
+      <!-- draw the barchart -->
+      barchart.draw(viewBar, options);
+
+      <!-- draw the table -->
+      var table = new google.visualization.Table(document.getElementById('chart2'));
+      table.draw(viewTable, {width:280, allowHtml:true});
+      table.setSelection([{'row': 0}]);
+
+
+       <!-- There will be extra emissions leftover after any energy
+	    saving option.  This caluclation figures out how much GHG
+	    emissions remain, and gives the user a link to offset those
+	    emissions. -->
+
+       var total = 0;
+       var i = 0;
+
+       for (i = 1; i <= 4; i = i+1) {
+	total = total + data.getValue(0, i);
+	}
+	var totalLbs = total/2;
+       document.getElementById('totalOffset').innerHTML = 
+	"<p>Learn about how to <a href='http://store.terrapass.com/store/p/56-TerraPass-carbon-offsets-1-000lbs.html?qty="+totalLbs.toFixed()+"'>offset</a> the remaining "+total.toFixed()+" metric tons of greenhouse gases.</p>";
+
+
+      <!-- event handlers for when a row in the table is selected -->
+      // When the table is selected, update the barchart.
+      google.visualization.events.addListener(table, 'select', function() {
+
+       var curRow = table.getSelection();
+       var item = curRow[0];
+       var nCurRow = item.row;
+
+       if (nCurRow == 0) {
+        <!-- case when No Action is selected -->
+	data.setCell(0,0, 'No Action');
+	data.setCell(0,1, 1);		
+	data.setCell(0,2, 1);		
+	data.setCell(0,3, 1);		
+	data.setCell(0,4, 1);		
+       } else {
+	<!-- update  -->
+          data.setCell(0,0,data.getValue(nCurRow,0));       
+       }
+
+
+	<!-- Row 0 holds the values that are updated when the users
+	     selects an energy saving option. The following for loop
+	     steps through each column in that row, and updates it
+	     using the factors from the selected row. Each column
+	     corresponds to one of the four components of home energy
+	     use: lighting, appliances, heating & cooling, etc.  -->
+
+       for (i = 1; i <= 4; i = i+1) {
+	data.setCell(0,i,
+		     data.getValue(data.getNumberOfRows()-2,i) * {{elecMod}} *
+		     data.getValue(nCurRow,i));
+	}
+     
+       viewBar.setRows([0,7,6]);
+       <!-- redraw the barchart with new modifiers based on table selection -->
+       barchart.draw(viewBar, options);
+
+
+       <!-- There will be extra emissions leftover after any energy
+	    saving option.  This caluclation figures out how much GHG
+	    emissions remain, and gives the user a link to offset those
+	    emissions. -->
+
+       var total = 0;
+       var i = 0;
+
+       for (i = 1; i <= 4; i = i+1) {
+	total = total + data.getValue(0, i);
+	}
+	var totalLbs = total/2;
+       document.getElementById('totalOffset').innerHTML = 
+	"<p>Learn about how to <a href='http://store.terrapass.com/store/p/56-TerraPass-carbon-offsets-1-000lbs.html?qty="+totalLbs.toFixed()+"'>offset</a> the remaining "+total.toFixed()+" metric tons of greenhouse gases.</p>";
+
+
+      });
+
+      }
+      
+
+      google.setOnLoadCallback(drawVisualization);
+    </script>
+  </head>
+
+
+<body>
+
+    <!-- This section hanldes the facebook check. 
+	 It both sets up the buttons that allow you to login
+	 and initializes the facebook code.
+	 Kicks the users back to welcome page if not logged in 
+	 to facebook. -->
+
+    <div id="fb-root"></div>
+    <script>
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+
+      // Init the SDK upon load
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '179716018816396', // App ID
+          channelUrl : '//'+window.location.hostname+'/fbjs', // Path to your Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+      
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+         // the user is logged in and has authenticated your
+         // app, and response.authResponse supplies
+         // the user's ID, a valid access token, a signed
+         // request, and the time the access token 
+         // and signed request each expire
+          var uid = response.authResponse.userID;
+          var accessToken = response.authResponse.accessToken;
+          FB.api('/me', function(me){
+            if (me.name) {
+              document.getElementById('auth-displayname').innerHTML = me.name;
+            }
+          })
+        } else {
+         // the user isn't logged in to Facebook.
+          window.top.location='http://www.nextclimate.org/';          
+        }
+      }, true);
+
+
+
+
+        // listen for and handle auth.statusChange events
+        FB.Event.subscribe('auth.statusChange', function(response) {
+          if (response.authResponse) {
+            // user has auth'd your app and is logged into Facebook
+            FB.api('/me', function(me){
+              if (me.name) {
+                document.getElementById('auth-displayname').innerHTML = me.name;
+              }
+            })
+            document.getElementById('auth-loggedout').style.display = 'none';
+            document.getElementById('auth-loggedin').style.display = 'block';
+          } else {
+            // user has not auth'd your app, or is not logged into Facebook
+            window.top.location='http://www.nextclimate.org/';
+            document.getElementById('auth-loggedout').style.display = 'block';
+            document.getElementById('auth-loggedin').style.display = 'none';
+          }
+        });
+
+        // respond to clicks on the login and logout links
+        document.getElementById('auth-loginlink').addEventListener('click', function(){
+          FB.login();
+        });
+        document.getElementById('auth-logoutlink').addEventListener('click', function(){
+          FB.logout();
+        }); 
+
+      }
+      
+    </script>
+
+
+<!-- Now, actually start the content of the page -->
+  <div class="container">
+
+
+<!-- Render the header at the top of the page 
+     (NextClimate logo, about, support, etc.) -->
+
+    <div class="row sixteen columns">
+      <header>
+	<div class="six columns">
+	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
+	</div>
+	<div class="eight columns">
+      	<ul>
+      	  <li class='s2'><a href='static/about.html'>About</a> </li>
+      	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
+      	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
+      	  <li class='s2'><a href='static/donate.html'>Support</a></li>
+      	  <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li>	  
+      	</ul>
+	</div>
+      </header>
+      </div>
+      
+    <div class="sixteen columns">
+<!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
+      <div class="fourteen columns">
+	<h2>Act Now!</h2>
+       <h4>Take advantage of these energy-saving
+	 opportunities. You can both save money and help protect
+	 future generations from dangerous climate change. Here are
+	 some suggestions.</h4>
+       <br> 
+      </div>
+
+
+      <!-- render the table, barchart, and text about offsets -->
+      <br>
+      <div class="row">
+	<div class="five columns">
+	 <p>Select the action below and check the improvement in
+	 greenhouse gas emissions.</p>
+         <div style="float: rigth;" id="chart2"></div>
+	 <br>
+	 <div id="totalOffset"></div>
+	</div>
+	<div class="nine columns">
+            <div style="float: right;" id="chart1"></div>
+	</div>
+
+      </div>
+      </div>
+      </div>
+
+<!-- this footer is on every page -->
+ <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
+
+
+  </body>
+</html>

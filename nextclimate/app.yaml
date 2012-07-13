@@ -6,40 +6,78 @@ api_version: 1
 builtins:
 - remote_api: on
 
+# These handlers map the urls to the python code that is executed.
+# For example, If a user navigates to www.nextclimate.com/energy
+# the app engine executes the energy.py code. Google App Engine
+# goes down this lists and executes the first match.
+
 handlers:
+# this is for uploading data to the datastore. not for users.
 - url: /remote_api
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin
 
+# this deletes all entries in the datastore. not for users.
 - url: /delete
   script: delete_zip.py
   login: admin
 
+# this is for manually entering zipcodes into the datastore. not for users
 - url: /write_zip
   script: write_zip.py
   login: admin
 
+# this is to manually enter zipcodes into the datastore. not for users.
 - url: /addEntry
   script: write_zip.py
   login: admin
 
+# this is to manually enter an energy efficiency action. not for users.
+- url: /write_act
+  script: write_act.py
+  login: admin
+
+# this is to manually enter an energy efficiency action. not for users.
+- url: /addActEntry
+  script: write_act.py
+  login: admin
+
+# query the users for a zip code and then show climate change info
+- url: /queryZip
+  script: query_zip.py
+
+# what happens when you press the "Act Now!" button
 - url: /actnow
   script: actnow.py
 
+# the page that shows energy options and a bar chart of your use.
+- url: /energy
+  script: energy.py
+
+# the page that shows an action with a video and list of what you'll need.
+- url: /selectAct
+  script: selectAct.py
+
+# facebook needs this to allow you to post to people's stream.
 - url: /fbjs
   script: fbjs.py
 
+# this is the directory for css style sheets. static content.
 - url: /stylesheets
   static_dir: skeleton/stylesheets
 
+# this is the directory for javascript. static content.
 - url: /javascripts
   static_dir: skeleton/javascripts
 
+# this is the directory for images. static content.
 - url: /images
   static_dir: skeleton/images
 
+# this is the directory for static pages like the "About" pages. static content.
 - url: /static
   static_dir: static
 
+# anything else takes you to the intro page and the change to login
 - url: /.*
-  script: query_zip.py
+  script: welcome.py
