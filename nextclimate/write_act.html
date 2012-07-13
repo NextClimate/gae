@@ -1,0 +1,39 @@
+
+<html>
+  <body>
+    {% for action in actions %}
+    <p>action: {{action.name}} {{action.description}}</p>
+<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
+    {% endfor %}
+
+    <form action="/addActEntry" method="post">
+      <div>Action Name: <textarea name="name" rows="1" cols="30"></textarea></div>
+      <div>Description: <textarea name="description" rows="3" cols="40"></textarea></div>
+      <div>Embedded youtube URL: <textarea name="youtube" rows="1" cols="50"></textarea></div>
+      <div>Checklist: <textarea name="checklist" rows="3" cols="30"></textarea></div>
+      <div><input type="submit" value="Add action"></div>
+    </form>
+
+  </body>
+</html>
+
+<!-- <html> -->
+<!--   <body> -->
+<!--     {% for greeting in greetings %} -->
+<!--       {% if greeting.author %} -->
+<!--         <b>{{ greeting.author.nickname }}</b> wrote: -->
+<!--       {% else %} -->
+<!--         An anonymous person wrote: -->
+<!--       {% endif %} -->
+<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
+<!--     {% endfor %} -->
+
+<!--     <form action="/sign" method="post"> -->
+<!--       <div><textarea name="content" rows="3" cols="60"></textarea></div> -->
+<!--       <div><input type="submit" value="Sign Guestbook"></div> -->
+<!--     </form> -->
+
+<!--     <a href="{{ url }}">{{ url_linktext }}</a> -->
+
+<!--   </body> -->
+<!-- </html> -->

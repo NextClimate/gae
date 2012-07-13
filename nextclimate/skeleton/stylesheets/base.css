@@ -199,6 +199,18 @@
 		padding-right: 0 !important;
 		text-align: center; }
 
+	#custom-fb-button button {
+	    display: block;
+	    padding: 2px 5px 2px 5px;
+	    height: 30px;
+	}
+
+	#custom-tweet-button button {
+	    display: block;
+	    padding: 2px 5px 2px 5px;
+	    height: 30px;
+	}
+
 
 /* #Tabs (activate in tabs.js)
 ================================================== */
