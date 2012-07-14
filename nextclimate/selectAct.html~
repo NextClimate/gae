@@ -3,23 +3,7 @@
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
-
-<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# nextclimate: http://ogp.me/ns/fb/nextclimate#">
-
-
-<!-- This page shows the user info about a specific energy saving improvement
-     that was selected on the /energy page. The datastore holds this info, it
-     is retrieved using selectAct.py and rendered here. Future additions
-     should have a button that says something like "start!" that then 
-     shows more specific info about where to go to get this stuff, post
-     to FB, etc. -->
-
-<!-- Also, user supplied actions will need to conform to this format.
-     Need to develop a page that supports entry of user supplied 
-     content. -->
-
-
-
+<head>
 
 	<!-- Basic Page Needs
   ================================================== -->
@@ -27,20 +11,8 @@
 	<title>Our shared climate future</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
-
-	<!-- Here is a bunch of facebook meta-data that is needed for open graph.
-	     This basically sets up our app id to allow posting open graph actions.
-	     The action in facebook open graph is called "start" and the object
-	     is "energy_improvement". So a facebook post would say 
-	     "Nancy Collins has started an energy improvement". And the user
-	     can add his/her own message to go with it. -->
-	  
-
 	<meta property="og:image" content="http://www.nextclimate.org/images/circle_logo_transparent_128.png"/>
 	<meta property="fb:app_id" content="179716018816396"/>
-        <meta property="og:type"   content="nextclimate:energy_improvement" /> 
-        <meta property="og:url"    content="http://www.nextclimate.org/selectAct?type={{selectType}}" /> 
-        <meta property="og:title"  content="{{selectName}}" /> 
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -69,10 +41,39 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
+	<style type="text/css">
+	  div.ex
+	  {
+	  width:320px;
+	  padding:0px;
+	  margin:10px;
+	  }
+	</style>
+
+	<style type="text/css">
+	  div.topfirst
+	  {
+	  width:320px;
+	  padding:0px;
+	  margin:1px;
+	  background-color:"black";
+	  background-image:url('');
+	  }
+	</style>
+	<style type="text/css">
+	  div.toprest
+	  {
+	  width:320px;
+	  padding:0px;
+	  margin:1px;
+	  }
+	  p { color:"white";  background-color:"black";}
+	  a {link:text-decoration:none;}
+	</style>
 
 
 
-<!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
+
 
 <script type="text/javascript">
 
@@ -89,13 +90,6 @@
 </script>
 
 </head>
-
-    <!-- This section hanldes the facebook check. 
-	 It both sets up the buttons that allow you to login
-	 and initializes the facebook code.
-	 Kicks the users back to welcome page if not logged in 
-	 to facebook. -->
-
 <body>
 
     <div id="fb-root"></div>
@@ -170,39 +164,16 @@
         }); 
 
       }
-      
-      // This code is called if the user clicks to post to facebook 
-      // Handles initializing the facebook ui and populating it with  
-      // site specific information.
-
       function sendRequestViaMultiFriendSelector() {
         var body = document.getElementById('fbMessage').value;
-        FB.api('/me/nextclimate:start', 'post', { energy_improvement:'http://www.nextclimate.org/selectAct?type={{selectType}}', message:body }, function(response) {
+        FB.api('/me/feed', 'post', { message: body }, function(response) {
         if (!response || response.error) {
-          alert('Error occured '+ response.error);
+          alert('Error occured');
         } else {
           alert('Post ID: ' + response.id);
         }
         });
       }
-
-      // This code is called if the users clicks to post to twitter. Handles 
-      // initializing the twitter ui and populating it with NextClimate info 
-
-      var popupWindow = null;
-      function centeredPopup(){
-        var body = document.getElementById('fbMessage').value;
-	url='https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org&text='+body;
-	w = '500';
-	h = '300';
-	scroll='yes';
-	winName='myWindow';
-	LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-	TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-	settings =
-	'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-	popupWindow = window.open(url,winName,settings)
-      } 
 
     </script>
 
@@ -210,8 +181,6 @@
 
   <div class="container">
 
-
-    <!-- Render the header at the top of the page -->
     <div class="row sixteen columns">
       <header>
 	<div class="six columns">
@@ -229,23 +198,23 @@
       </header>
       </div>
       
-
-
     <div class="sixteen columns">
 <!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
       <div class="eight columns">
-	<!-- render the name and description of the energy improvement -->
 	<h2>{{selectName}}</h2>
        <h4>{{selectDesc}}</h4>
        <br> 
-       <!-- show the youtube video plugin -->
-       {{selectYoutube}}
+      <!-- </div> -->
 
-       <!-- allow the facebook comments section -->
+
+      <!-- <br> -->
+      <!-- <div class="row"> -->
+      <!-- 	<div class="eight columns"> -->
+	  {{selectYoutube}}
+
         <div class="fb-comments" data-href="http://www.nextclimate.org/selectAct?type={{selectType}}" data-num-posts="6" data-width="460"></div>
 	</div>
 
-	<!-- render the checklist of what you'll need -->
 	<div class="five columns">
 	  <h4>What you'll need</h4>
 	      <ul>
@@ -255,32 +224,10 @@
 	      </ul>
 	      <h4>Do you have what you'll need?</h4>
 
-	      <!-- Post to facebook or twitter -->
-		<p>Need to borrow tools or supplies from a friend? Let them know you are starting this project.</p>
-		<div>Message: <textarea name="borrowMessage" id="fbMessage" rows="3" cols="40"></textarea></div>
+		<p>Save time and money by borrowing tools from your friends. Edit the message below to include the tools or supplies you would like to borrow.</p>
+		<div>Message: <textarea name="borrowMessage" id="fbMessage" rows="3" cols="40">{{selectMessage}}</textarea></div>
 		<!-- <input type="hidden" name="type" value={{selectType}}> -->
-
-		<!-- facebook button -->
-		<div class="one columns">
-		<div id="custom-fb-button">
-		  <button onclick='sendRequestViaMultiFriendSelector()'>
-		    <img style="padding-top:4px" src="../images/facebook-icon.ico">
-		    <span style="padding-left:5px; vertical-align:top; padding-top:0px">Share</span>
-		  </button>
-		</div>	      
-		</div>
-		<!-- twitter button -->
-		<div class="one columns">
-		<div id="custom-tweet-button">
-		  <!-- href="https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org" -->
-		  <button onclick='centeredPopup()'>
-		    <img style="padding-top:2px" src="http://a4.twimg.com/images/favicon.ico"><span style="padding-left:5px; vertical-align:top; padding-top:0px">Tweet</span></button>
-		</div>
-		</div>
-
-		</div>
-
-
+		<div><button vertical-align="middle" padding-left="18px" height="16px" onclick='sendRequestViaMultiFriendSelector()'><img src="../images/facebook_smaller.png"><span style="font-size:16px">Post to facebook</span></button></div>	      
 		
 	</div>
       </div>
@@ -288,11 +235,29 @@
     <br>
     </div>
 <hr>
-
-<!-- this footer is on every page -->
  <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
 
   </div>
   </body>
 </html>
 
+<!-- <html> -->
+<!--   <body> -->
+<!--     {% for greeting in greetings %} -->
+<!--       {% if greeting.author %} -->
+<!--         <b>{{ greeting.author.nickname }}</b> wrote: -->
+<!--       {% else %} -->
+<!--         An anonymous person wrote: -->
+<!--       {% endif %} -->
+<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
+<!--     {% endfor %} -->
+
+<!--     <form action="/sign" method="post"> -->
+<!--       <div><textarea name="content" rows="3" cols="60"></textarea></div> -->
+<!--       <div><input type="submit" value="Sign Guestbook"></div> -->
+<!--     </form> -->
+
+<!--     <a href="{{ url }}">{{ url_linktext }}</a> -->
+
+<!--   </body> -->
+<!-- </html> -->

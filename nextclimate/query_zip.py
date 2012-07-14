@@ -37,7 +37,7 @@ def zipcode_key(zipcode_value=None):
 # comparing the future climate of this location to the present
 # climate of a current location. Finally, this is packaged in the variable
 # named template and pushed to 
- class MainPage(webapp.RequestHandler):
+class MainPage(webapp.RequestHandler):
 
     # execute this code at a get request
     def get(self):

@@ -1,0 +1,20 @@
+
+<head>
+<script src="https://platform.twitter.com/widgets.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="skeleton/stylesheets/base.css">
+	<link rel="stylesheet" href="skeleton/stylesheets/skeleton.css">
+	<link rel="stylesheet" href="skeleton/stylesheets/layout.css">
+
+</head>
+<style type="text/css" media="screen">
+  #custom-tweet-button a {
+    display: block;
+    padding: 2px 5px 2px 20px;
+    background: url('http://a4.twimg.com/images/favicon.ico') 1px center no-repeat;
+    border: 1px solid #ccc;
+  }
+</style>
+ 
+<div id="custom-tweet-button">
+  <a href="https://twitter.com/share?url=https%3A%2F%2Fdev.twitter.com%2Fpages%2Ftweet-button" target="_blank">Tweet</a>
+</div>

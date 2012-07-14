@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>Our shared climate future</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- javascript
+  ================================================== -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/raphael.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.enumerable.js"></script>
+
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="../stylesheets/base.css">
+	<link rel="stylesheet" href="../stylesheets/skeleton.css">
+	<link rel="stylesheet" href="../stylesheets/layout.css">
+
+
+<!-- <link href="http://assets.artistic.ly/assets/skeleton-3dea3309d873755bf8886c577d3defa8.css" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link href="http://assets.artistic.ly/assets/pictos-64f77c4ecef2fc6fde3345691f229091.css" media="screen" rel="stylesheet" type="text/css" /> -->
+<!-- <link href="http://assets.artistic.ly/assets/llama-29c56ba969cfc00ebac0d00890f17886.css" media="screen" rel="stylesheet" type="text/css" /> -->
+
+	<!-- Favicons 
+	================================================== -->
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+
+
+
+
+	<style type="text/css">
+	  div.toprest
+	  {
+	  width:320px;
+	  padding:0px;
+	  margin:1px;
+	  }
+	  p { color:"white";  background-color:"black";}
+	  a {link:text-decoration:none;}
+	</style>
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-29277261-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+</head>
+<body>
+
+  <div class='container'>
+
+    <div class="row sixteen columns">
+      <header>
+	<div class="six columns">
+	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
+	</div>
+	<div class="eight columns">
+      	<ul>
+      	  <li class='s2'><a href='about.html'>About</a> </li>
+      	  <li class='s2'><a href='science.html'>Science</a> </li>
+      	  <li class='s2'><a href='share.html'>Share</a> </li>
+      	  <li class='s2'><a href='donate.html'>Support</a></li>
+      	</ul>
+	</div>
+      </header>
+    </div>
+
+    <div class='row sixteent columns'>
+      <iframe src="http://astore.amazon.com/nextc02-20" width="920" height="4000" frameborder="0" scrolling="no"></iframe>
+    </div>
+ 
+    <hr>
+    <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
+
+  </div>
+
+
+</body>
+</html>
+
+<!-- <html> -->
+<!--   <body> -->
+<!--     {% for greeting in greetings %} -->
+<!--       {% if greeting.author %} -->
+<!--         <b>{{ greeting.author.nickname }}</b> wrote: -->
+<!--       {% else %} -->
+<!--         An anonymous person wrote: -->
+<!--       {% endif %} -->
+<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
+<!--     {% endfor %} -->
+
+<!--     <form action="/sign" method="post"> -->
+<!--       <div><textarea name="content" rows="3" cols="60"></textarea></div> -->
+<!--       <div><input type="submit" value="Sign Guestbook"></div> -->
+<!--     </form> -->
+
+<!--     <a href="{{ url }}">{{ url_linktext }}</a> -->
+
+<!--   </body> -->
+<!-- </html> -->

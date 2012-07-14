@@ -1,29 +1,9 @@
-<!DOCTYPE html xmlns:fb="http://ogp.me/ns/fb#" itemscope itemtype="http://schema.org/Organization">
+<!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
-
-<!-- These comments above are not just comments, they are key to getting the css to work right in internet explorer -->
-
 <head>
-
-<!-- Meta data for facebook. This is required for login / initializing facebook. -->
-<!-- facebook --->
-<meta property="og:title" content="NextClimate" />
-<meta property="og:type" content="non_profit" />
-<meta property="og:url" content="http://www.nextclimate.org" />
-<meta property="og:image" content="http://nextclimate.appspot.com/images/nextclimate_logo_transparent.png" />
-<meta property="og:site_name" content="NextClimate" />
-
-<!-- Google plus. This hasn't been used in a while -->
-<!-- google+ --->
-<meta itemprop="name" content="NextClimate">
-<meta itemprop="description" content="Discover what climate change means for you.">
-<meta itemprop="image" content="http://www.nextclimate.org/images/nextclimate_logo_transparent.png">
-
-
-<!-- This sets up the grid format for the css. The style is called skeleton. Learn more here http://www.getskeleton.com/ -->
 
 	<!-- Basic Page Needs
   ================================================== -->
@@ -48,11 +28,10 @@
 
 	<!-- CSS
   ================================================== -->
-	<link rel="stylesheet" href="../stylesheets/base.css">
-	<link rel="stylesheet" href="../stylesheets/skeleton.css">
-	<link rel="stylesheet" href="../stylesheets/layout.css">
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
 
-<!-- This needs to be updated. -->
 	<!-- Favicons
 	================================================== -->
 	<link rel="shortcut icon" href="images/favicon.ico">
@@ -60,8 +39,40 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
+	<style type="text/css">
+	  div.ex
+	  {
+	  width:320px;
+	  padding:0px;
+	  margin:10px;
+	  }
+	</style>
 
-<!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
+	<style type="text/css">
+	  div.topfirst
+	  {
+	  width:320px;
+	  padding:0px;
+	  margin:1px;
+	  background-color:"black";
+	  background-image:url('');
+	  }
+	</style>
+	<style type="text/css">
+	  div.toprest
+	  {
+	  width:320px;
+	  padding:0px;
+	  margin:1px;
+	  }
+	  p { color:"white";  background-color:"black";}
+	  a {link:text-decoration:none;}
+	</style>
+
+
+
+
+
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -76,13 +87,9 @@
 
 </script>
 
-
 </head>
 <body>
-
-<!-- This section hanldes the facebook check. It both sets up the buttons that allow you to login -->
-<!-- and initializes the facebook code. -->
-
+<body>
     <div id="fb-root"></div>
     <script>
       // Load the SDK Asynchronously
@@ -103,12 +110,34 @@
           cookie     : true, // enable cookies to allow the server to access the session
           xfbml      : true  // parse XFBML
         });
+      
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+         // the user is logged in and has authenticated your
+         // app, and response.authResponse supplies
+         // the user's ID, a valid access token, a signed
+         // request, and the time the access token 
+         // and signed request each expire
+          var uid = response.authResponse.userID;
+          var accessToken = response.authResponse.accessToken;
+          FB.api('/me', function(me){
+            if (me.name) {
+              document.getElementById('auth-displayname').innerHTML = me.name;
+            }
+          })
+        } else {
+         // the user isn't logged in to Facebook.
+          window.top.location='http://www.nextclimate.org/';          
+        }
+      }, true);
+
+
+
 
         // listen for and handle auth.statusChange events
         FB.Event.subscribe('auth.statusChange', function(response) {
           if (response.authResponse) {
             // user has auth'd your app and is logged into Facebook
-            // how this works is discussed at developer.facebook.com
             FB.api('/me', function(me){
               if (me.name) {
                 document.getElementById('auth-displayname').innerHTML = me.name;
@@ -118,6 +147,7 @@
             document.getElementById('auth-loggedin').style.display = 'block';
           } else {
             // user has not auth'd your app, or is not logged into Facebook
+            window.top.location='http://www.nextclimate.org/';
             document.getElementById('auth-loggedout').style.display = 'block';
             document.getElementById('auth-loggedin').style.display = 'none';
           }
@@ -130,17 +160,14 @@
         document.getElementById('auth-logoutlink').addEventListener('click', function(){
           FB.logout();
         }); 
-      } 
+
+      }
+      
     </script>
 
-
-<!-- Now, actually start the content of the page -->
-
-<div class="container">
+  <div class="container">
 
     <div class="row sixteen columns">
-
-<!-- Render the header at the top of the page (NextClimate logo, about, support, etc.) -->
       <header>
 	<div class="six columns">
 	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
@@ -148,42 +175,74 @@
 	<div class="eight columns">
       	<ul>
       	  <li class='s2'><a href='static/about.html'>About</a> </li>
+      	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
+      	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
+      	  <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li>
       	</ul>
 	</div>
       </header>
-
-
-
-<!-- This is the login / intro page. Users are re-directed here when they logout or come to a different page without logging in. -->
-    <div class="twelve columns" style="padding-top:40px">
-      <h3 style="padding-bottom:20px">NextClimate helps you learn about climate change and find out what you can do to help.</h3>
-      <div id="auth-status">
-	<!-- this area is rendered if you are _not_ logged in -->
-        <div id="auth-loggedout">
-	  <h3 class="strapline" style="padding-bottom:20px">Login using facebook to become a beta tester.</h3>
-          <button href="#" id="auth-loginlink" class="button_fbstyle"><img src="../images/facebook_smaller.png" style="vertical-align:top">
-	    <span style="padding-left:2px" >Login</span></button>
-        </div>
-	<!-- this area is rendered if you are logged in -->
-        <div id="auth-loggedin" style="display:none">
-          <h3 class="strapline" style="padding-bottom:20px">You are logged in as <span id="auth-displayname"></span>.</h3>
-	  <div class="row twelve columns">
-            <button onclick="window.top.location='http://www.nextclimate.org/queryZip'" style="height:30px">Continue to NextClimate</button>
-            <button href="#" id="auth-logoutlink" style="height:30px"><img src="../images/facebook_smaller.png" style="vertical-align:top">
-	      <span style="padding-left:2px">Logout</span></button>
-	  </div>
-	</div>
       </div>
       
+    <div class="sixteen columns">
+<!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
+      <div class="eight columns">
+	<h2>What can you do?</h2>
+       <h4>First, let us know a bit about you. We'll use this
+       information to help you identify energy-saving
+	 opportunities. You can both save money and help protect
+	 future generations from dangerous climate change.</h4>
+       <br> 
+       <form action="/energy" method="post">
+	 <label for="electricity">What is your highest monthly electricity bill?</label>
+	 <select id="electricity" name="electricity">
+	   <option value="low">Less than $100</option>
+	   <option value="medium">Between $100 and $200</option>
+	   <option value="high">More than $200</option>
+	 </select>
+	 <br>
+	 <label for="heat">What is your highest monthly home gas or heating oil bill?</label>
+	 <select id="heat" name="heat">
+	   <option value="NA">I don't have this</option>
+	   <option value="low">Less than $100</option>
+	   <option value="medium">Between $100 and $200</option>
+	   <option value="high">More than $200</option>
+	 </select>
+
+	   <!-- Label and text input -->
+	   <label for="zipcode">What is your zipcode?</label>
+	   <input type="text" id="zipcode" name="zipcode" value="{{zipcode}}" />
+
+      <div><input type="submit" value="Done!"></div>
+    </form>
+
+      </div>
+
     </div>
 <hr>
-
-<!-- this footer is on every page -->
  <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
 
-</div>
-</div>
-</body>
+  </div>
+  </body>
 </html>
 
+<!-- <html> -->
+<!--   <body> -->
+<!--     {% for greeting in greetings %} -->
+<!--       {% if greeting.author %} -->
+<!--         <b>{{ greeting.author.nickname }}</b> wrote: -->
+<!--       {% else %} -->
+<!--         An anonymous person wrote: -->
+<!--       {% endif %} -->
+<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
+<!--     {% endfor %} -->
+
+<!--     <form action="/sign" method="post"> -->
+<!--       <div><textarea name="content" rows="3" cols="60"></textarea></div> -->
+<!--       <div><input type="submit" value="Sign Guestbook"></div> -->
+<!--     </form> -->
+
+<!--     <a href="{{ url }}">{{ url_linktext }}</a> -->
+
+<!--   </body> -->
+<!-- </html> -->
