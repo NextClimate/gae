@@ -61,6 +61,10 @@
 	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
 
+	<style type="text/css">
+	  body {background-image:url('images/sunflower-flip.png');}
+	</style>
+
 <!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
 <script type="text/javascript">
 
@@ -176,16 +180,16 @@
 
 <div class="container">
 
-    <div class="row sixteen columns">
+    <div class="row eight columns">
 
 <!-- Render the header at the top of the page (NextClimate logo, about, support, etc.) -->
       <header>
-	<div class="six columns">
+	<div class="row six columns">
 	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
 	</div>
-	<div class="eight columns">
-      	<ul>
-      	  <li class='s2'><a href='static/about.html'>About</a> </li>
+	<div class="row eight columns" style="margin-bottom:0px">
+      	<ul style="float:left">
+      	  <li class='s2' style="text-align:left"><a href='static/about.html'>About</a> </li>
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
       	</ul>
 	</div>
@@ -194,19 +198,19 @@
 
 
 <!-- This is the login / intro page. Users are re-directed here when they logout or come to a different page without logging in. -->
-    <div class="twelve columns" style="padding-top:40px">
-      <h3 style="padding-bottom:20px">NextClimate helps you learn about climate change and find out what you can do to help.</h3>
+    <div class="six columns" style="padding-top:20px">
+      <h4 style="padding-bottom:10px">NextClimate helps you learn about climate change and find out what you can do to help.</h4>
       <!-- <p> access_token: {{accessToken}}</p> -->
       <div id="auth-status">
 	<!-- this area is rendered if you are _not_ logged in -->
         <div id="auth-loggedout">
-	  <h3 class="strapline" style="padding-bottom:20px">Login using facebook to become a beta tester.</h3>
+	  <h5 class="strapline" style="padding-bottom:20px">Login using facebook to become a beta tester.</h5>
           <button href="#" id="auth-loginlink" class="button_fbstyle"><img src="../images/facebook_smaller.png" style="vertical-align:top">
 	    <span style="padding-left:2px" >Login</span></button>
         </div>
 	<!-- this area is rendered if you are logged in -->
         <div id="auth-loggedin" style="display:none">
-          <h3 class="strapline" style="padding-bottom:20px">You are logged in as <span id="auth-displayname"></span>.</h3>
+          <h4 class="strapline" style="padding-bottom:20px">You are logged in as <span id="auth-displayname"></span>.</h3>
 	    <div class="row clearfix">
 	      <div class="five columns" style="margin-left: 0px">
 		<form action='/queryZip' method='post' style="display: inline; margin-bottom: 0px;">
@@ -231,12 +235,12 @@
 	</div>
       </div>
       
-    </div>
-<hr>
+
+
 
 <!-- this footer is on every page -->
- <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
-
+ <footer style="float:left; padding-top:100px"><ul><li style="color:#FFFFFF">Questions or comments? Contact us at <a style="color:#FFFFFF" href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
+    </div>
 </div>
 </div>
 </body>

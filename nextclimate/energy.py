@@ -14,6 +14,29 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 
+# this class holds information about energy saving actions
+class Action(db.Model):
+  """Models an Action to reduce greenhouse gases """
+  name=db.StringProperty()
+  locale=db.StringProperty()
+  description=db.StringProperty()
+  effectHeatCool = db.FloatProperty()
+  effectWater = db.FloatProperty()
+  effectLighting = db.FloatProperty()
+  effectAppliance = db.FloatProperty()
+  cost = db.FloatProperty()
+  # one of DIY, sponsors, store, offsets
+  savings =  db.StringProperty()
+  category = db.StringProperty() 
+  #for DIY
+  youtube = db.StringProperty()
+  checklist = db.StringProperty()
+  #for sponsors
+  sponsors = db.StringProperty()
+  # for store
+  storeURL = db.StringProperty()
+
+
 # this class holds a zip code and climate info. This is an
 # entity in the datastore.
 
@@ -61,7 +84,8 @@ class ActNowPage(webapp.RequestHandler):
         zipcode_value=self.request.get('zipcode')
         electricity=self.request.get('electricity')
 	heat=self.request.get('heat')
-
+	FBid=self.request.get('id')
+	
 	# elecMod is a modifier that is based on the user response
 	# it modifies the size of the users energy use
 	# if the user picks the low value, it is 0.5,
@@ -88,12 +112,24 @@ class ActNowPage(webapp.RequestHandler):
 	     city = string.capwords(results[0].city)
 	 else:
 	     city = 'your area'
+
+
+	# pull all of the actions from the table
+	# and assemble into a javascript array
+
+	action_query = Action.all()
+	actions = action_query.fetch(5)
+	energy_list = ""
+	for a in actions:
+	    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', ' '],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings)
 	     
 
 	template_values = {'zipcode':zipcode_value,
 			   'city':city,
 			   'electricity': electricity,
-			   'elecMod': elecMod}
+			   'elecMod': elecMod,
+			   'FBid':FBid,
+			   'energyList':energy_list}
 
 
 	# there are more calculations in the javascript in energy.html

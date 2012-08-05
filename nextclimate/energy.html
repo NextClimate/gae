@@ -111,13 +111,9 @@
 	
 
         var data = google.visualization.arrayToDataTable([
-        ['Action','heating and cooling','water','lighting','appliances','savings', 'Act!'],
+        ['Action','heating and cooling','water','lighting','appliances','Savings', 'Act!'],
         ['No action',            1,   1,    1,   1, ' ', ' '],
-        ['Solar photovoltaics', 0.15, 0.15, 0.15, 0.15, ' $$$',' '],
-        ['Solar water heater',   1, 0.1,    1,   1, ' $$', ' '],
-        ['Efficient lighting',   1,   1, 0.15,   1, '$', ' '],
-        ['Fix air leaks',      0.9,   1,    1,   1, '$', ' '],
-        ['Unplug electronics' ,  1,   1,    1, 0.7, '$', ' '],
+        {{energyList}}
         ['Average in {{city}}', 6,   2,    1,    1, 'NA', 'NA'],
         ['Your baseline',          1,   1,  1,  1, 'NA', 'NA']
       ]);
@@ -125,7 +121,7 @@
       
       var i = 0;
        for (i = 1; i <= data.getNumberOfRows()-3; i = i+1) {
-	 data.setCell(i,6,"<form action='/selectAct' method='get'><button type='submit' name='type' value='"+ data.getValue(i,0) +"'>Learn more</button></form>");
+	 data.setCell(i,6,"<button><a style='text-decoration: none' href='/selectAct?id={{FBid}}&type="+ data.getValue(i,0) +"'>Learn more</a></button>");
 	}
 
        for (i = 1; i <= 4; i = i+1) {

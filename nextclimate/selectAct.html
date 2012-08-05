@@ -69,8 +69,13 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
-
-
+<!-- This is for the "go back" button -->
+	<script type="text/javascript">
+	  function goBack(i)
+	  {
+	   window.history.go(i)
+	  }
+	</script>
 
 <!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
 
@@ -149,6 +154,10 @@
             FB.api('/me', function(me){
               if (me.name) {
                 document.getElementById('auth-displayname').innerHTML = me.name;
+                document.getElementById('start-form-id').value = me.id;
+                document.getElementById('start-form-email').value = me.email;
+                document.getElementById('start-form-name').value = me.name;
+                document.getElementById('start-form-locale').value = me.locale;
               }
             })
             document.getElementById('auth-loggedout').style.display = 'none';
@@ -236,38 +245,88 @@
       <div class="eight columns">
 	<!-- render the name and description of the energy improvement -->
 	<h2>{{selectName}}</h2>
+	</div>
+      <div class="eight columns">
        <h4>{{selectDesc}}</h4>
        <br> 
        <!-- show the youtube video plugin -->
        {{selectYoutube}}
 
-       <!-- allow the facebook comments section -->
-        <div class="fb-comments" data-href="http://www.nextclimate.org/selectAct?type={{selectType}}" data-num-posts="6" data-width="460"></div>
 	</div>
 
-	<!-- render the checklist of what you'll need -->
-	<div class="five columns">
+	<!-- render the checklist of what you'll need -->	   
+	<!-- buttons for start and go back -->
+
+	<div class="six columns" style="margin-left: 0px">
+
+	  <div class="row six columns">
+
+	    <div class="three columns">
+	      <h5>{{startText}}</h5>
+	    </div>
+	    <div class="two columns">
+
+  	    {% ifequal status 'new' %}
+		<form action='/selectAct' method='post' style="display: inline; margin-bottom: 0px;">
+		  <input type="hidden" name="id" id="start-form-id">
+		  <input type="hidden" name="email" id="start-form-email">
+		  <input type="hidden" name="name" id="start-form-name">
+		  <input type="hidden" name="locale" id="start-form-locale">
+		  <input type="hidden" name="type" value="{{selectType}}">
+		  <input type="hidden" name="actionName" value="{{selectName}}">
+		  <input type="hidden" name="start" value="1">
+		  <button type="submit" style="height:30px">Start this project</button>
+		</form>
+	{% endifequal %}
+
+	{% ifequal status 'started' %}
+		<form action='/selectAct' method='post' style="display: inline; margin-bottom: 0px;">
+		  <input type="hidden" name="id" id="start-form-id">
+		  <input type="hidden" name="email" id="start-form-email">
+		  <input type="hidden" name="name" id="start-form-name">
+		  <input type="hidden" name="actionName" value="{{selectName}}">
+		  <input type="hidden" name="type" value="{{selectType}}">
+		  <input type="hidden" name="complete" value="1">
+		  <button type="submit" style="height:30px">I've finished it!</button>
+	{% endifequal %}
+
+	{% ifequal status 'complete' %}
+	<!-- User has completed action. Perhaps share with others? -->
+	{% endifequal %}
+	
+	</div>
+	</div>
+
+	<div class="row six columns">
 	  <h4>What you'll need</h4>
 	      <ul>
 	      {% for item in selectChecklist %}
 	      <li>{{item}}</li>
 	      {% endfor %}
 	      </ul>
-	      <h4>Do you have what you'll need?</h4>
+	</div>
+
+
+	<!-- if the user hits the start button, render the facebook / twitter interface -->
+	{% ifequal status 'started' %}
+	<div class="row six columns">
+
+	  <h4>Do you have what you'll need?</h4>
 
 	      <!-- Post to facebook or twitter -->
 		<p>Need to borrow tools or supplies from a friend? Let them know you are starting this project.</p>
 		<div>Message: <textarea name="borrowMessage" id="fbMessage" rows="3" cols="40"></textarea></div>
-		<!-- <input type="hidden" name="type" value={{selectType}}> -->
 
 		<!-- facebook button -->
+
 		<div class="one columns">
 		<div id="custom-fb-button">
 		  <button onclick='sendRequestViaMultiFriendSelector()'>
 		    <img style="padding-top:4px" src="../images/facebook-icon.ico">
 		    <span style="padding-left:5px; vertical-align:top; padding-top:0px">Share</span>
 		  </button>
-		</div>	      
+
+		</div>
 		</div>
 		<!-- twitter button -->
 		<div class="one columns">
@@ -277,6 +336,18 @@
 		    <img style="padding-top:2px" src="http://a4.twimg.com/images/favicon.ico"><span style="padding-left:5px; vertical-align:top; padding-top:0px">Tweet</span></button>
 		</div>
 		</div>
+	</div>
+	{% endifequal %}
+
+		<!-- end block for facebook / twitter interface -->
+
+		<div class="row six columns">
+		  <h4>What others are saying</h4>
+
+		  <!-- allow the facebook comments section -->
+		  <div class="fb-comments" data-href="http://www.nextclimate.org/selectAct?type={{selectType}}" data-num-posts="6" data-width="320"></div>
+		</div>
+
 
 		</div>
 

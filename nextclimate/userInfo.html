@@ -112,6 +112,7 @@
           FB.api('/me', function(me){
             if (me.name) {
               document.getElementById('auth-displayname').innerHTML = me.name;
+              document.getElementById('auth-form-id').value = me.id;
             }
           })
         } else {
@@ -191,6 +192,7 @@
 	 future generations from dangerous climate change.</h4>
        <br> 
        <form action="/energy" method="post">
+	 <input type="hidden" name="id" id="auth-form-id">
 	 <label for="electricity">What is your highest monthly electricity bill?</label>
 	 <select id="electricity" name="electricity">
 	   <option value="low">Less than $100</option>
