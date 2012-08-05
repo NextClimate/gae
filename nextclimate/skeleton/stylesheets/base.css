@@ -288,9 +288,9 @@
 ================================================== */
 
 	form {
-		margin-bottom: 20px; }
+		margin-bottom: 0px; }
 	fieldset {
-		margin-bottom: 20px; }
+		margin-bottom: 0px; }
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
@@ -305,7 +305,7 @@
 		font: 13px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 		color: #777;
 		margin: 0;
-		width: 210px;
+		/* width: 210px; */
 		max-width: 100%;
 		display: block;
 		margin-bottom: 20px;
@@ -328,8 +328,8 @@
 		display: block;
 		font-weight: bold;
 		font-size: 13px;  }
-	select {
-		width: 220px; }
+	/* select { */
+	/* 	width: 220px; } */
 	input[type="checkbox"] {
 		display: inline; }
 	label span,

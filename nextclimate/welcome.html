@@ -112,6 +112,18 @@
             FB.api('/me', function(me){
               if (me.name) {
                 document.getElementById('auth-displayname').innerHTML = me.name;
+                document.getElementById('auth-form-name').value = me.name;
+                document.getElementById('auth-form-id').value = me.id;
+                document.getElementById('auth-form-gender').value = me.gender;
+                document.getElementById('auth-form-email').value = me.email;
+                document.getElementById('auth-form-birthday').value = me.birthday;
+                document.getElementById('auth-form-first_name').value = me.first_name;      
+                document.getElementById('auth-form-last_name').value = me.last_name;      
+                document.getElementById('auth-form-locale').value = me.locale;      
+                document.getElementById('auth-form-verified').value = me.verified;      
+                <!-- document.getElementById('ContinueToNextClimate').onclick =  -->
+                <!--  function() {window.top.location="http://www.nextclimate.org/queryZip?name="+me.name+"&id="+me.id;}; -->
+      
               }
             })
             document.getElementById('auth-loggedout').style.display = 'none';
@@ -125,12 +137,38 @@
 
         // respond to clicks on the login and logout links
         document.getElementById('auth-loginlink').addEventListener('click', function(){
-          FB.login();
+          FB.login(function(response) {
+             if (response.status === 'connected') {
+               // the user is logged in and has authenticated your
+               // app, and response.authResponse supplies
+               // the user's ID, a valid access token, a signed
+               // request, and the time the access token 
+               // and signed request each expire
+               var uid = response.authResponse.userID;
+               var accessToken = response.authResponse.accessToken;
+               
+             } else if (response.status === 'not_authorized') {
+               // the user is logged in to Facebook, 
+               // but has not authenticated your app
+             } else {
+            // the user isn't logged in to Facebook.
+            }
+         }, {scope: 'email, user_birthday'});
+
         });
         document.getElementById('auth-logoutlink').addEventListener('click', function(){
           FB.logout();
         }); 
       } 
+
+      <!-- function continueToNextClimate() { -->
+      <!--   FB.api('/me', function(me){ -->
+      <!--   if (me.name) { -->
+      <!--    window.top.location='http://www.nextclimate.org/queryZip?name='+me.name+'&id='me.id; -->
+      <!--   } -->
+      <!-- }) -->
+      <!-- } -->
+
     </script>
 
 
@@ -158,6 +196,7 @@
 <!-- This is the login / intro page. Users are re-directed here when they logout or come to a different page without logging in. -->
     <div class="twelve columns" style="padding-top:40px">
       <h3 style="padding-bottom:20px">NextClimate helps you learn about climate change and find out what you can do to help.</h3>
+      <!-- <p> access_token: {{accessToken}}</p> -->
       <div id="auth-status">
 	<!-- this area is rendered if you are _not_ logged in -->
         <div id="auth-loggedout">
@@ -168,10 +207,26 @@
 	<!-- this area is rendered if you are logged in -->
         <div id="auth-loggedin" style="display:none">
           <h3 class="strapline" style="padding-bottom:20px">You are logged in as <span id="auth-displayname"></span>.</h3>
-	  <div class="row twelve columns">
-            <button onclick="window.top.location='http://www.nextclimate.org/queryZip'" style="height:30px">Continue to NextClimate</button>
-            <button href="#" id="auth-logoutlink" style="height:30px"><img src="../images/facebook_smaller.png" style="vertical-align:top">
-	      <span style="padding-left:2px">Logout</span></button>
+	    <div class="row clearfix">
+	      <div class="five columns" style="margin-left: 0px">
+		<form action='/queryZip' method='post' style="display: inline; margin-bottom: 0px;">
+		  <input type="hidden" name="name" id="auth-form-name">
+		  <input type="hidden" name="id" id="auth-form-id">
+		  <input type="hidden" name="gender" id="auth-form-gender">
+		  <input type="hidden" name="email" id="auth-form-email">
+		  <input type="hidden" name="birthday" id="auth-form-birthday">
+		  <input type="hidden" name="first_name" id="auth-form-first_name">
+		  <input type="hidden" name="last_name" id="auth-form-last_name">
+		  <input type="hidden" name="verified" id="auth-form-verified">
+		  <input type="hidden" name="locale" id="auth-form-locale">
+
+		  <button type="submit" style="height:30px">Continue to NextClimate</button>
+		</form>
+	      <!-- 	</div> -->
+	      <!-- <div class="two columns"> -->
+		<button href="#" id="auth-logoutlink" style="height:30px"><img src="../images/facebook_smaller.png" style="vertical-align:top">
+		  <span style="padding-left:2px">Logout</span></button>
+	      </div>
 	  </div>
 	</div>
       </div>
