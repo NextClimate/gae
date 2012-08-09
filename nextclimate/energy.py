@@ -36,6 +36,17 @@ class Action(db.Model):
   # for store
   storeURL = db.StringProperty()
 
+# this class is a connection between a user and and action
+class UserAction(db.Model):
+  name = db.StringProperty() # the user name that has started a project
+  locale = db.StringProperty() # locale, like "en_US" for language support
+  FBid = db.StringProperty() # the user that has started a project
+  email = db.StringProperty() # the email address of the user
+  actionName = db.StringProperty() # name of the action
+  dateStart = db.DateTimeProperty(auto_now_add=True) # date project was started
+  dateEnd = db.DateTimeProperty() # date project was completed
+  complete = db.StringProperty() # one of started or complete
+
 
 # this class holds a zip code and climate info. This is an
 # entity in the datastore.
@@ -115,15 +126,47 @@ class ActNowPage(webapp.RequestHandler):
 
 
 	# pull all of the actions from the table
-	# and assemble into a javascript array
+	# and assemble into a javascript array.
+	# Need some logic here to rank results to
+        # show top five most relevant.
 
 	action_query = Action.all()
 	actions = action_query.fetch(5)
 	energy_list = ""
-	for a in actions:
-	    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', ' '],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings)
-	     
 
+	# has the user started/completed these actions?
+
+	userAction_query = UserAction.all()
+	userAction_query.filter("FBid = ",FBid)
+	userActions = userAction_query.fetch(5)
+
+	heatCoolMod = 1
+	waterMod = 1
+	lightingMod = 1
+	applianceMod = 1
+
+	
+	# iterate over all actions
+	for a in actions:
+	    # for each action, check if user has started it
+	    for ua in userActions:
+		if (ua.actionName == a.name) and (ua.complete == "started"):
+		    button_html = """<button style='width:70px'><a style='text-decoration: none' href='/selectAct?id=%s&type=%s'>%s</a></button>""" % (FBid, a.name, "Finish It")
+		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings, button_html, 0)
+		    break
+		if (ua.actionName == a.name) and (ua.complete == "complete"):
+		    button_html = "<span style='text-align:center'>Complete!<span>"
+		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, 1, 1, 1, 1, a.savings, button_html, 1)
+		    heatCoolMod = heatCoolMod * a.effectHeatCool
+		    waterMod = waterMod * a.effectWater
+		    lightingMod = lightingMod * a.effectLighting
+		    applianceMod = applianceMod * a.effectAppliance
+		    break
+	    else:
+		button_html = """<button><a style='text-decoration: none' href='/selectAct?id=%s&type=%s'>%s</a></button>""" % (FBid, a.name, "Learn More")
+		energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings, button_html, 0)
+	     
+	energy_list = """[ '%s',%f, %f, %f, %f, '%s', "%s",%d],""" % ("No new action",heatCoolMod, waterMod, lightingMod, applianceMod, ' ',' ',1) + energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % ("Your baseline",heatCoolMod, waterMod, lightingMod, applianceMod, 'NA','NA',0)
 	template_values = {'zipcode':zipcode_value,
 			   'city':city,
 			   'electricity': electricity,

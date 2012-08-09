@@ -25,8 +25,9 @@
   .s1{width:340px;margin-left:0px}
   .s2{width:90px;text-align:right}
   .s3{width:270px;text-align:right}
-  header ul li a:link,a:visited{display:block;font-weight:bold;color:#444444;text-align:center;padding:4px;text-decoration:none;line-height:20px; font-size:1.2em; padding-top:10px}
-  header ul li a:hover,a:active {color:#000000}
+  header ul li a{color:#222}
+  header ul li a:link,a:visited{display:block;color:#222;font-weight:bold;text-align:center;padding:4px;text-decoration:none;line-height:20px; font-size:1.2em; padding-top:10px}
+  header ul li a:hover,a:active {color:#CCC}
 
   input.button_fbstyle {
     background-image: url(../images/facebook_smaller.png); /* 16px x 16px */
@@ -43,7 +44,7 @@
   footer{margin-top:10px; margin:0px; text-align:center}
   footer ul {list-style-type:none;margin:0;padding:0px;overflow:hidden; float:center}
   footer ul li {float:center;color:#AAA;display:block}
-  footer ul li a:link,a:visited{color:#AAA;text-align:center;padding:0px;text-decoration:none; padding-top:10px}
+  footer ul li a:link,a:visited{color:#222;text-align:center;padding:0px;text-decoration:none; padding-top:10px}
   footer ul li a:hover,a:active {color:#000000}
 
 /* p.contact{color:#555;text-align:center} */
@@ -56,7 +57,7 @@
 
     .container                                  { position: relative; width: 960px; margin: 0 auto; padding: 0; }
     .column, .columns                           { float: left; display: inline; margin-left: 10px; margin-right: 10px; }
-    .row                                        { margin-bottom: 20px; }
+    .row                                        { margin-bottom: 10px; }
 
     /* Nested Column Classes */
     .column.alpha, .columns.alpha               { margin-left: 0; }

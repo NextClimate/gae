@@ -111,27 +111,25 @@
 	
 
         var data = google.visualization.arrayToDataTable([
-        ['Action','heating and cooling','water','lighting','appliances','Savings', 'Act!'],
-        ['No action',            1,   1,    1,   1, ' ', ' '],
+        ['Action','heating and cooling','water','lighting','appliances','Savings', 'Act!', 'complete'],
+/*        ['No action',            1,   1,    1,   1, ' ', ' '],*/
         {{energyList}}
-        ['Average in {{city}}', 6,   2,    1,    1, 'NA', 'NA'],
-        ['Your baseline',          1,   1,  1,  1, 'NA', 'NA']
+        ['Average in {{city}}', 6,   2,    1,    1, 'NA', 'NA',0]
       ]);
 
+      // this is the row that holds the results shown in the barplot
+      showRow = 0
+      // this has the baseline multipliers before any actions are taken
+      modRow = data.getNumberOfRows()-2
+      // this has the average GHG emissions for the area of the user
+      GHGrow = data.getNumberOfRows()-1
       
+
       var i = 0;
-       for (i = 1; i <= data.getNumberOfRows()-3; i = i+1) {
-	 data.setCell(i,6,"<button><a style='text-decoration: none' href='/selectAct?id={{FBid}}&type="+ data.getValue(i,0) +"'>Learn more</a></button>");
-	}
 
        for (i = 1; i <= 4; i = i+1) {
-	data.setCell(data.getNumberOfRows()-1,i,
-		     data.getValue(data.getNumberOfRows()-2,i) * {{elecMod}});
-	}
-
-       for (i = 1; i <= 4; i = i+1) {
-	data.setCell(0,i,
-		     data.getValue(data.getNumberOfRows()-2,i) * {{elecMod}});
+	data.setCell(0,i, data.getValue(GHGrow, i) * 
+			  data.getValue(modRow, i) * {{elecMod}});
 	}
 
         /* The DataTable above has both the energy saving options, as well as the 
@@ -142,33 +140,36 @@
 	   last two rows of the DataTable. */
       
       var viewTable = new google.visualization.DataView(data);
-      viewTable.hideColumns([1,2,3,4]);
+      viewTable.hideColumns([1,2,3,4,7]);
       viewTable.hideRows([6,7]);
 
       var viewBar = new google.visualization.DataView(data);
-      viewBar.hideColumns([5,6]);
-      viewBar.setRows([0,7,6 ]);
+      viewBar.hideColumns([5,6,7]);
+      viewBar.setRows([0,7 ]);
 
       // The visual options for the barchart are below. 
 
-      var options = {isStacked:true, height: 420,width:450,fontName:'Georgia',
+      var options = {isStacked:true, height: 360,width:320,fontName:'Georgia',
                      legend: {position:'bottom'},
                      colors: ['#BB1111','#CC4444','#DD8888','#CCBBBB'],
                      title:'  Your Greenhouse Gas Emissions',titlePosition:'out',
                      titleTextStyle: {fontName:'Georgia',fontSize: 16},
                      hAxis:{textStyle: {fontSize: 16}},
-                     chartArea:{left:20,top:20,width:"80%",height:"75%"},
+                     chartArea:{left:20,top:20,width:"90%",height:"70%"},
                      vAxis: {minValue:0, maxValue:16, textPosition:'in', gridlines: {count:4,color:'#F8F8F8' }}
                     };
 
-      var barchart = new google.visualization.ColumnChart(document.getElementById('chart1'));
-      // draw the barchart 
-      barchart.draw(viewBar, options);
 
       // draw the table 
       var table = new google.visualization.Table(document.getElementById('chart2'));
       table.draw(viewTable, {width:280, allowHtml:true});
       table.setSelection([{'row': 0}]);
+
+      data.setCell(0,0, 'Your emissions');
+      var barchart = new google.visualization.ColumnChart(document.getElementById('chart1'));
+      // draw the barchart 
+
+      barchart.draw(viewBar, options);
 
 
        /*   There will be extra emissions leftover after any energy
@@ -195,18 +196,17 @@
        var item = curRow[0];
        var nCurRow = item.row;
 
-       if (nCurRow == 0) {
-        // case when No Action is selected 
-	data.setCell(0,0, 'No Action');
-	data.setCell(0,1, 1);		
-	data.setCell(0,2, 1);		
-	data.setCell(0,3, 1);		
-	data.setCell(0,4, 1);		
+       if ((nCurRow == 0) |
+	   (data.getValue(nCurRow,7) == 1)) {
+        // case when No Action or completed action is selected 
+	data.setCell(0,0, 'Your emissions');
+	data.setCell(0,1, data.getValue(GHGrow, 1) * data.getValue(modRow, 1) * {{elecMod}});
+	data.setCell(0,2, data.getValue(GHGrow, 2) * data.getValue(modRow, 2) * {{elecMod}});
+	data.setCell(0,3, data.getValue(GHGrow, 3) * data.getValue(modRow, 3) * {{elecMod}});
+	data.setCell(0,4, data.getValue(GHGrow, 4) * data.getValue(modRow, 4) * {{elecMod}});
        } else {
 	  // update 
-          data.setCell(0,0,data.getValue(nCurRow,0));       
-       }
-
+          data.setCell(0,0,data.getValue(nCurRow,0) );       
 
 	  /* Row 0 holds the values that are updated when the users
 	     selects an energy saving option. The following for loop
@@ -215,13 +215,18 @@
 	     corresponds to one of the four components of home energy
 	     use: lighting, appliances, heating & cooling, etc.  */
 
-       for (i = 1; i <= 4; i = i+1) {
-	data.setCell(0,i,
-		     data.getValue(data.getNumberOfRows()-2,i) * {{elecMod}} *
-		     data.getValue(nCurRow,i));
-	}
+	  for (i = 1; i <= 4; i = i+1) {
+	      data.setCell(0,i,
+		     data.getValue(modRow,i) * {{elecMod}} *
+		     data.getValue(nCurRow,i) * data.getValue(GHGrow,i));
+	  }
+
+       }
+
+
+
      
-       viewBar.setRows([0,7,6]);
+       viewBar.setRows([0,7]);
        /* redraw the barchart with new modifiers based on table selection */
        barchart.draw(viewBar, options);
 
@@ -375,15 +380,15 @@
       <!-- render the table, barchart, and text about offsets -->
       <br>
       <div class="row">
-	<div class="five columns">
+	<div class="six columns">
 	 <p>Select the action below and check the improvement in
 	 greenhouse gas emissions.</p>
-         <div style="float: rigth;" id="chart2"></div>
+         <div style="" id="chart2"></div>
 	 <br>
 	 <div id="totalOffset"></div>
 	</div>
-	<div class="nine columns">
-            <div style="float: right;" id="chart1"></div>
+	<div class="six columns">
+          <div  id="chart1"></div>
 	</div>
 
       </div>

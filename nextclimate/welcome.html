@@ -62,8 +62,22 @@
 
 
 	<style type="text/css">
-	  body {background-image:url('images/sunflower-flip.png');}
+	  body {
+	  background-image:url('images/sunflower-flip.png');
+	  background-repeat:no-repeat;
+	  background-position:0% 0%;
+	  background-color:black;
+	  }
 	</style>
+
+	<script type="text/javascript" >
+	   var viewportWidth  = document.documentElement.clientWidth
+		, viewportHeight = document.documentElement.clientHeight;
+	   if(viewportWidth < 600) {
+		document.body.style.backgroundimage='none';
+   	        document.body.style.backgroundcolor='grey';
+	     }
+	</script>
 
 <!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
 <script type="text/javascript">
@@ -180,14 +194,14 @@
 
 <div class="container">
 
-    <div class="row eight columns">
+    <div class="row six columns">
 
 <!-- Render the header at the top of the page (NextClimate logo, about, support, etc.) -->
       <header>
-	<div class="row six columns">
-	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
+	<div class="row six columns" style="margin-bottom:0px">
+	  <a href="../" ><img class="logo scale-with-grid" style="margin-top:10px" src="../images/nextclimate_logo_transparent.png" /></a>
 	</div>
-	<div class="row eight columns" style="margin-bottom:0px">
+	<div class="row six columns" style="margin-top:0px">
       	<ul style="float:left">
       	  <li class='s2' style="text-align:left"><a href='static/about.html'>About</a> </li>
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
@@ -198,7 +212,7 @@
 
 
 <!-- This is the login / intro page. Users are re-directed here when they logout or come to a different page without logging in. -->
-    <div class="six columns" style="padding-top:20px">
+    <div class="six columns" style="padding-top:10px">
       <h4 style="padding-bottom:10px">NextClimate helps you learn about climate change and find out what you can do to help.</h4>
       <!-- <p> access_token: {{accessToken}}</p> -->
       <div id="auth-status">
@@ -210,7 +224,7 @@
         </div>
 	<!-- this area is rendered if you are logged in -->
         <div id="auth-loggedin" style="display:none">
-          <h4 class="strapline" style="padding-bottom:20px">You are logged in as <span id="auth-displayname"></span>.</h3>
+          <h5 class="strapline" style="padding-bottom:20px">You are logged in as <span id="auth-displayname"></span>.</h5>
 	    <div class="row clearfix">
 	      <div class="five columns" style="margin-left: 0px">
 		<form action='/queryZip' method='post' style="display: inline; margin-bottom: 0px;">

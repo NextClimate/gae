@@ -45,6 +45,7 @@ def action_key(action_name=None):
   """Constructs a datastore key for a Action entity with action_name."""
   return db.Key.from_path('Action', action_name or 'default_action')
 
+# this class is a connection between a user and and action
 class UserAction(db.Model):
   name = db.StringProperty() # the user name that has started a project
   locale = db.StringProperty() # locale, like "en_US" for language support
