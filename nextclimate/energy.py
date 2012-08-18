@@ -151,7 +151,7 @@ class ActNowPage(webapp.RequestHandler):
 	    # for each action, check if user has started it
 	    for ua in userActions:
 		if (ua.actionName == a.name) and (ua.complete == "started"):
-		    button_html = """<button style='width:70px'><a style='text-decoration: none' href='/selectAct?id=%s&type=%s'>%s</a></button>""" % (FBid, a.name, "Finish It")
+		    button_html = """<button style='width:70px'><a style='text-decoration: none' href='/selectAct?id=%s&type=%s&zipcode=%s'>%s</a></button>""" % (FBid, a.name, zipcode_value, "Finish It")
 		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings, button_html, 0)
 		    break
 		if (ua.actionName == a.name) and (ua.complete == "complete"):
@@ -163,7 +163,7 @@ class ActNowPage(webapp.RequestHandler):
 		    applianceMod = applianceMod * a.effectAppliance
 		    break
 	    else:
-		button_html = """<button><a style='text-decoration: none' href='/selectAct?id=%s&type=%s'>%s</a></button>""" % (FBid, a.name, "Learn More")
+		button_html = """<button><a style='text-decoration: none' href='/selectAct?id=%s&type=%s&zipcode=%s'>%s</a></button>""" % (FBid, a.name, zipcode_value, "Learn More")
 		energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings, button_html, 0)
 	     
 	energy_list = """[ '%s',%f, %f, %f, %f, '%s', "%s",%d],""" % ("No new action",heatCoolMod, waterMod, lightingMod, applianceMod, ' ',' ',1) + energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % ("Your baseline",heatCoolMod, waterMod, lightingMod, applianceMod, 'NA','NA',0)

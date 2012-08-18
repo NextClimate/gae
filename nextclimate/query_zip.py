@@ -152,9 +152,9 @@ class MainPage(webapp.RequestHandler):
 	for v in results:
 	    p1 = "The future climate of "+string.capwords(v.city)+" will be most like present day "
 	    if v.maxTa1_2090 > 0:
-		place = p1 + "Upstate New York"
+		place = p1 + "Los Angeles"
 	    if v.maxTa1_2090 > 10:
-		place = p1 + "New York City"
+		place = p1 + "Los Angeles"
 	    if v.maxTa1_2090 > 20:
 		place = p1 + "Kansas"
 	    if v.maxTa1_2090 > 30:

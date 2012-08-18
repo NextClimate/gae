@@ -185,6 +185,7 @@
           FB.api('/me', function(me){
             if (me.name) {
               document.getElementById('auth-displayname').innerHTML = me.name;
+              document.getElementById('auth-form-id').value = me.id;
             }
           })
         } else {
@@ -203,6 +204,7 @@
             FB.api('/me', function(me){
               if (me.name) {
                 document.getElementById('auth-displayname').innerHTML = me.name;
+
               }
             })
             document.getElementById('auth-loggedout').style.display = 'none';
@@ -317,12 +319,13 @@
     <h5> {{place}}.  By reducing our dependence on fossil fuels,
       future warming in your area can be limited to {{maxTb2_2090}}
       days per year above 90 degrees. If
-      we <a href="/actnow?zipcode_value={{zipcode}}">act now</a>, we can protect
+      we act now, we can protect
       our children and grandchildren from dangerous climate
       change. </h5><p></p>
 
     <!-- render Act Now button -->
     <form action="/actnow" method="get">
+      <input type="hidden" name="name" id="auth-form-name">    
     <button type="submit" class="full-width button" name="zipcode_value" value={{zipcode}}>
       <h4>Act Now!</h4></button>
     </form>

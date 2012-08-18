@@ -28,6 +28,20 @@ def zipmsa_key(zipmsa_value=None):
   """Constructs a datastore key for a Zipcode entity with zipcode_value."""
   return db.Key.from_path('ZipMSA', zipmsa_value or 'default_zipcode')
 
+class UserNC(db.Model):
+    """ This is a NextClimate user """
+    name = db.StringProperty()
+    FBid = db.StringProperty()
+    gender = db.StringProperty()
+    email = db.EmailProperty()
+    birthday = db.DateProperty()
+    firstName = db.StringProperty()
+    lastName = db.StringProperty()
+    locale = db.StringProperty()
+    verified = db.StringProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
+    lastLogin = db.DateTimeProperty(auto_now=True)
+
 
 # this class is called when there is a request to /actnow page.
 # it renders userInfo.html, which asks the user a series of
@@ -38,6 +52,8 @@ def zipmsa_key(zipmsa_value=None):
 class ActNowPage(webapp.RequestHandler):
     def get(self):
         zipcode_value=self.request.get('zipcode_value')
+        FBid=self.request.get('id')
+
 	template_values = {'zipcode':zipcode_value}
 
 	path = os.path.join(os.path.dirname(__file__), 'userInfo.html')

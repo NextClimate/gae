@@ -5,6 +5,10 @@ from google.appengine.ext.webapp import template
 import cgi
 import datetime
 import urllib
+import urllib2
+import cookielib
+import re
+
 import wsgiref.handlers
 import string
 
@@ -105,6 +109,65 @@ def send_complete_email(toEmail, toName, actionName):
     message.send()
 
 
+def get_local_professionals(zipcode, profession):
+    url = 'http://solar-estimate.org/'
+    user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+    headers = { 'User-Agent' : user_agent }
+
+    urlopen = urllib2.urlopen
+    Request = urllib2.Request
+    cj = cookielib.LWPCookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+    urllib2.install_opener(opener)
+
+    req = Request(url, {}, headers)
+
+    handle = urlopen(req)
+
+    for index, cookie in enumerate(cj):
+	print index, '  :  ', cookie
+
+
+	url = 'http://solar-estimate.org/index.php'
+
+	values = {'page' : 'findacontractor',
+		  'subpage' : 'show',
+		  'from' : 'step2',
+		  'state' : '',
+		  'county' : '',
+		  'business' : '0'}
+	values[ profession ]  = '1'
+	values['zipcode' ] = zipcode
+	  # 'wantwater' : '0',
+	  # 'wantpool' : '0',
+	  # 'wantair' : '0',
+	  # 'wantgeo' : '0',
+	  # 'wantwind' : '0',
+	  # 'wantwood' : '0',	  
+	  # 'wantdesign' : '0',
+	  # 'wantcooker' : '0',
+	  # 'wantpump' : '0',
+	  # 'wantengineering' : '0',
+	  # 'wantenergyaudit' : '0',
+	  # 'wantweatherization' : '0',
+	  # 'wantfinance' : '0',
+
+	data = urllib.urlencode(values)
+
+	req = Request(url, data, headers)
+	response = urllib2.urlopen(req)
+	the_page = response.read()
+
+	siteNames = re.findall('<span style="font-size:14px;font-weight:bold;text-decoration:underline; color:##00003F;">?(.*?)</span>', the_page)
+	websites = re.findall('Website: <a href="?(.*?)"? target=_blank>', the_page)
+
+	return_string = ''
+	for s, w in zip(siteNames, websites):
+	    return_string = return_string +  ''' <li><a href="%s" target="_blank"> %s </a></li> ''' % (w,s.title())
+	return return_string
+
+
+    
 # this class is called when there is a request to /selectAct
 # it populates the selectAct.html page with the action information
 # for the energy saving action that the users has selected.
@@ -113,6 +176,7 @@ class SelectActPage(webapp.RequestHandler):
     def get(self):
 	start_boolean = bool(self.request.get('start'))
 	FBid = self.request.get('id')
+	zipcode = self.request.get('zipcode')
 	
         act_value=self.request.get('type')
  	qTrue  = 0
@@ -144,6 +208,11 @@ class SelectActPage(webapp.RequestHandler):
 		    start_text="You have completed this project"
 
 
+	    if (v.sponsors):
+		professionals = get_local_professionals(zipcode, v.sponsors)
+	    else:
+		professionals = ''
+
 	    template_values = {
 		'status':status,
 		'startText':start_text,
@@ -151,6 +220,7 @@ class SelectActPage(webapp.RequestHandler):
 		'selectDesc':v.description,
 		'selectYoutube':v.youtube,
 		'selectChecklist':string.split(v.checklist,"|"),
+		'selectProfessionals':professionals,
 		'selectType':act_value,
 		'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
 		}
@@ -169,6 +239,7 @@ class SelectActPage(webapp.RequestHandler):
 	    email = self.request.get('email')
 	    name = self.request.get('name')
 	    actionName = self.request.get('actionName')
+	    professionals=self.request.get('professionals')
 	    FBid = self.request.get('id')
 
 	    # check to see if user has already started this project
@@ -230,6 +301,8 @@ class SelectActPage(webapp.RequestHandler):
 
 	# if valid results, populate template that is sent to selectAct.html
 	for v in results:
+
+
 	    template_values = {
 		'status':status,
 		'startText':start_text,
@@ -237,6 +310,7 @@ class SelectActPage(webapp.RequestHandler):
 		'selectDesc':v.description,
 		'selectYoutube':v.youtube,
 		'selectChecklist':string.split(v.checklist,"|"),
+		'selectProfessions':professionals,
 		'selectType':act_value,
 		'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
 		}

@@ -26,8 +26,8 @@
   .s2{width:90px;text-align:right}
   .s3{width:270px;text-align:right}
   header ul li a{color:#222}
-  header ul li a:link,a:visited{display:block;color:#222;font-weight:bold;text-align:center;padding:4px;text-decoration:none;line-height:20px; font-size:1.2em; padding-top:10px}
-  header ul li a:hover,a:active {color:#CCC}
+  header ul li a:link, header ul li a:visited{display:block;color:#222;font-weight:bold;text-align:center;padding:4px;text-decoration:none;line-height:20px; font-size:1.2em; padding-top:10px}
+  header ul li a:hover, header ul li a:active {color:#555}
 
   input.button_fbstyle {
     background-image: url(../images/facebook_smaller.png); /* 16px x 16px */
@@ -44,12 +44,21 @@
   footer{margin-top:10px; margin:0px; text-align:center}
   footer ul {list-style-type:none;margin:0;padding:0px;overflow:hidden; float:center}
   footer ul li {float:center;color:#AAA;display:block}
-  footer ul li a:link,a:visited{color:#222;text-align:center;padding:0px;text-decoration:none; padding-top:10px}
-  footer ul li a:hover,a:active {color:#000000}
+  footer ul li a:link, footer ul li a:visited{color:#222;text-align:center;padding:0px;text-decoration:none; padding-top:10px}
+  footer ul li a:hover, footer ul li a:active {color:#222;text-decoration:none}
+
+
+  checklist{margin-top:10px; margin:0px; text-align:left}
+  checklist ul {list-style-type:none;margin:0;padding:0px;overflow:hidden}
+  checklist ul li {color:#222}
+  checklist ul li a {text-decoration:none}
+  checkist ul li a:link,checklist ul li a:visited{color:#555;padding:0px;text-decoration:none}
+  checklist ul li a:hover,checklist ul li a:active {color:#555;text-decoration:none}
+
 
 /* p.contact{color:#555;text-align:center} */
 		
-
+  
 
 
 /* #Base 960 Grid

@@ -23,7 +23,7 @@ class Action(db.Model):
   effectLighting = db.FloatProperty()
   effectAppliance = db.FloatProperty()
   cost = db.FloatProperty()
-  savings =  db.FloatProperty()
+  savings =  db.StringProperty()
   # one of DIY, sponsors, store, offsets
   category = db.StringProperty() 
   # for DIY 

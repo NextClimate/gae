@@ -274,6 +274,7 @@
 		  <input type="hidden" name="locale" id="start-form-locale">
 		  <input type="hidden" name="type" value="{{selectType}}">
 		  <input type="hidden" name="actionName" value="{{selectName}}">
+		  <input type="hidden" name="professionals" value="{{selectProfessional}}">		  
 		  <input type="hidden" name="start" value="1">
 		  <button type="submit" style="height:30px">Start this project</button>
 		</form>
@@ -299,11 +300,14 @@
 
 	<div class="row six columns">
 	  <h4>What you'll need</h4>
+	  <checklist>
 	      <ul>
 	      {% for item in selectChecklist %}
-	      <li>{{item}}</li>
+	      <li>{{item}}</li>	  
 	      {% endfor %}
+	      {{selectProfessionals}}
 	      </ul>
+	  </checklist>
 	</div>
 
 
