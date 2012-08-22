@@ -1,0 +1,38 @@
+
+<html>
+  <body>
+    {% for zipcode in zipcodes %}
+    <p>zipcode: {{zipcode.zipcode}} {{zipcode.city}} {{zipcode.state}}</p>
+<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
+    {% endfor %}
+
+    <form action="/addEntry" method="post">
+      <div>Zip Code: <textarea name="zipcode" rows="1" cols="7"></textarea></div>
+      <div>City: <textarea name="city" rows="1" cols="15"></textarea></div>
+      <div>State: <textarea name="state" rows="1" cols="2"></textarea></div>
+      <div><input type="submit" value="Add zipcode"></div>
+    </form>
+
+  </body>
+</html>
+
+<!-- <html> -->
+<!--   <body> -->
+<!--     {% for greeting in greetings %} -->
+<!--       {% if greeting.author %} -->
+<!--         <b>{{ greeting.author.nickname }}</b> wrote: -->
+<!--       {% else %} -->
+<!--         An anonymous person wrote: -->
+<!--       {% endif %} -->
+<!--       <blockquote>{{ greeting.content|escape }}</blockquote> -->
+<!--     {% endfor %} -->
+
+<!--     <form action="/sign" method="post"> -->
+<!--       <div><textarea name="content" rows="3" cols="60"></textarea></div> -->
+<!--       <div><input type="submit" value="Sign Guestbook"></div> -->
+<!--     </form> -->
+
+<!--     <a href="{{ url }}">{{ url_linktext }}</a> -->
+
+<!--   </body> -->
+<!-- </html> -->

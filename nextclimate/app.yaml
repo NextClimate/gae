@@ -43,20 +43,20 @@ handlers:
   login: admin
 
 # query the users for a zip code and then show climate change info
-- url: /queryZip
-  script: query_zip.py
+#- url: /queryZip
+#  script: query_zip.py
 
 # what happens when you press the "Act Now!" button
-- url: /actnow
-  script: actnow.py
+#- url: /actnow
+#  script: actnow.py
 
 # the page that shows energy options and a bar chart of your use.
-- url: /energy
-  script: energy.py
+#- url: /energy
+#  script: energy.py
 
 # the page that shows an action with a video and list of what you'll need.
-- url: /selectAct
-  script: selectAct.py
+#- url: /selectAct
+#  script: selectAct.py
 
 # facebook needs this to allow you to post to people's stream.
 - url: /fbjs

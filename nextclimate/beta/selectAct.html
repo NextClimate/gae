@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# nextclimate: http://ogp.me/ns/fb/nextclimate#">
+
+
+<!-- This page shows the user info about a specific energy saving improvement
+     that was selected on the /energy page. The datastore holds this info, it
+     is retrieved using selectAct.py and rendered here. Future additions
+     should have a button that says something like "start!" that then 
+     shows more specific info about where to go to get this stuff, post
+     to FB, etc. -->
+
+<!-- Also, user supplied actions will need to conform to this format.
+     Need to develop a page that supports entry of user supplied 
+     content. -->
+
+
+
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>Our shared climate future</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- Here is a bunch of facebook meta-data that is needed for open graph.
+	     This basically sets up our app id to allow posting open graph actions.
+	     The action in facebook open graph is called "start" and the object
+	     is "energy_improvement". So a facebook post would say 
+	     "Nancy Collins has started an energy improvement". And the user
+	     can add his/her own message to go with it. -->
+	  
+
+	<meta property="og:image" content="http://www.nextclimate.org/images/circle_logo_transparent_128.png"/>
+	<meta property="fb:app_id" content="179716018816396"/>
+        <meta property="og:type"   content="nextclimate:energy_improvement" /> 
+        <meta property="og:url"    content="http://www.nextclimate.org/selectAct?type={{selectType}}" /> 
+        <meta property="og:title"  content="{{selectName}}" /> 
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- javascript
+  ================================================== -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/raphael.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.enumerable.js"></script>
+
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
+
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+<!-- This is for the "go back" button -->
+	<script type="text/javascript">
+	  function goBack(i)
+	  {
+	   window.history.go(i)
+	  }
+	</script>
+
+<!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-29277261-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+
+    <!-- This section hanldes the facebook check. 
+	 It both sets up the buttons that allow you to login
+	 and initializes the facebook code.
+	 Kicks the users back to welcome page if not logged in 
+	 to facebook. -->
+
+<body>
+
+    <div id="fb-root"></div>
+    <script>
+      // Load the SDK Asynchronously
+      (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=179716018816396";
+      fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      // Init the SDK upon load
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '179716018816396', // App ID
+          channelUrl : '//'+window.location.hostname+'/fbjs', // Path to your Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+      
+      FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+         // the user is logged in and has authenticated your
+         // app, and response.authResponse supplies
+         // the user's ID, a valid access token, a signed
+         // request, and the time the access token 
+         // and signed request each expire
+          var uid = response.authResponse.userID;
+          var accessToken = response.authResponse.accessToken;
+          FB.api('/me', function(me){
+            if (me.name) {
+              document.getElementById('auth-displayname').innerHTML = me.name;
+            }
+          })
+        } else {
+         // the user isn't logged in to Facebook.
+          window.top.location='http://www.nextclimate.org/';          
+        }
+      }, true);
+
+
+
+
+        // listen for and handle auth.statusChange events
+        FB.Event.subscribe('auth.statusChange', function(response) {
+          if (response.authResponse) {
+            // user has auth'd your app and is logged into Facebook
+            FB.api('/me', function(me){
+              if (me.name) {
+                document.getElementById('auth-displayname').innerHTML = me.name;
+                document.getElementById('start-form-id').value = me.id;
+                document.getElementById('start-form-email').value = me.email;
+                document.getElementById('start-form-name').value = me.name;
+                document.getElementById('start-form-locale').value = me.locale;
+              }
+            })
+            document.getElementById('auth-loggedout').style.display = 'none';
+            document.getElementById('auth-loggedin').style.display = 'block';
+          } else {
+            // user has not auth'd your app, or is not logged into Facebook
+            window.top.location='http://www.nextclimate.org/';
+            document.getElementById('auth-loggedout').style.display = 'block';
+            document.getElementById('auth-loggedin').style.display = 'none';
+          }
+        });
+
+        // respond to clicks on the login and logout links
+        document.getElementById('auth-loginlink').addEventListener('click', function(){
+          FB.login();
+        });
+        document.getElementById('auth-logoutlink').addEventListener('click', function(){
+          FB.logout();
+        }); 
+
+      }
+      
+      // This code is called if the user clicks to post to facebook 
+      // Handles initializing the facebook ui and populating it with  
+      // site specific information.
+
+      function sendRequestViaMultiFriendSelector() {
+        var body = document.getElementById('fbMessage').value;
+        FB.api('/me/nextclimate:start', 'post', { energy_improvement:'http://www.nextclimate.org/selectAct?type={{selectType}}', message:body }, function(response) {
+        if (!response || response.error) {
+          alert('Error occured '+ response.error);
+        } else {
+          alert('Post ID: ' + response.id);
+        }
+        });
+      }
+
+      // This code is called if the users clicks to post to twitter. Handles 
+      // initializing the twitter ui and populating it with NextClimate info 
+
+      var popupWindow = null;
+      function centeredPopup(){
+        var body = document.getElementById('fbMessage').value;
+	url='https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org&text='+body;
+	w = '500';
+	h = '300';
+	scroll='yes';
+	winName='myWindow';
+	LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+	TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+	settings =
+	'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+	popupWindow = window.open(url,winName,settings)
+      } 
+
+    </script>
+
+
+
+  <div class="container">
+
+
+    <!-- Render the header at the top of the page -->
+    <div class="row sixteen columns">
+      <header>
+	<div class="six columns">
+	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
+	</div>
+	<div class="eight columns">
+      	<ul>
+      	  <li class='s2'><a href='static/about.html'>About</a> </li>
+      	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
+      	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
+      	  <li class='s2'><a href='static/donate.html'>Support</a></li>
+      	  <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li>	  
+      	</ul>
+	</div>
+      </header>
+      </div>
+      
+
+
+    <div class="sixteen columns">
+<!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
+      <div class="eight columns">
+	<!-- render the name and description of the energy improvement -->
+	<h2>{{selectName}}</h2>
+	</div>
+      <div class="eight columns">
+       <h4>{{selectDesc}}</h4>
+       <br> 
+       <!-- show the youtube video plugin -->
+       {{selectYoutube}}
+
+	</div>
+
+	<!-- render the checklist of what you'll need -->	   
+	<!-- buttons for start and go back -->
+
+	<div class="six columns" style="margin-left: 0px">
+
+	  <div class="row six columns">
+
+	    <div class="three columns">
+	      <h5>{{startText}}</h5>
+	    </div>
+	    <div class="two columns">
+
+  	    {% ifequal status 'new' %}
+		<form action='/selectAct' method='post' style="display: inline; margin-bottom: 0px;">
+		  <input type="hidden" name="id" id="start-form-id">
+		  <input type="hidden" name="email" id="start-form-email">
+		  <input type="hidden" name="name" id="start-form-name">
+		  <input type="hidden" name="locale" id="start-form-locale">
+		  <input type="hidden" name="type" value="{{selectType}}">
+		  <input type="hidden" name="actionName" value="{{selectName}}">
+		  <input type="hidden" name="professionals" value="{{selectProfessional}}">		  
+		  <input type="hidden" name="start" value="1">
+		  <button type="submit" style="height:30px">Start this project</button>
+		</form>
+	{% endifequal %}
+
+	{% ifequal status 'started' %}
+		<form action='/selectAct' method='post' style="display: inline; margin-bottom: 0px;">
+		  <input type="hidden" name="id" id="start-form-id">
+		  <input type="hidden" name="email" id="start-form-email">
+		  <input type="hidden" name="name" id="start-form-name">
+		  <input type="hidden" name="actionName" value="{{selectName}}">
+		  <input type="hidden" name="type" value="{{selectType}}">
+		  <input type="hidden" name="complete" value="1">
+		  <button type="submit" style="height:30px">I've finished it!</button>
+	{% endifequal %}
+
+	{% ifequal status 'complete' %}
+	<!-- User has completed action. Perhaps share with others? -->
+	{% endifequal %}
+	
+	</div>
+	</div>
+
+	<div class="row six columns">
+	  <h4>What you'll need</h4>
+	  <checklist>
+	      <ul>
+	      {% for item in selectChecklist %}
+	      <li>{{item}}</li>	  
+	      {% endfor %}
+	      {{selectProfessionals}}
+	      </ul>
+	  </checklist>
+	</div>
+
+
+	<!-- if the user hits the start button, render the facebook / twitter interface -->
+	{% ifequal status 'started' %}
+	<div class="row six columns">
+
+	  <h4>Do you have what you'll need?</h4>
+
+	      <!-- Post to facebook or twitter -->
+		<p>Need to borrow tools or supplies from a friend? Let them know you are starting this project.</p>
+		<div>Message: <textarea name="borrowMessage" id="fbMessage" rows="3" cols="40"></textarea></div>
+
+		<!-- facebook button -->
+
+		<div class="one columns">
+		<div id="custom-fb-button">
+		  <button onclick='sendRequestViaMultiFriendSelector()'>
+		    <img style="padding-top:4px" src="../images/facebook-icon.ico">
+		    <span style="padding-left:5px; vertical-align:top; padding-top:0px">Share</span>
+		  </button>
+
+		</div>
+		</div>
+		<!-- twitter button -->
+		<div class="one columns">
+		<div id="custom-tweet-button">
+		  <!-- href="https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org" -->
+		  <button onclick='centeredPopup()'>
+		    <img style="padding-top:2px" src="http://a4.twimg.com/images/favicon.ico"><span style="padding-left:5px; vertical-align:top; padding-top:0px">Tweet</span></button>
+		</div>
+		</div>
+	</div>
+	{% endifequal %}
+
+		<!-- end block for facebook / twitter interface -->
+
+		<div class="row six columns">
+		  <h4>What others are saying</h4>
+
+		  <!-- allow the facebook comments section -->
+		  <div class="fb-comments" data-href="http://www.nextclimate.org/selectAct?type={{selectType}}" data-num-posts="6" data-width="320"></div>
+		</div>
+
+
+		</div>
+
+
+		
+	</div>
+      </div>
+
+    <br>
+    </div>
+<hr>
+
+<!-- this footer is on every page -->
+ <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
+
+  </div>
+  </body>
+</html>
+

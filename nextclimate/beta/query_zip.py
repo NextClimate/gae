@@ -90,6 +90,7 @@ class QueryZipPage(webapp.RequestHandler):
 	
 	# first check to see if this is a new users and if so add this user to
 	# the database
+
 	
 	user_query = UserNC.all()
 	user_query.filter("FBid = ",self.request.get('id'))

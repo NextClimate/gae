@@ -1,0 +1,142 @@
+<!--
+You are free to copy and use this sample in accordance with the terms of the
+Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>
+      Google Visualization API Sample
+    </title>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1.1', {packages: ['controls', 'table']});
+    </script>
+    <script type="text/javascript">
+      function drawVisualization() {
+        // Prepare the data
+        var data = google.visualization.arrayToDataTable([
+          ['Country', 'Region/State', 'City', 'Population'],
+          ['USA', 'California', 'San Francisco', 776733],
+          ['USA', 'California', 'Los Angeles', 3694820],
+          ['USA', 'California', 'Mountain View', 70708],
+          ['USA', 'New York', 'New York', 8175173],
+          ['USA', 'New York', 'Albany', 857592],
+          ['France', 'Ile-de-France', 'Paris', 2193031],
+          ['France', 'Ile-de-France', 'Orly', 21372],
+          ['France', 'Provence', 'Marseille', 852395],
+          ['France', 'Provence', 'Nice', 348556]
+        ]);
+
+      var view = new google.visualization.DataView(data);
+      view.hideColumns([3]);
+
+      var table = new google.visualization.Table(document.getElementById('chart2'));
+      table.draw(view, null);
+
+      
+        // Define category pickers for 'Country', 'Region/State' and 'City'
+        var countryPicker = new google.visualization.ControlWrapper({
+          'controlType': 'CategoryFilter',
+          'containerId': 'control1',
+          'options': {
+            'filterColumnLabel': 'Country',
+            'ui': {
+              'labelStacking': 'vertical',
+              'allowTyping': false,
+              'allowMultiple': false
+            }
+          }
+        });
+      
+        var regionPicker = new google.visualization.ControlWrapper({
+          'controlType': 'CategoryFilter',
+          'containerId': 'control2',
+          'options': {
+            'filterColumnLabel': 'Region/State',
+            'ui': {
+              'labelStacking': 'vertical',
+              'allowTyping': false,
+              'allowMultiple': false
+            }
+          }
+        });
+      
+        var cityPicker = new google.visualization.ControlWrapper({
+          'controlType': 'CategoryFilter',
+          'containerId': 'control3',
+          'options': {
+            'filterColumnLabel': 'City',
+            'ui': {
+              'labelStacking': 'vertical',
+              'allowTyping': false,
+              'allowMultiple': false
+            }
+          }
+        });
+      
+        // Define a bar chart to show 'Population' data
+        var barChart = new google.visualization.ChartWrapper({
+          'chartType': 'BarChart',
+          'containerId': 'chart1',
+          'options': {
+            'width': 400,
+            'height': 300,
+            'chartArea': {top: 0, right: 0, bottom: 0}
+          },
+          // Configure the barchart to use columns 2 (City) and 3 (Population)
+          'view': {'columns': [2, 3]}
+        });
+      
+
+      <!-- // Define a table -->
+      <!-- var table = new google.visualization.ChartWrapper({ -->
+      <!-- 'chartType': 'Table', -->
+      <!-- 'containerId': 'chart2', -->
+      <!-- 'options': { -->
+      <!-- 'width': '600px' -->
+      <!-- } -->
+      <!-- }); -->
+      
+
+
+        // Create the dashboard.
+        new google.visualization.Dashboard(document.getElementById('dashboard')).
+          // Configure the controls so that:
+          // - the 'Country' selection drives the 'Region' one,
+          // - the 'Region' selection drives the 'City' one,
+          // - and finally the 'City' output drives the chart
+          bind(countryPicker, regionPicker).
+          bind(regionPicker, cityPicker).
+          bind(cityPicker, barChart).
+          // Draw the dashboard
+          draw(data);
+
+      }
+
+      
+
+      google.setOnLoadCallback(drawVisualization);
+    </script>
+  </head>
+  <body style="font-family: Arial;border: 0 none;">
+    <div id="dashboard">
+      <table>
+        <tr style='vertical-align: top'>
+          <td style='width: 300px; font-size: 0.9em;'>
+            <div id="control1"></div>
+            <div id="control2"></div>
+            <div id="control3"></div>
+          </td>
+          <td style='width: 600px'>
+            <div style="float: left;" id="chart1"></div>
+            <div style="float: left;" id="chart2"></div>
+            <div style="float: left;" id="chart3"></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

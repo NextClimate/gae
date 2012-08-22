@@ -65,34 +65,11 @@ class BetaWelcomePage(webapp.RequestHandler):
 #   run_wsgi_app(application)
 
 import beta.base
-import query_zip
-import beta.query_zip
-import actnow
-import beta.actnow
-import energy
-import beta.energy
-import selectAct
-import beta.selectAct
 
 applications = {
-    'localhost:8081': webapp.WSGIApplication([('/', beta.base.WelcomePage),
-					      ('/queryZip', beta.query_zip.QueryZipPage),
-					      ('/actnow', beta.actnow.ActNowPage),
-					      ('/energy', beta.energy.EnergyPage),
-					      ('/selectAct', beta.selectAct.SelectActPage)
-					      ]),
-    'www.nextclimate.org': webapp.WSGIApplication([('/', WelcomePage),
-						   ('/queryZip', query_zip.QueryZipPage),
-						   ('/actnow', actnow.ActNowPage),
-						   ('/energy', energy.EnergyPage),
-						   ('/selectAct', selectAct.SelectActPage)
-						   ]),
-    'beta.nextclimate.org': webapp.WSGIApplication([('/', beta.base.WelcomePage),
-						    ('/queryZip', beta.query_zip.QueryZipPage),
-						    ('/actnow', beta.actnow.ActNowPage),
-						    ('/energy', beta.energy.EnergyPage),
-						    ('/selectAct', beta.selectAct.SelectActPage)
-						    ])
+    'localhost:8081': webapp.WSGIApplication([('/', v002.base.WelcomePage)]),
+    'www.nextclimate.org': webapp.WSGIApplication([('/', WelcomePage)]),
+    'beta.nextclimate.org': webapp.WSGIApplication([('/', beta.base.WelcomePage)])
 }
 
 def main():

@@ -42,3 +42,6 @@ Thumbs.db
 *~
 .#*
 *.sw?
+
+# added python compiled packages
+*.pyc
