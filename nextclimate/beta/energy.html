@@ -98,7 +98,7 @@
 	   has a factor for appliances that is less than one, but has a factor 
 	   of 1 for the other three categories. */ 
 
-      /* The bar chart has three bars -- average for your area, your baseline,
+      /* The bar chart has two bars -- average for your area, your baseline,
          and your GHGs after implementing selected action. The average for your
          area is set to a default value, but could be varied by location.
 	 Your baseline is the average for your area multiplied by a factor based
@@ -106,9 +106,6 @@
 	 a selected action is your baseline multiplied by the factors described 
 	 in the prior paragraph. */
 	   
-      /* Right now, these are all hard coded, but at some point this should 
-	 come from a database */
-	
 
         var data = google.visualization.arrayToDataTable([
         ['Action','heating and cooling','water','lighting','appliances','Savings', 'Act!', 'complete'],
@@ -152,6 +149,7 @@
       var options = {isStacked:true, height: 360,width:320,fontName:'Georgia',
                      legend: {position:'bottom'},
                      colors: ['#BB1111','#CC4444','#DD8888','#CCBBBB'],
+		     <!-- colors: ['#0B18A3','#1123F0','#4D54A3','#5C5C5C'], -->
                      title:'  Your Greenhouse Gas Emissions',titlePosition:'out',
                      titleTextStyle: {fontName:'Georgia',fontSize: 16},
                      hAxis:{textStyle: {fontSize: 16}},
@@ -350,10 +348,9 @@
 
     <div class="row sixteen columns">
       <header>
-	<div class="six columns">
-	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
-	</div>
-	<div class="eight columns">
+	<div class="row sixteen columns" style="margin-left:0px; padding-left:5px; padding-top:5px">
+	  <a href="../" ><img src="../images/square_logo_small_white.png" /></a>
+
       	<ul>
       	  <li class='s2'><a href='static/about.html'>About</a> </li>
       	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
@@ -363,7 +360,7 @@
       	</ul>
 	</div>
       </header>
-      </div>
+
       
     <div class="sixteen columns">
 <!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->

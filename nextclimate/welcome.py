@@ -73,10 +73,12 @@ import energy
 import beta.energy
 import selectAct
 import beta.selectAct
+import beta.authUser
 
 applications = {
     'localhost:8081': webapp.WSGIApplication([('/', beta.base.WelcomePage),
 					      ('/queryZip', beta.query_zip.QueryZipPage),
+					      ('/authUser', beta.authUser.AuthUserPage), 
 					      ('/actnow', beta.actnow.ActNowPage),
 					      ('/energy', beta.energy.EnergyPage),
 					      ('/selectAct', beta.selectAct.SelectActPage)
@@ -89,6 +91,7 @@ applications = {
 						   ]),
     'beta.nextclimate.org': webapp.WSGIApplication([('/', beta.base.WelcomePage),
 						    ('/queryZip', beta.query_zip.QueryZipPage),
+						    ('/authUser', beta.authUser.AuthUserPage), 
 						    ('/actnow', beta.actnow.ActNowPage),
 						    ('/energy', beta.energy.EnergyPage),
 						    ('/selectAct', beta.selectAct.SelectActPage)

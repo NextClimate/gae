@@ -49,9 +49,12 @@ class UserNC(db.Model):
 # that is specific to this user. The user is then directed to
 # /energy to look at the impact of their energy choices.
 
+
+
+
 class ActNowPage(webapp.RequestHandler):
     def get(self):
-        zipcode_value=self.request.get('zipcode_value')
+        zipcode_value=self.request.get('zipcode')
         FBid=self.request.get('id')
 
 	template_values = {'zipcode':zipcode_value}
@@ -60,3 +63,4 @@ class ActNowPage(webapp.RequestHandler):
 	
         self.response.out.write(template.render(path, template_values))
 
+	

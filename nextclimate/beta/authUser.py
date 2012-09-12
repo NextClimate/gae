@@ -79,7 +79,7 @@ def send_welcome_email(toEmail, toName):
 # comparing the future climate of this location to the present
 # climate of a current location. Finally, this is packaged in the variable
 # named template and pushed to 
-class QueryZipPage(webapp.RequestHandler):
+class AuthUserPage(webapp.RequestHandler):
 
     def post(self):
 	# the welcome page does a form post with the user's info. This is
@@ -123,86 +123,28 @@ class QueryZipPage(webapp.RequestHandler):
 	    send_welcome_email(new_user.email, new_user.name)
 	    # could put an else clause here to update the lastLogin.
 
-	# go back to the query_zip page
-	self.redirect('/queryZip')
+	# go back to the actnow page; eventually update this so other pages can re-direct here.
+	self.redirect('/actnow?zipcode='+self.request.get('zipcode') + '&id='+self.request.get('id'))
 
 
     # execute this code at a get request
     def get(self):
 	
-	# parse the zip code value out of the URL
-        zipcode_value=self.request.get('zipcode_value')
-	qTrue  = False
-	if (len(zipcode_value) > 0):
-	    qTrue = True
+        access_token = self.request.get('access_token')
+	if (access_token == ''):
+	    template_values={'accessToken':'none'}
+	    template_values={'zipcode':self.request.get('zipcode')}
+	    path = os.path.join(os.path.dirname(__file__), 'authUser.html')
+	    self.response.out.write(template.render(path, template_values))
+	else:
+	    fb_response = urllib.urlopen('https://graph.facebook.com/me?'+access_token)
+	    fb_text = fb_response.read(-1)
+	    fb_json = open('fb_text')
+	    fb_data = json.loads(fb_json)
+	    template_values={'userId':fb_data["id"], 'userName':fb_data["name"], 'accessToken':access_token, 'zipcode':self.request.get('zipcode')}
+	    fb_data.close()
+	    path = os.path.join(os.path.dirname(__file__), 'authUser.html')
+	    self.response.out.write(template.render(path, template_values))
 
-	# query the datastore, retrieve the record with this zipcode 
-        zipcode_query = Zipcode.all()
-        zipcodes = zipcode_query.filter("zipcode =",zipcode_value)
-	results = zipcodes.fetch(1)
-
-	# initialize values
-	place = "not good"
-	template_values = {}
-
-	# iterate through results, although there should be only 1
-	# check the number of days to exceed 90 degrees and 
-	# assign a place that is like that in current conditions.
-	# this generates text 'the future climate of you city will
-	# be most like this place in the present day'
-	for v in results:
-	    p1 = "The future temperatures of "+string.capwords(v.city)+" will be most like present day "
-	    if v.maxTa1_2090 > 0:
-		place = p1 + "Los Angeles"
-	    if v.maxTa1_2090 > 10:
-		place = p1 + "Los Angeles"
-	    if v.maxTa1_2090 > 20:
-		place = p1 + "Kansas"
-	    if v.maxTa1_2090 > 30:
-		place = p1 + "Missouri"		
-	    if v.maxTa1_2090 > 40:
-		place = p1 + "Jackson, Mississippi"
-	    if v.maxTa1_2090 > 50:
-		place = p1 + "New Orleans, Louisiana"
-	    if v.maxTa1_2090 > 60:
-		place = p1 + "Dallas, Texas"
-	    if v.maxTa1_2090 > 80:
-		place = p1 + "Sacramento, California"
-	    if v.maxTa1_2090 > 90:
-		place = p1 + "Orlando, Florida"
-	    if v.maxTa1_2090 > 100:
-		place = p1 + "Palm Springs, California"
-	    if v.maxTa1_2090 > 120:
-		place = p1 + "Brownsville, Texas"
-	    if v.maxTa1_2090 > 140:
-		place = p1 + "Las Vegas, Nevada"
-	    if v.maxTa1_2090 > 160:
-		place = p1 + "Phoenix, Arizona"
-	    if v.maxTa1_2090 > 180:
-		place = "The number of days above 90 degrees in your area will be greater than any place in the present-day continental US"
-
-	    # fill in these template values. These variables are passed to
-	    # the webpage and rendered on the page. Look for variables of
-	    # the form {{varname}} in the html; these values replace those {{}}
-	    # placeholders
-	    template_values = {
-	    'qTrue':qTrue,
-            'zipcode': v.zipcode,
-	    'city': string.capwords(v.city),
-	    'state': v.state,
-	    'maxTobs_1990': v.maxTobs_1990,
-	    'maxTa1_2050':v.maxTa1_2050,
-	    'maxTa1_2090':v.maxTa1_2090,	    
-	    'maxTb2_2090':v.maxTb2_2090,	    
-             'place': place,
-	     }
-
-	# return the file query_zip.html, with all of the template
-	# values replaced with the data assigned above
-        path = os.path.join(os.path.dirname(__file__), 'query_zip.html')
-        self.response.out.write(template.render(path, template_values))
-
-	#class ZipcodeShow(webapp.RequestHandler):
-	#def 
 
 

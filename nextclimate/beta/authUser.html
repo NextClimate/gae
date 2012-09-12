@@ -61,23 +61,15 @@
 	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
 
-	<style type="text/css">
-	  body {
-	  background-image:url('images/sunflower-sky-background.png');
-	  background-repeat:no-repeat;
-	  background-position:100% 100%;
-	  background-color:#488bc0;
-	  }
-	</style>
+	<!-- <style type="text/css"> -->
+	<!--   body { -->
+	<!--   background-image:url('images/sunflower-sky-background.png'); -->
+	<!--   background-repeat:no-repeat; -->
+	<!--   background-position:100% 100%; -->
+	<!--   background-color:#488bc0; -->
+	<!--   } -->
+	<!-- </style> -->
 
-	<script type="text/javascript" >
-	   var viewportWidth  = document.documentElement.clientWidth
-		, viewportHeight = document.documentElement.clientHeight;
-	   if(viewportWidth < 600) {
-		document.body.style.backgroundimage='none';
-   	        document.body.style.backgroundcolor='grey';
-	     }
-	</script>
 
 <!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
 <script type="text/javascript">
@@ -192,36 +184,80 @@
 
 <!-- Now, actually start the content of the page -->
 
-<div class="container" style="position:fixed; margin-left:10px">
+<div class="container">
 
-    <div class="row sixteen columns" style="margin-left:0px">
+    <div class="row ten columns">
 
 <!-- Render the header at the top of the page (NextClimate logo, about, support, etc.) -->
       <header>
 	<div class="row sixteen columns" style="margin-left:0px; padding-left:5px; padding-top:5px">
-	  <!-- <a href="../" ><a image="../images/" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" /></a>	     -->
-	  <a href="../"> <img src="../images/square_logo_small.png" /></a>
-	<!-- <div class="row six columns" style="margin-top:0px"> -->
-      	<ul style="vertical-align:middle">
-      	  <li class='s2' ><a style="color:#EEE" href='/authUser'>Log in</a> </li>
-      	  <li class='s2' ><a style="color:#EEE" href='static/about.html'>About</a> </li>
-      	  <li class='s2'><a style="color:#EEE" href='static/donate.html'>Support</a></li>
+	  <a href="../" ><img src="../images/square_logo_small_white.png" /></a>
+      	<ul style="float:right">
+      	  <li class='s2' style="text-align:left"><a href='static/about.html'>About</a> </li>
+      	  <li class='s2'><a href='static/donate.html'>Support</a></li>
       	</ul>
 	</div>
-	<!-- </div> -->
       </header>
 
 
 
 <!-- This is the login / intro page. Users are re-directed here when they logout or come to a different page without logging in. -->
-    <div class="seven columns" style="padding-top:10px">
-      <h4 style="color:#222; padding-bottom:10px">NextClimate helps you find out what climate change means for you and learn what you can do to help.</h4>
-      <form>
-      <button type="submit" style="height:30px"><a style="text-decoration:none" href="/queryZip"> Tell me more about climate change</a></button>
-      <button type="submit" style="height:30px"><a style="text-decoration:none" href="/authUser"> Improve your energy efficiency</a></button>
-      </form>
+    <div class="ten columns" style="padding-top:10px">
+      <h3> Become a NextClimate Member</h3>
+      <h5 style="padding-bottom:10px">When we burn fossil fuels to
+      make electricity, we add pollutants to the
+      atmosphere that increase the rate of climate change. NextClimate
+      can help you improve your energy efficiency and</h5>
+      <ul style="margin-left:20px">
+	<li> Learn what energy efficient steps really work for your area </li>
+	<li> Read reviews of projects you can do yourself</li>
+	<li> Connect you with trusted suppliers and vendors </li>
+	<li> Help you track your progress towards energy independence!</li>
+      </ul>
+      <!-- <p> access_token: {{accessToken}}</p> -->
+      <div id="auth-status">
+	<!-- this area is rendered if you are _not_ logged in -->
+        <div id="auth-loggedout">
+	  <h5 style="margin-bottom:10px"> Log in with Facebook to join.</h5>
+          <button href="#" id="auth-loginlink" class="button_fbstyle"><img src="../images/facebook_smaller.png" style="vertical-align:top">
+	    <span style="padding-left:2px" >Login</span></button>
+	  <p style="font-size:0.8em"> We have partnered with Facebook to make it easy join NextClimate. It
+	  doesn't give us access to your private facebook data, and we
+	  promise to abide by
+	  our <a href="static/privacy.html">privacy policy</a>.</p>
+        </div>
+	<!-- this area is rendered if you are logged in -->
+        <div id="auth-loggedin" style="display:none">
+          <h5 class="strapline" style="padding-bottom:20px">You are logged in as <span id="auth-displayname"></span>.</h5>
+	    <div class="row clearfix">
+	      <div class="five columns" style="margin-left: 0px">
+		<form action='/authUser' method='post' style="display: inline; margin-bottom: 0px;">
+		  <input type="hidden" name="name" id="auth-form-name">
+		  <input type="hidden" name="id" id="auth-form-id">
+		  <input type="hidden" name="gender" id="auth-form-gender">
+		  <input type="hidden" name="email" id="auth-form-email">
+		  <input type="hidden" name="birthday" id="auth-form-birthday">
+		  <input type="hidden" name="first_name" id="auth-form-first_name">
+		  <input type="hidden" name="last_name" id="auth-form-last_name">
+		  <input type="hidden" name="verified" id="auth-form-verified">
+		  <input type="hidden" name="locale" id="auth-form-locale">
+		  <input type="hidden" name="zipcode" value="{{zipcode}}">
+		  <button type="submit" style="height:30px">Continue to NextClimate</button>
+		</form>
+	      <!-- 	</div> -->
+	      <!-- <div class="two columns"> -->
+		<button href="#" id="auth-logoutlink" style="height:30px"><img src="../images/facebook_smaller.png" style="vertical-align:top">
+		  <span style="padding-left:2px">Logout</span></button>
+	      </div>
+	  </div>
+	</div>
+      </div>
+      
+
+
+
 <!-- this footer is on every page -->
- <footer style="float:left; padding-top:30px"><ul><li style="color:#FFFFFF">Questions or comments? Contact us at <a style="color:#FFFFFF" href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
+ <footer style="float:left; padding-top:100px"><ul><li style="color:#FFFFFF">Questions or comments? Contact us at <a style="color:#FFFFFF" href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
     </div>
 </div>
 </div>
