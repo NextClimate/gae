@@ -56,10 +56,7 @@
 	<!-- Favicons needs to be updated. -->
 	<!-- Favicons
 	================================================== -->
-	<link rel="shortcut icon" href="images/favicon.ico">
-	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	<link rel="shortcut icon" href="images/sunflower-sky-crop.ico">
 
 	<!-- this exists to help render better on mobile devices. should be updated -->
 	<style type="text/css">
@@ -173,59 +170,59 @@
           xfbml      : true  // parse XFBML
         });
       
-      FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-         // the user is logged in and has authenticated your
-         // app, and response.authResponse supplies
-         // the user's ID, a valid access token, a signed
-         // request, and the time the access token 
-         // and signed request each expire
-          var uid = response.authResponse.userID;
-          var accessToken = response.authResponse.accessToken;
-          FB.api('/me', function(me){
-            if (me.name) {
-              document.getElementById('auth-displayname').innerHTML = me.name;
-              document.getElementById('auth-form-id').value = me.id;
-            }
-          })
-        } else {
-         // the user isn't logged in to Facebook, redirect to welcome
-          window.top.location='http://www.nextclimate.org/';          
-        }
-      }, true);
+      <!-- FB.getLoginStatus(function(response) { -->
+      <!--   if (response.status === 'connected') { -->
+      <!--    // the user is logged in and has authenticated your -->
+      <!--    // app, and response.authResponse supplies -->
+      <!--    // the user's ID, a valid access token, a signed -->
+      <!--    // request, and the time the access token  -->
+      <!--    // and signed request each expire -->
+      <!--     var uid = response.authResponse.userID; -->
+      <!--     var accessToken = response.authResponse.accessToken; -->
+      <!--     FB.api('/me', function(me){ -->
+      <!--       if (me.name) { -->
+      <!--         document.getElementById('auth-displayname').innerHTML = me.name; -->
+      <!--         document.getElementById('auth-form-id').value = me.id; -->
+      <!--       } -->
+      <!--     }) -->
+      <!--   } else { -->
+      <!--    // the user isn't logged in to Facebook, redirect to welcome -->
+      <!--     window.top.location='http://www.nextclimate.org/';           -->
+      <!--   } -->
+      <!-- }, true); -->
 
 
 
-        // if the users logs out, kick them back to welcome 
-        // listen for and handle auth.statusChange events
-        FB.Event.subscribe('auth.statusChange', function(response) {
-          if (response.authResponse) {
-            // user has auth'd your app and is logged into Facebook
-            FB.api('/me', function(me){
-              if (me.name) {
-                document.getElementById('auth-displayname').innerHTML = me.name;
+      <!--   // if the users logs out, kick them back to welcome  -->
+      <!--   // listen for and handle auth.statusChange events -->
+      <!--   FB.Event.subscribe('auth.statusChange', function(response) { -->
+      <!--     if (response.authResponse) { -->
+      <!--       // user has auth'd your app and is logged into Facebook -->
+      <!--       FB.api('/me', function(me){ -->
+      <!--         if (me.name) { -->
+      <!--           document.getElementById('auth-displayname').innerHTML = me.name; -->
 
-              }
-            })
-            document.getElementById('auth-loggedout').style.display = 'none';
-            document.getElementById('auth-loggedin').style.display = 'block';
-          } else {
-            // user has not auth'd your app, or is not logged into Facebook
-            window.top.location='http://www.nextclimate.org/';
-            document.getElementById('auth-loggedout').style.display = 'block';
-            document.getElementById('auth-loggedin').style.display = 'none';
-          }
-        });
+      <!--         } -->
+      <!--       }) -->
+      <!--       document.getElementById('auth-loggedout').style.display = 'none'; -->
+      <!--       document.getElementById('auth-loggedin').style.display = 'block'; -->
+      <!--     } else { -->
+      <!--       // user has not auth'd your app, or is not logged into Facebook -->
+      <!--       window.top.location='http://www.nextclimate.org/'; -->
+      <!--       document.getElementById('auth-loggedout').style.display = 'block'; -->
+      <!--       document.getElementById('auth-loggedin').style.display = 'none'; -->
+      <!--     } -->
+      <!--   }); -->
 
-        // respond to clicks on the login and logout links
-        document.getElementById('auth-loginlink').addEventListener('click', function(){
-          FB.login();
-        });
-        document.getElementById('auth-logoutlink').addEventListener('click', function(){
-          FB.logout();
-        }); 
+      <!--   // respond to clicks on the login and logout links -->
+      <!--   document.getElementById('auth-loginlink').addEventListener('click', function(){ -->
+      <!--     FB.login(); -->
+      <!--   }); -->
+      <!--   document.getElementById('auth-logoutlink').addEventListener('click', function(){ -->
+      <!--     FB.logout(); -->
+      <!--   });  -->
 
-      }
+      <!-- } -->
 
 
       /* This code is called if the user clicks to post to facebook 
@@ -263,16 +260,14 @@
 
   <div class="container">
 
-    <div class="row sixteen columns">
+
 
 <!-- Render the header at the top of the page 
      (NextClimate logo, about, support, etc.) -->
 
       <header>
-	<div class="six columns">
-	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
-	</div>
-	<div class="eight columns">
+	<div class="row sixteen columns" style="margin-left:-5px; padding-left:0px; padding-top:5px">
+	  <a href="../" ><img src="../images/square_logo_small_white.png" /></a>
       	<ul>
       	  <li class='s2'><a href='static/about.html'>About</a> </li>
       	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
@@ -280,13 +275,13 @@
       	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
 	  <!-- if the user clicks logout, call FB.logout routine defined above -->
-      	  <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li>
+      	  <!-- <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li> -->
       	</ul>
 	</div>
       </header>
-    </div>
 
-    <div class="sixteen columns">
+
+    <div class="sixteen columns" style="margin-top: 20px">
 <!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
     <div class="twelve columns">
       <h3>The climate is changing at an unprecedented pace. What does this mean for where you live?</h3>
@@ -300,7 +295,7 @@
 	 qTrue will be greater than 0 if the zip code returns a successful
 	 area, and then this code will be executed  -->
 
-    {% for i in qTrue %}
+    {% if qTrue %}
       <br>
       <div class="row clearfix">
       <div class="eight columns temperature">
@@ -324,9 +319,8 @@
       change. </h5><p></p>
 
     <!-- render Act Now button -->
-    <form action="/actnow" method="get">
-      <input type="hidden" name="name" id="auth-form-name">    
-    <button type="submit" class="full-width button" name="zipcode_value" value={{zipcode}}>
+    <form action="/authUser" method="get">
+    <button type="submit" class="full-width button" name="zipcode" value={{zipcode}}>
       <h4>Act Now!</h4></button>
     </form>
 
@@ -351,19 +345,21 @@
 
     </div>
     </div>
-    {% endfor %}
+    {% else %}
     <!-- this is the end of the logic that only shows the barchart if a zip code
 	 has been entered by the user -->
     <br>
 
 
     <!-- here is the query box for the user to enter a zip code -->
-    <div class="six columns">    
-    <form action="/queryZip" method="get">
+    <div class="seven columns">    
+    <form action="/queryZip" method="get" style="display: inline; margin-bottom: 0px;">
       Enter a zip code: <input type="text" name="zipcode_value" rows="1" cols="7">
     <button type="submit">Tell me about climate change</button>
     </form>
     </div>
+    
+    {% endif %}
     </div>
 <hr>
 

@@ -73,7 +73,7 @@ def send_welcome_email(toEmail, toName):
 
 
 
-# this class gets called when ther is a request to /zip_query
+# this class gets called when there is a request to /zip_query
 # it queries the datastore and pulls the city, state, and climate
 # info. It then constructs the text that is displayed
 # comparing the future climate of this location to the present
@@ -90,6 +90,7 @@ class QueryZipPage(webapp.RequestHandler):
 	
 	# first check to see if this is a new users and if so add this user to
 	# the database
+
 	
 	user_query = UserNC.all()
 	user_query.filter("FBid = ",self.request.get('id'))
@@ -131,9 +132,9 @@ class QueryZipPage(webapp.RequestHandler):
 	
 	# parse the zip code value out of the URL
         zipcode_value=self.request.get('zipcode_value')
-	qTrue  = 0
+	qTrue  = False
 	if (len(zipcode_value) > 0):
-	    qTrue = 1
+	    qTrue = True
 
 	# query the datastore, retrieve the record with this zipcode 
         zipcode_query = Zipcode.all()
@@ -150,7 +151,7 @@ class QueryZipPage(webapp.RequestHandler):
 	# this generates text 'the future climate of you city will
 	# be most like this place in the present day'
 	for v in results:
-	    p1 = "The future climate of "+string.capwords(v.city)+" will be most like present day "
+	    p1 = "The future temperatures of "+string.capwords(v.city)+" will be most like present day "
 	    if v.maxTa1_2090 > 0:
 		place = p1 + "Los Angeles"
 	    if v.maxTa1_2090 > 10:
@@ -178,14 +179,14 @@ class QueryZipPage(webapp.RequestHandler):
 	    if v.maxTa1_2090 > 160:
 		place = p1 + "Phoenix, Arizona"
 	    if v.maxTa1_2090 > 180:
-		place = "The climate in your area will be warmer than any place in the present-day continental US"
+		place = "The number of days above 90 degrees in your area will be greater than any place in the present-day continental US"
 
 	    # fill in these template values. These variables are passed to
 	    # the webpage and rendered on the page. Look for variables of
 	    # the form {{varname}} in the html; these values replace those {{}}
 	    # placeholders
 	    template_values = {
-	    'qTrue':range(qTrue),
+	    'qTrue':qTrue,
             'zipcode': v.zipcode,
 	    'city': string.capwords(v.city),
 	    'state': v.state,

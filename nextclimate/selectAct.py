@@ -160,10 +160,22 @@ def get_local_professionals(zipcode, profession):
 
 	siteNames = re.findall('<span style="font-size:14px;font-weight:bold;text-decoration:underline; color:##00003F;">?(.*?)</span>', the_page)
 	websites = re.findall('Website: <a href="?(.*?)"? target=_blank>', the_page)
+	rating = re.findall('</b>&nbsp;Customer Rating<br />(.*?)<p class="small"><u><b>Licensing:</b></u>', the_page)
+
+	def get_number_of_reviews(s):
+	    if (s == ''):
+		return 'No customer reviews'
+	    else:
+		percent_approve = re.findall('(.*?) would use this Company again',s)
+		number_reviews = re.findall('View (.*?) Customer Reviews',s)
+		review_website = re.findall('href="?(.*?)"', s)
+		return '''%s <a href="http://solar-estimate.org/%s" target="blank">reviews</a>, %s would use again''' % (number_reviews[0], review_website[0], percent_approve[0])
+
+	reviews = map(get_number_of_reviews, rating)
 
 	return_string = ''
-	for s, w in zip(siteNames, websites):
-	    return_string = return_string +  ''' <li><a href="%s" target="_blank"> %s </a></li> ''' % (w,s.title())
+	for s, w, r in zip(siteNames, websites, reviews):
+	    return_string = return_string +  ''' <li><a href="%s" target="_blank"> %s </a> <p style="padding:0px; font-size:0.8em">%s</p></li> ''' % (w,s.title(), r)
 	return return_string
 
 
@@ -318,6 +330,7 @@ class SelectActPage(webapp.RequestHandler):
 	    
  	path = os.path.join(os.path.dirname(__file__), 'selectAct.html')	    	
         self.response.out.write(template.render(path, template_values))
+
 
 
 

@@ -64,10 +64,7 @@
 
 	<!-- Favicons
 	================================================== -->
-	<link rel="shortcut icon" href="images/favicon.ico">
-	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	<link rel="shortcut icon" href="images/sunflower-sky-crop.ico">
 
 <!-- This is for the "go back" button -->
 	<script type="text/javascript">
@@ -135,12 +132,14 @@
           var accessToken = response.authResponse.accessToken;
           FB.api('/me', function(me){
             if (me.name) {
-              document.getElementById('auth-displayname').innerHTML = me.name;
+                document.getElementById('user-image').alt = me.name;
+                document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
+
             }
           })
         } else {
          // the user isn't logged in to Facebook.
-          window.top.location='http://www.nextclimate.org/';          
+          window.top.location='../';          
         }
       }, true);
 
@@ -153,30 +152,24 @@
             // user has auth'd your app and is logged into Facebook
             FB.api('/me', function(me){
               if (me.name) {
-                document.getElementById('auth-displayname').innerHTML = me.name;
                 document.getElementById('start-form-id').value = me.id;
                 document.getElementById('start-form-email').value = me.email;
                 document.getElementById('start-form-name').value = me.name;
                 document.getElementById('start-form-locale').value = me.locale;
+                document.getElementById('user-image').alt = me.name;
+                document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
+
+
               }
             })
-            document.getElementById('auth-loggedout').style.display = 'none';
-            document.getElementById('auth-loggedin').style.display = 'block';
+
           } else {
             // user has not auth'd your app, or is not logged into Facebook
-            window.top.location='http://www.nextclimate.org/';
-            document.getElementById('auth-loggedout').style.display = 'block';
-            document.getElementById('auth-loggedin').style.display = 'none';
+            window.top.location='../';
+
           }
         });
 
-        // respond to clicks on the login and logout links
-        document.getElementById('auth-loginlink').addEventListener('click', function(){
-          FB.login();
-        });
-        document.getElementById('auth-logoutlink').addEventListener('click', function(){
-          FB.logout();
-        }); 
 
       }
       
@@ -223,14 +216,14 @@
     <!-- Render the header at the top of the page -->
     <div class="row sixteen columns">
       <header>
-	<div class="row sixteen columns" style="margin-left:0px; padding-left:5px; padding-top:5px">
+	<div class="row sixteen columns" style="margin-left:-10px; padding-left:0px; padding-top:5px">
 	  <a href="../" ><img src="../images/square_logo_small_white.png" /></a>
       	<ul>
       	  <li class='s2'><a href='static/about.html'>About</a> </li>
       	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
       	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
-      	  <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li>	  
+      	  <li class='s3'><a href='../' onclick='FB.logout()'><span style="vertical-align:top">Logout</span> <img id="user-image" align="middle" style="border:1px solid #222; margin-left:5px; margin-top:-5px"></img></a></li>	  
       	</ul>
 	</div>
       </header>
@@ -238,7 +231,7 @@
       
 
 
-    <div class="sixteen columns">
+    <div class="sixteen columns" style="padding-top:20px">
 <!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
       <div class="eight columns">
 	<!-- render the name and description of the energy improvement -->

@@ -79,7 +79,11 @@ class ActionPut(webapp.RequestHandler):
     action.description = self.request.get('description')
     action.youtube = self.request.get('youtube')
     action.checklist=self.request.get('checklist')
-
+    action.effectHeatCool=self.request.get('effectHeatCool')
+    action.effectWater=self.request.get('effectWater')
+    action.effectLighting=self.request.get('effectLighting')
+    action.effectAppliance=self.request.get('effectAppliance')
+    action.savings='$'
     action.put()
     self.redirect('/write_act?action_value=99999')
 

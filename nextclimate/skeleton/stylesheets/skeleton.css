@@ -23,10 +23,10 @@
   header ul {list-style-type:none;margin:2px;padding:0px;overflow:hidden; float:right}
   header ul li {float:right}
   .s1{width:340px;margin-left:0px}
-  .s2{width:60px;text-align:right}
-  .s3{width:120px;text-align:right}
+  .s2{width:55px;text-align:right}
+  .s3{width:115px;text-align:right}
   header ul li a{color:#222}
-  header ul li a:link, header ul li a:visited{display:block;color:#222;font-weight:bold;text-align:center;padding:2px;text-decoration:none;line-height:15px; font-size:0.8em; padding-top:4px; padding-bottom:0px}
+  header ul li a:link, header ul li a:visited{display:block;color:#222;font-weight:bold;text-align:center;padding:2px;text-decoration:none;line-height:20px; font-size:0.8em; padding-top:10px; padding-bottom:0px}
   header ul li a:hover, header ul li a:active {color:#555}
 
   input.button_fbstyle {

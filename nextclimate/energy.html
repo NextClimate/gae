@@ -58,10 +58,7 @@
 
 	<!-- Favicons
 	================================================== -->
-	<link rel="shortcut icon" href="images/favicon.ico">
-	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	<link rel="shortcut icon" href="images/sunflower-sky-crop.ico">
 
 
 
@@ -98,7 +95,7 @@
 	   has a factor for appliances that is less than one, but has a factor 
 	   of 1 for the other three categories. */ 
 
-      /* The bar chart has three bars -- average for your area, your baseline,
+      /* The bar chart has two bars -- average for your area, your baseline,
          and your GHGs after implementing selected action. The average for your
          area is set to a default value, but could be varied by location.
 	 Your baseline is the average for your area multiplied by a factor based
@@ -106,9 +103,6 @@
 	 a selected action is your baseline multiplied by the factors described 
 	 in the prior paragraph. */
 	   
-      /* Right now, these are all hard coded, but at some point this should 
-	 come from a database */
-	
 
         var data = google.visualization.arrayToDataTable([
         ['Action','heating and cooling','water','lighting','appliances','Savings', 'Act!', 'complete'],
@@ -151,7 +145,8 @@
 
       var options = {isStacked:true, height: 360,width:320,fontName:'Georgia',
                      legend: {position:'bottom'},
-                     colors: ['#BB1111','#CC4444','#DD8888','#CCBBBB'],
+                     <!-- colors: ['#BB1111','#CC4444','#DD8888','#CCBBBB'], -->
+		     colors: ['#D6E9F8','#93A0AB','#F7EFD5','#ABA193'],
                      title:'  Your Greenhouse Gas Emissions',titlePosition:'out',
                      titleTextStyle: {fontName:'Georgia',fontSize: 16},
                      hAxis:{textStyle: {fontSize: 16}},
@@ -297,12 +292,14 @@
           var accessToken = response.authResponse.accessToken;
           FB.api('/me', function(me){
             if (me.name) {
-              document.getElementById('auth-displayname').innerHTML = me.name;
+                document.getElementById('user-image').alt = me.name;
+              document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
+
             }
           })
         } else {
          // the user isn't logged in to Facebook.
-          window.top.location='http://www.nextclimate.org/';          
+          window.top.location='../';          
         }
       }, true);
 
@@ -315,26 +312,20 @@
             // user has auth'd your app and is logged into Facebook
             FB.api('/me', function(me){
               if (me.name) {
-                document.getElementById('auth-displayname').innerHTML = me.name;
+                document.getElementById('user-image').alt = me.name;
+                document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
+
               }
             })
-            document.getElementById('auth-loggedout').style.display = 'none';
-            document.getElementById('auth-loggedin').style.display = 'block';
+
+
           } else {
             // user has not auth'd your app, or is not logged into Facebook
-            window.top.location='http://www.nextclimate.org/';
-            document.getElementById('auth-loggedout').style.display = 'block';
-            document.getElementById('auth-loggedin').style.display = 'none';
+            window.top.location='../';
+
+
           }
         });
-
-        // respond to clicks on the login and logout links
-        document.getElementById('auth-loginlink').addEventListener('click', function(){
-          FB.login();
-        });
-        document.getElementById('auth-logoutlink').addEventListener('click', function(){
-          FB.logout();
-        }); 
 
       }
       
@@ -350,29 +341,33 @@
 
     <div class="row sixteen columns">
       <header>
-	<div class="six columns">
-	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
-	</div>
-	<div class="eight columns">
+	<div class="row sixteen columns" style="margin-left:-10px; padding-left:0px; padding-top:5px">
+	  <a href="../" ><img src="../images/square_logo_small_white.png" /></a>
+
       	<ul>
       	  <li class='s2'><a href='static/about.html'>About</a> </li>
       	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
       	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
-      	  <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li>	  
+      	  <li class='s3'><a href='../' onclick='FB.logout()'><span style="vertical-align:top">Logout</span> <img id="user-image" align="middle" style="border:1px solid #222; margin-left:5px; margin-top:-5px"></img></a></li>	  
+<!-- (<span id="auth-displayname"></span>) -->
       	</ul>
 	</div>
       </header>
-      </div>
+
       
-    <div class="sixteen columns">
+    <div class="sixteen columns" style="padding-top:10px">
 <!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
       <div class="fourteen columns">
 	<!-- <h2>Act Now!</h2> -->
-       <h4>Take advantage of these energy-saving
-	 opportunities. You can both save money and help protect
-	 future generations from dangerous climate change. Here are
-	 some suggestions.</h4>
+       <h4>We've searched our database to find energy-saving
+	 opportunities that work where you live. You can both save
+	 money and help protect future generations from dangerous
+	 climate change. Here are some suggestions.</h4>
+	 <p style="margin:10px 0px 0px 0px">Click an action in the table below and see the improvement in
+	 greenhouse gas emissions. </p><p style="margin:0px">Press the "Learn More" button to find out how
+	 to start this project.</p>
+
        <br> 
       </div>
 
@@ -381,8 +376,6 @@
       <br>
       <div class="row">
 	<div class="six columns">
-	 <p>Select the action below and check the improvement in
-	 greenhouse gas emissions.</p>
          <div style="" id="chart2"></div>
 	 <br>
 	 <div id="totalOffset"></div>
