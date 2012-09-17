@@ -33,16 +33,14 @@
 	<link rel="stylesheet" href="../stylesheets/layout.css">
 
 
-<!-- <link href="http://assets.artistic.ly/assets/skeleton-3dea3309d873755bf8886c577d3defa8.css" media="screen" rel="stylesheet" type="text/css" /> -->
-<!-- <link href="http://assets.artistic.ly/assets/pictos-64f77c4ecef2fc6fde3345691f229091.css" media="screen" rel="stylesheet" type="text/css" /> -->
-<!-- <link href="http://assets.artistic.ly/assets/llama-29c56ba969cfc00ebac0d00890f17886.css" media="screen" rel="stylesheet" type="text/css" /> -->
 
 	<!-- Favicons 
 	================================================== -->
-	<link rel="shortcut icon" href="images/favicon.ico">
-	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	<link rel="shortcut icon" href="images/sunflower-sky-crop.ico">
+
+	<!-- <link rel="apple-touch-icon" href="images/apple-touch-icon.png"> -->
+	<!-- <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png"> -->
+	<!-- <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png"> -->
 
 
 
@@ -78,74 +76,24 @@
 </head>
 <body>
 
-    <script>
-      // Load the SDK Asynchronously
-      (function(d){
-         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement('script'); js.id = id; js.async = true;
-         js.src = "//connect.facebook.net/en_US/all.js";
-         ref.parentNode.insertBefore(js, ref);
-       }(document));
-
-      // Init the SDK upon load
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '179716018816396', // App ID
-          channelUrl : '//'+window.location.hostname+'/fbjs', // Path to your Channel File
-          status     : true, // check login status
-          cookie     : true, // enable cookies to allow the server to access the session
-          xfbml      : true  // parse XFBML
-        });
-
-        <!-- // listen for and handle auth.statusChange events -->
-        <!-- FB.Event.subscribe('auth.statusChange', function(response) { -->
-        <!--   if (response.authResponse) { -->
-        <!--     // user has auth'd your app and is logged into Facebook -->
-        <!--     FB.api('/me', function(me){ -->
-        <!--       if (me.name) { -->
-        <!--         document.getElementById('auth-displayname').innerHTML = me.name; -->
-        <!--       } -->
-        <!--     }) -->
-            window.top.location='http://www.nextclimate.org/queryZip';
-            document.getElementById('auth-loggedout').style.display = 'none';
-            document.getElementById('auth-loggedin').style.display = 'block';
-          } else {
-            // user has not auth'd your app, or is not logged into Facebook
-            document.getElementById('auth-loggedout').style.display = 'block';
-            document.getElementById('auth-loggedin').style.display = 'none';
-          }
-        });
-
-        // respond to clicks on the login and logout links
-        document.getElementById('auth-loginlink').addEventListener('click', function(){
-          FB.login();
-        });
-        document.getElementById('auth-logoutlink').addEventListener('click', function(){
-          FB.logout();
-        }); 
-      } 
-    </script>
 
   <div class='container'>
 
+
     <div class="row sixteen columns">
+
       <header>
-	<div class="six columns">
-	  <a href="../" ><img class="logo scale-with-grid" src="../images/nextclimate_logo_transparent.png" /></a>
-	</div>
-	<div class="eight columns">
-      	<ul>
-      	  <li class='s2'><a href='about.html'>About</a> </li>
-      	  <!-- <li class='s2'><a href='science.html'>Science</a> </li> -->
-      	  <!-- <li class='s2'><a href='share.html'>Share</a> </li> -->
-      	  <!-- <li class='s2'><a href='store.html'>Store</a> </li> -->
-      	  <li class='s2'><a href='donate.html'>Support</a></li>
-      	  <li class='s2'><a href='#' onclick='FB.logout()'>Logout</a></li>
+	<div class="row sixteen columns" style="margin-left:0px; padding-left:5px; padding-top:5px">
+	  <!-- <a href="../" ><a image="../images/" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" /></a>	     -->
+	  <a href="../"> <img src="../images/square_logo_small.png" /></a>
+	<!-- <div class="row six columns" style="margin-top:0px"> -->
+      	<ul style="vertical-align:middle">
+      	  <li class='s2' ><a style="color:#222" href='about.html'>About</a> </li>
+      	  <li class='s2'><a style="color:#222" href='donate.html'>Support</a></li>
       	</ul>
 	</div>
+	<!-- </div> -->
       </header>
-    </div>
 
  <div class='row twelve columns'>
    <div class='eight columns toprest alpha'>
