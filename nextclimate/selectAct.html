@@ -252,10 +252,10 @@
 
 	  <div class="row six columns" style="margin-left: 0px">
 
-	    <div class="three columns">
-	      <h5>{{startText}}</h5>
-	    </div>
-	    <div class="two columns">
+	    <!-- <div class="three columns"> -->
+	    <!--   <h5>{{startText}}</h5> -->
+	    <!-- </div> -->
+	    <!-- <div class="two columns"> -->
 
   	    {% ifequal status 'new' %}
 		<form action='/selectAct' method='post' style="display: inline; margin-bottom: 0px;">
@@ -266,8 +266,11 @@
 		  <input type="hidden" name="type" value="{{selectType}}">
 		  <input type="hidden" name="actionName" value="{{selectName}}">
 		  <input type="hidden" name="professionals" value="{{selectProfessional}}">		  
+		  <input type="hidden" name="heat" value="{{heat}}">
+		  <input type="hidden" name="electricity" value="{{electricity}}">
+		  <input type="hidden" name="zipcode" value="{{zipcode}}">
 		  <input type="hidden" name="start" value="1">
-		  <button type="submit" style="height:30px">Start this project</button>
+		  <button type="submit"><h4>Start this project</h5></button>
 		</form>
 	{% endifequal %}
 
@@ -277,16 +280,18 @@
 		  <input type="hidden" name="email" id="start-form-email">
 		  <input type="hidden" name="name" id="start-form-name">
 		  <input type="hidden" name="actionName" value="{{selectName}}">
-		  <input type="hidden" name="type" value="{{selectType}}">
+		  <input type="hidden" name="heat" value="{{heat}}">
+		  <input type="hidden" name="electricity" value="{{electricity}}">
+		  <input type="hidden" name="zipcode" value="{{zipcode}}">
 		  <input type="hidden" name="complete" value="1">
-		  <button type="submit" style="height:30px">I've finished it!</button>
+		  <button type="submit"><h4>I've finished it!</h4></button>
 	{% endifequal %}
 
 	{% ifequal status 'complete' %}
 	<!-- User has completed action. Perhaps share with others? -->
 	{% endifequal %}
 	
-	</div>
+	<!-- </div> -->
 	</div>
 
 	<div class="row six columns">

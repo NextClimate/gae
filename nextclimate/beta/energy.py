@@ -91,7 +91,7 @@ def zipmsa_key(zipmsa_value=None):
 #
 
 class EnergyPage(webapp.RequestHandler):
-    def post(self):
+    def get(self):
         zipcode_value=self.request.get('zipcode')
         electricity=self.request.get('electricity')
 	heat=self.request.get('heat')
@@ -145,17 +145,22 @@ class EnergyPage(webapp.RequestHandler):
 	lightingMod = 1
 	applianceMod = 1
 
-	
+    
+	countAction = 0
+	script_all = """<script type="text/javascript">\n """
 	# iterate over all actions
 	for a in actions:
 	    # for each action, check if user has started it
 	    for ua in userActions:
+		countAction = countAction + 1
 		if (ua.actionName == a.name) and (ua.complete == "started"):
-		    button_html = """<button style='width:70px'><a style='text-decoration: none' href='/selectAct?id=%s&type=%s&zipcode=%s'>%s</a></button>""" % (FBid, a.name, zipcode_value, "Finish It")
+		    script_html = """ function selectAct%d() {window.location.href='/selectAct?id=%s&type=%s&zipcode=%s&electricity=%s&heat=%s';};\n """ % (countAction, FBid, a.name, zipcode_value, electricity, heat)
+		    script_all = script_all + script_html
+		    button_html = """<button style='width:90px' onclick='selectAct%d()'>%s</button>""" % (countAction, "Finish It")
 		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings, button_html, 0)
 		    break
 		if (ua.actionName == a.name) and (ua.complete == "complete"):
-		    button_html = "<span style='text-align:center'>Complete!<span>"
+		    button_html = "<span style='text-align:center;width:90px'>Complete!<span>"
 		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, 1, 1, 1, 1, a.savings, button_html, 1)
 		    heatCoolMod = heatCoolMod * a.effectHeatCool
 		    waterMod = waterMod * a.effectWater
@@ -163,15 +168,21 @@ class EnergyPage(webapp.RequestHandler):
 		    applianceMod = applianceMod * a.effectAppliance
 		    break
 	    else:
-		button_html = """<button><a style='text-decoration: none' href='/selectAct?id=%s&type=%s&zipcode=%s'>%s</a></button>""" % (FBid, a.name, zipcode_value, "Learn More")
+		script_html = """ function selectAct%d() {window.location.href='/selectAct?id=%s&type=%s&zipcode=%s&electricity=%s&heat=%s';};\n """ % (countAction, FBid, a.name, zipcode_value, electricity, heat)
+		script_all = script_all + script_html
+		button_html = """<button style='width:90px' onclick='selectAct%d()'>%s</button>""" % (countAction, "Learn more")
+
 		energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings, button_html, 0)
 	     
 	energy_list = """[ '%s',%f, %f, %f, %f, '%s', "%s",%d],""" % ("No new action",heatCoolMod, waterMod, lightingMod, applianceMod, ' ',' ',1) + energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % ("Your baseline",heatCoolMod, waterMod, lightingMod, applianceMod, 'NA','NA',0)
+
+	script_all = script_all + """</script> """
 	template_values = {'zipcode':zipcode_value,
 			   'city':city,
 			   'electricity': electricity,
 			   'elecMod': elecMod,
 			   'FBid':FBid,
+			   'scriptList':script_all,
 			   'energyList':energy_list}
 
 

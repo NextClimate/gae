@@ -189,6 +189,9 @@ class SelectActPage(webapp.RequestHandler):
 	start_boolean = bool(self.request.get('start'))
 	FBid = self.request.get('id')
 	zipcode = self.request.get('zipcode')
+	electricity = self.request.get('electricity')
+	heat = self.request.get('heat')
+
 	
         act_value=self.request.get('type')
  	qTrue  = 0
@@ -234,6 +237,9 @@ class SelectActPage(webapp.RequestHandler):
 		'selectChecklist':string.split(v.checklist,"|"),
 		'selectProfessionals':professionals,
 		'selectType':act_value,
+		'electricity':electricity,
+		'heat':heat,
+		'zipcode':zipcode,
 		'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
 		}
 
@@ -241,8 +247,38 @@ class SelectActPage(webapp.RequestHandler):
         self.response.out.write(template.render(path, template_values))
 
     def post(self):
+
+	zipcode = self.request.get('zipcode')
+	electricity = self.request.get('electricity')
+	heat = self.request.get('heat')
+
 	start_boolean = bool(self.request.get('start'))
 	complete_boolean = bool(self.request.get('complete'))
+
+
+	if complete_boolean:
+	    status = "complete"
+	    start_text="You have completed this project"	    
+	    # pull user info from web request
+	    email = self.request.get('email')
+	    name = self.request.get('name')
+	    actionName = self.request.get('actionName')
+	    FBid = self.request.get('id')
+
+	    # check to see if user has already started this project
+	    userAction_query = UserAction.all()
+	    userAction_query.filter("FBid = ",FBid)
+	    userAction_query.filter("actionName = ",actionName)
+
+	    mod_user_action = userAction_query.fetch(1)[0]
+	    mod_user_action.complete = "complete"
+	    mod_user_action.put()
+
+	    # also need to send an email to the user
+	    send_complete_email(email, name, actionName)
+
+	    # redirect user back to energy page
+	    self.redirect('''/energy?zipcode=%s&electricity=%s&heat=%s&id=%s''' % (zipcode, electricity, heat, FBid))
 
 	if start_boolean:
 	    status = "started"
@@ -271,65 +307,44 @@ class SelectActPage(webapp.RequestHandler):
 
 		# also need to send an email to the user
 		send_start_email(email, name, actionName)
-
-	if complete_boolean:
-	    status = "complete"
-	    start_text="You have completed this project"	    
-	    # pull user info from web request
-	    email = self.request.get('email')
-	    name = self.request.get('name')
-	    actionName = self.request.get('actionName')
-	    FBid = self.request.get('id')
-
-	    # check to see if user has already started this project
-	    userAction_query = UserAction.all()
-	    userAction_query.filter("FBid = ",FBid)
-	    userAction_query.filter("actionName = ",actionName)
-
-	    mod_user_action = userAction_query.fetch(1)[0]
-	    mod_user_action.complete = "complete"
-	    mod_user_action.put()
-
-	    # also need to send an email to the user
-	    send_complete_email(email, name, actionName)
+	    
 
 
 
+		# query action database to repopulate the action contect
+		# this could be improved to have the post command repost all this info
+		# to avoid a database query
 
+		act_value=self.request.get('type')
+		qTrue = 0
+		if (len(act_value) > 0):
+		    qTrue = 1
 
-	# query action database to repopulate the action contect
-        # this could be improved to have the post command repost all this info
-	# to avoid a database query
+		# query the datastore for matching action
+		action_query = Action.all()
+		actions = action_query.filter("name =",act_value)
+		results = actions.fetch(1)
 
-        act_value=self.request.get('type')
- 	qTrue = 0
- 	if (len(act_value) > 0):
- 	     qTrue = 1
-
-	# query the datastore for matching action
-        action_query = Action.all()
-        actions = action_query.filter("name =",act_value)
-	results = actions.fetch(1)
-
-	# if valid results, populate template that is sent to selectAct.html
-	for v in results:
-
-
-	    template_values = {
-		'status':status,
-		'startText':start_text,
-		'selectName':v.name,
-		'selectDesc':v.description,
-		'selectYoutube':v.youtube,
-		'selectChecklist':string.split(v.checklist,"|"),
-		'selectProfessions':professionals,
-		'selectType':act_value,
-		'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
-		}
+		# if valid results, populate template that is sent to selectAct.html
+		for v in results:
+		    template_values = {
+			'status':status,
+			'startText':start_text,
+			'selectName':v.name,
+			'selectDesc':v.description,
+			'selectYoutube':v.youtube,
+			'selectChecklist':string.split(v.checklist,"|"),
+			'selectProfessions':professionals,
+			'selectType':act_value,
+			'electricity':electricity,
+			'heat':heat,
+			'zipcode':zipcode,		
+			'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
+		    }
 
 	    
- 	path = os.path.join(os.path.dirname(__file__), 'selectAct.html')	    	
-        self.response.out.write(template.render(path, template_values))
+		    path = os.path.join(os.path.dirname(__file__), 'selectAct.html')	    	
+		    self.response.out.write(template.render(path, template_values))
 
 
 

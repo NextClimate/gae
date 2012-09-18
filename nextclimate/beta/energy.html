@@ -84,6 +84,9 @@
     <script type="text/javascript">
       google.load('visualization', '1.1', {packages: ['corechart', 'table']});
     </script>
+
+    {{scriptList}}
+
     <script type="text/javascript">
       function drawVisualization() {
         // Prepare the data
@@ -157,7 +160,7 @@
 
       // draw the table 
       var table = new google.visualization.Table(document.getElementById('chart2'));
-      table.draw(viewTable, {width:280, allowHtml:true});
+      table.draw(viewTable, {width:300, allowHtml:true});
       table.setSelection([{'row': 0}]);
 
       data.setCell(0,0, 'Your emissions');
@@ -249,6 +252,9 @@
 
       google.setOnLoadCallback(drawVisualization);
     </script>
+
+
+
   </head>
 
 
