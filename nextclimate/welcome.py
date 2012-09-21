@@ -22,8 +22,8 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 class WelcomePage(webapp.RequestHandler):
     def get(self):
 	uastring = self.request.headers.get('user_agent')
-	if "MSIE 7.0" in uastring or  "MSIE 6." in uastring:
-	    self.response.out.write("<html><body>"+uastring+"\n<p>We are sorry. Your browser is not supported.</p></body></html>")
+	if "MSIE 6.0" in uastring or  "MSIE 6." in uastring:
+	    self.response.out.write("<html><body>"+uastring+"\n<p>We are sorry. The NextClimate tools are not compatible with your browser. We suggest you upgrade to a more recent release of Internet Explorer. Or try browsing the web with <a href='http://mozilla.org'>Firefox</a> (it's free and we think you'll like it).</p></body></html>")
 	else:
 	    path = os.path.join(os.path.dirname(__file__), 'welcome.html')
 	    f = open(path)

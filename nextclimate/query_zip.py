@@ -13,6 +13,16 @@ from google.appengine.ext import webapp
 from google.appengine.api import mail
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+
+# import sys, urllib, string, SOAPpy
+# from xml.sax import parse, ContentHandler, SAXParseException
+# from SOAPpy import SOAPProxy
+# from SOAPpy import *
+
+
+
+
+
 # this class holds a zip code and climate info. This is an
 # entity in the datastore.
 
@@ -199,6 +209,32 @@ class QueryZipPage(webapp.RequestHandler):
 
 	# return the file query_zip.html, with all of the template
 	# values replaced with the data assigned above
+
+
+	# this is a mess of commented out code for looking up the IP address of the user and locating the ISP
+	# if not qTrue:
+
+	#     SOAPpy.Config.buildWithNamespacePrefix=0
+	#     SOAPpy.Config.debug=0
+
+	#     server=SOAPProxy("http://v1.fraudlabs.com/ip2locationwebservice.asmx", namespace="http://v1.fraudlabs.com/", noroot=1, soapaction="http://v1.fraudlabs.com/ip2locationwebservice.asmx/IP2Location")
+
+	#     # Change these values to the address to validate
+	#     license = "02-61QF-BHA4"
+	#     ip = self.request.remote_addr
+
+	#     myarray = {}
+
+	#     myarray["IP"]=ip
+	#     myarray["LICENSE"]=license
+
+	#     result = server.IP2Location(inputdata=myarray)
+
+	#     template_values={'zipcode':result.ZIPCODE}
+
+	      
+
+
         path = os.path.join(os.path.dirname(__file__), 'query_zip.html')
         self.response.out.write(template.render(path, template_values))
 

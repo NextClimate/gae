@@ -8,13 +8,6 @@
 
 <head>
 
-<!-- Meta data for facebook. This is required for login / initializing facebook. -->
-<!-- facebook --->
-<meta property="og:title" content="NextClimate" />
-<meta property="og:type" content="non_profit" />
-<meta property="og:url" content="http://www.nextclimate.org" />
-<meta property="og:image" content="http://nextclimate.appspot.com/images/nextclimate_logo_transparent.png" />
-<meta property="og:site_name" content="NextClimate" />
 
 <!-- Google plus. This hasn't been used in a while -->
 <!-- google+ --->
@@ -86,14 +79,6 @@
 	  <!-- } -->
 	</style>
 
-	<script type="text/javascript" >
-	   var viewportWidth  = document.documentElement.clientWidth
-		, viewportHeight = document.documentElement.clientHeight;
-	   if(viewportWidth < 600) {
-		document.body.style.backgroundimage='none';
-   	        document.body.style.backgroundcolor='grey';
-	     }
-	</script>
 
 <!-- This is for google analytics. Tracks web users and where they access the site from and their path through the site -->
 <script type="text/javascript">
@@ -110,98 +95,171 @@
 
 </script>
 
-   <script>
-      // This code is called if the users clicks to post to twitter. Handles
-      // initializing the twitter ui and populating it with NextClimate info
-      var popupWindow = null;
-      function centeredPopup(){
-	url='https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org&text={{place}}. Learn more at ';
-	w = '500';
-	h = '300';
-	scroll='yes';
-	winName='myWindow';
-	LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
-	TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
-	settings =
-	'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-	popupWindow = window.open(url,winName,settings)
+<style type="text/css">
+.fancy-form div {
+	margin: 0 0 6px 0;
+	clear: both;
+}
+
+.fancy-form div > div {
+  padding: 0px;
+}
+
+.fancy-form .city-wrap {
+	width: 69%;
+	margin-right: 1%;
+}
+
+.fancy-form .state-wrap {
+	width: 9%;
+	margin-right: 1%;
+}
+
+.fancy-form .zip-wrap {
+	<!-- width: 20%; -->
+	display: block !important;
+}
+
+.zip-error {
+	color: #d70000;
+	font: 12px;
+	border-top: 2px dotted #ec9696;
+	border-bottom: 2px dotted #ec9696;
+	text-align: center;
+	width=20%;
+	padding: 5px 10px;
+	margin-top: 10px;
+	display: none;
+}
+
+
+</style>
+
+
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script>
+
+    function is_int(value){ 
+      if((parseFloat(value) == parseInt(value, 10)) && !isNaN(value)){
+        return true;
+      } else { 
+        return false;
       } 
+    }
+
+    $(function() {
+
+      // Set up
+      $(".fancy-form div > div").hide();
+      var firstReveal = true;
+      $('input,select').keypress(function(event) { return event.keyCode != 13; });
+      $("#zip").keyup(function() {
+
+        // Cache 
+        var el = $(this);
+
+        // Did they type five integers?
+        if ((el.val().length == 5) && (is_int(el.val())))  {
+
+          // Call Ziptastic for information
+          $.ajax({
+            url: "http://zip.elevenbasetwo.com",
+            cache: false,
+            dataType: "json",
+            type: "GET",
+            data: "zip=" + el.val(),
+            success: function(result, success) {
+
+              $(".zip-error, .instructions").slideUp(200);
+
+              $("#dyn-button").text("Tell me about " + result.city + ", " + result.state);
+              $("#dyn-button").slideDown(200);
+
+              $(".fancy-form div > div").slideDown();
 
 
-    </script>
+              firstReveal = false;		
+
+            },
+            error: function(result, success) {
+
+              $(".zip-error").slideDown(300);
+              $("#dyn-button").slideUp(200);
+            }
+
+          });
+
+        } else if (el.val().length < 5) {
+
+          $(".zip-error", "#dyn-button").slideUp(200);
+
+        };
+
+      });
+
+    }); // END DOM Ready
+
+  </script>
+
+
 
 
 
 </head>
 <body>
 
-<!-- This section hanldes the facebook check. It both sets up the buttons that allow you to login -->
-<!-- and initializes the facebook code. -->
-
-    <div id="fb-root"></div>
-    <script>
-      // Load the SDK Asynchronously
-      (function(d){
-         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement('script'); js.id = id; js.async = true;
-         js.src = "//connect.facebook.net/en_US/all.js";
-         ref.parentNode.insertBefore(js, ref);
-       }(document));
-
-      // Init the SDK upon load
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '179716018816396', // App ID
-          channelUrl : '//'+window.location.hostname+'/fbjs', // Path to your Channel File
-          status     : true, // check login status
-          cookie     : true, // enable cookies to allow the server to access the session
-          xfbml      : true  // parse XFBML
-        });
-
-      } 
-
-      <!-- function continueToNextClimate() { -->
-      <!--   FB.api('/me', function(me){ -->
-      <!--   if (me.name) { -->
-      <!--    window.top.location='http://www.nextclimate.org/queryZip?name='+me.name+'&id='me.id; -->
-      <!--   } -->
-      <!-- }) -->
-      <!-- } -->
-
-    </script>
 
 
 <!-- Now, actually start the content of the page -->
 
 <div class="container" style="">
 
-    <div class="row sixteen columns" style="margin-left:0px">
+    <div class="row six columns" style="margin-left:0px">
 
 <!-- Render the header at the top of the page (NextClimate logo, about, support, etc.) -->
       <header>
-	<div class="row sixteen columns" style="margin-left:0px; padding-left:5px; padding-top:5px">
-	  <!-- <a href="../" ><a image="../images/" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" /></a>	     -->
+	<div class="row ten columns" style="margin-left:0px; padding-left:5px; padding-top:5px">
 	  <a href="../"> <img src="../images/square_logo_small.png" /></a>
-	<!-- <div class="row six columns" style="margin-top:0px"> -->
       	<ul style="vertical-align:middle">
       	  <li class='s2' ><a style="color:#EEE" href='/authUser'>Log in</a> </li>
       	  <li class='s2' ><a style="color:#EEE" href='static/about.html'>About</a> </li>
       	  <li class='s2'><a style="color:#EEE" href='static/donate.html'>Support</a></li>
       	</ul>
 	</div>
-	<!-- </div> -->
+
       </header>
 
 
 
 <!-- This is the login / intro page. Users are re-directed here when they logout or come to a different page without logging in. -->
-    <div class="seven columns" style="padding-top:20px">
+    <div class="row six columns" style="padding:15px; border-radius:5px; margin-left:5px; margin-top:20px; opacity=0.08; background-color:#CDE6FA">
       <h4 style="color:#222; padding-bottom:10px">NextClimate helps you find out what climate change means for you and learn what you can do to help.</h4>
-      <button style="height:30px" onclick="window.location.href='/queryZip'"> Tell me more about climate change</button>
-      <button style="height:30px" onclick="window.location.href='/authUser'"> Improve your energy efficiency</button>
-      <h5>NextClimate is an evolving service. Sign up for the latest news.
 
+      <form action="/queryZip" method="get" class="fancy-form">
+	<fieldset>
+	  <h4> Start by entering your zip code:</h4>
+          <div class="zip-wrap">
+
+            <input type="text" pattern="[0-9]*" maxlength="5" required name="zipcode_value" autocomplete="off" id="zip" style="display:inline; line-height:21px; font-size:14px; width:20%; border-radius:3px; margin-right:10px; margin-bottom:10px">
+            <!-- <label for="zip">Zip</label> -->
+
+
+      <!-- <div> -->
+      <!--   <div class="submit-wrap"> -->
+          <button id="dyn-button" type="submit" style=" margin-bottom:10px; display:none; padding:6px 4px"></button>
+        <!-- </div> -->
+	<!-- </div> -->
+            <span class="zip-error">Not a real zip code.</span>
+
+          </div>
+	</fieldset>
+	</form>
+	</div>
+    <div class="row six columns">
+      <!-- <button style="height:30px" onclick="window.location.href="> Tell me more about climate change</button> -->
+      <!-- <button style="height:30px" onclick="window.location.href='/authUser'"> Improve your energy efficiency</button> -->
+      <h5 style="margin-top:15px">NextClimate is an evolving service. Sign up for the latest news.
 
 <a href="https://twitter.com/NextClimate" class="twitter-follow-button" data-size="small" data-show-count="false">Follow @NextClimate</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -217,4 +275,5 @@
 </div>
 </body>
 </html>
+
 
