@@ -19,8 +19,8 @@
 	<!-- Basic Page Needs
   ================================================== -->
 	<meta charset="utf-8">
-	<title>Our shared climate future</title>
-	<meta name="description" content="">
+	<title>Next Climate</title>
+	<meta name="description" content="NextClimate is a non-profit dedicated to inspiring people and communities to take action on climate change">
 	<meta name="author" content="">
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -111,11 +111,13 @@
                 document.getElementById('user-image').alt = me.name;
               document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
               document.getElementById('auth-form-id').value = me.id;
+              document.getElementById('auth-loggedin').style.display = 'block';
             }
           })
         } else {
          // the user isn't logged in to Facebook.
-          window.top.location='../';          
+         // window.top.location='../';          
+            document.getElementById('auth-loggedin').style.display = 'none';
         }
       }, true);
 
@@ -129,11 +131,13 @@
             FB.api('/me', function(me){
               if (me.name) {
                 document.getElementById('auth-displayname').innerHTML = me.name;
+                document.getElementById('auth-loggedin').style.display = 'block';
               }
             })
           } else {
             // user has not auth'd your app, or is not logged into Facebook
-            window.top.location='../';
+            //window.top.location='../';
+            document.getElementById('auth-loggedin').style.display = 'none';
           }
         });
 
@@ -160,7 +164,8 @@
       	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
       	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
-      	  <li class='s3'><a href='../' onclick='FB.logout()'><span style="vertical-align:top">Logout</span> <img id="user-image" align="middle" style="border:1px solid #222; margin-left:5px; margin-top:-5px"></img></a></li>	  
+      	  <li class='s3' id="auth-loggedin"><a href='../' onclick='FB.logout()'><span style="vertical-align:top">Logout</span> <img id="user-image" align="middle" style="border:1px solid #222; margin-left:5px; margin-top:-5px"></img></a></li>	  
+
       	</ul>
 	</div>
       </header>

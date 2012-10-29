@@ -191,7 +191,7 @@ class SelectActPage(webapp.RequestHandler):
 	zipcode = self.request.get('zipcode')
 	electricity = self.request.get('electricity')
 	heat = self.request.get('heat')
-
+	saveVal = self.request.get('save')
 	
         act_value=self.request.get('type')
  	qTrue  = 0
@@ -206,23 +206,27 @@ class SelectActPage(webapp.RequestHandler):
 	# if valid results, populate template that is sent to selectAct.html
 	for v in results:
 
-	    # check to see if user has already started this action
-	    userAction_query = UserAction.all()
-	    userAction_query.filter("FBid = ",FBid)
-	    userAction_query.filter("actionName = ",act_value)
 
-	    if not userAction_query.count(limit=1):
-		status = "new"
-		start_text ="Click Start to begin this project"
+	    if (FBid == ""):
+		status = "no_user"
+
 	    else:
-		uA = userAction_query.fetch(1)
-		status = uA[0].complete
-		if status == "started":
-		    start_text="You have started this project"
-		if status == "complete":
-		    start_text="You have completed this project"
+		# check to see if user has already started this action
+        	userAction_query = UserAction.all()
+		userAction_query.filter("FBid = ",FBid)
+		userAction_query.filter("actionName = ",act_value)
 
-
+		if not userAction_query.count(limit=1):
+		    status = "new"
+		    start_text ="Click Start to begin this project"
+		else:
+		    uA = userAction_query.fetch(1)
+		    status = uA[0].complete
+		    if status == "started":
+			start_text="You have started this project"
+		    if status == "complete":
+			start_text="You have completed this project"
+			
 	    if (v.sponsors):
 		professionals = get_local_professionals(zipcode, v.sponsors)
 	    else:
@@ -230,16 +234,18 @@ class SelectActPage(webapp.RequestHandler):
 
 	    template_values = {
 		'status':status,
-		'startText':start_text,
+		# 'startText':start_text,
 		'selectName':v.name,
 		'selectDesc':v.description,
 		'selectYoutube':v.youtube,
 		'selectChecklist':string.split(v.checklist,"|"),
 		'selectProfessionals':professionals,
+		'selectSponsors':v.sponsors,
 		'selectType':act_value,
 		'electricity':electricity,
 		'heat':heat,
 		'zipcode':zipcode,
+		'saveVal':saveVal,
 		'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
 		}
 
@@ -251,7 +257,8 @@ class SelectActPage(webapp.RequestHandler):
 	zipcode = self.request.get('zipcode')
 	electricity = self.request.get('electricity')
 	heat = self.request.get('heat')
-
+	saveVal = self.request.get('save')
+	
 	start_boolean = bool(self.request.get('start'))
 	complete_boolean = bool(self.request.get('complete'))
 
@@ -287,7 +294,15 @@ class SelectActPage(webapp.RequestHandler):
 	    email = self.request.get('email')
 	    name = self.request.get('name')
 	    actionName = self.request.get('actionName')
-	    professionals=self.request.get('professionals')
+
+	    sponsors=self.request.get('sponsors')
+
+	    if (sponsors):
+		professionals = get_local_professionals(zipcode, sponsors)
+	    else:
+		professionals = ''
+		    
+
 	    FBid = self.request.get('id')
 
 	    # check to see if user has already started this project
@@ -329,16 +344,18 @@ class SelectActPage(webapp.RequestHandler):
 		for v in results:
 		    template_values = {
 			'status':status,
-			'startText':start_text,
+			#'startText':start_text,
 			'selectName':v.name,
 			'selectDesc':v.description,
 			'selectYoutube':v.youtube,
 			'selectChecklist':string.split(v.checklist,"|"),
-			'selectProfessions':professionals,
+			'selectProfessionals':professionals,
+			'selectSponsors':sponsors,
 			'selectType':act_value,
 			'electricity':electricity,
 			'heat':heat,
-			'zipcode':zipcode,		
+			'zipcode':zipcode,
+			'saveVal': saveVal,
 			'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
 		    }
 

@@ -19,14 +19,15 @@
 	<!-- Basic Page Needs
   ================================================== -->
 	<meta charset="utf-8">
-	<title>Our shared climate future</title>
+	<title>Find out what climate change means in {{city}}, {{state}}</title>
+	<meta name="description" content="The impact of global warming and climate change on {{city}}, {{state}}. The number of days in a year that are hotter than 90 degrees in {{city}}, {{state}}.">
 
 
 <!-- meta-data for facebook -->
-	<meta property="og:image" content="http://www.nextclimate.org/images/circle_logo_transparent_128.png"/>
+	<meta property="og:image" content="http://www.nextclimate.org/images/square_logo_small_medium.png"/>
 	<meta property="fb:app_id" content="179716018816396"/>
 
-	<meta name="description" content="">
+	<meta name="description" content="The number of days in a year that are hotter than 90 degrees in {{city}}, {{state}}">
 	<meta name="author" content="">
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -39,24 +40,24 @@
 	<!-- javascript
   ================================================== -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/raphael.js"></script>
-    <script type="text/javascript" src="javascripts/jquery.enumerable.js"></script>
+    <script type="text/javascript" src="http://www.nextclimate.org/javascripts/raphael.js"></script>
+    <script type="text/javascript" src="http://www.nextclimate.org/javascripts/jquery.enumerable.js"></script>
     <!-- this sets up tufte like bar graph -->
-    <script type="text/javascript" src="javascripts/jquery.tufte-graph.js"></script>
+    <script type="text/javascript" src="http://www.nextclimate.org/javascripts/jquery.tufte-graph.js"></script>
 
 	<!-- CSS
   ================================================== -->
-	<link rel="stylesheet" href="stylesheets/base.css">
-	<link rel="stylesheet" href="stylesheets/skeleton.css">
-	<link rel="stylesheet" href="stylesheets/layout.css">
+	<link rel="stylesheet" href="http://www.nextclimate.org/stylesheets/base.css">
+	<link rel="stylesheet" href="http://www.nextclimate.org/stylesheets/skeleton.css">
+	<link rel="stylesheet" href="http://www.nextclimate.org/stylesheets/layout.css">
 	<!-- this sets up tufte like bar graph -->
-	<link rel="stylesheet" href="stylesheets/tufte-graph.css" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="http://www.nextclimate.org/stylesheets/tufte-graph.css" type="text/css" media="screen" charset="utf-8" />
 
 
 	<!-- Favicons needs to be updated. -->
 	<!-- Favicons
 	================================================== -->
-	<link rel="shortcut icon" href="images/sunflower-sky-crop.ico">
+	<link rel="shortcut icon" href="http://www.nextclimate.org/images/sunflower-sky-crop.ico">
 
 	<!-- this exists to help render better on mobile devices. should be updated -->
 	<style type="text/css">
@@ -169,80 +170,29 @@
           cookie     : true, // enable cookies to allow the server to access the session
           xfbml      : true  // parse XFBML
         });
-      
-      <!-- FB.getLoginStatus(function(response) { -->
-      <!--   if (response.status === 'connected') { -->
-      <!--    // the user is logged in and has authenticated your -->
-      <!--    // app, and response.authResponse supplies -->
-      <!--    // the user's ID, a valid access token, a signed -->
-      <!--    // request, and the time the access token  -->
-      <!--    // and signed request each expire -->
-      <!--     var uid = response.authResponse.userID; -->
-      <!--     var accessToken = response.authResponse.accessToken; -->
-      <!--     FB.api('/me', function(me){ -->
-      <!--       if (me.name) { -->
-      <!--         document.getElementById('auth-displayname').innerHTML = me.name; -->
-      <!--         document.getElementById('auth-form-id').value = me.id; -->
-      <!--       } -->
-      <!--     }) -->
-      <!--   } else { -->
-      <!--    // the user isn't logged in to Facebook, redirect to welcome -->
-      <!--     window.top.location='http://www.nextclimate.org/';           -->
-      <!--   } -->
-      <!-- }, true); -->
+      }
 
+      // This code is called if the user clicks to post to facebook 
+      //   Handles initializing the facebook ui and populating it with  
+      //   site specific information. 
 
-
-      <!--   // if the users logs out, kick them back to welcome  -->
-      <!--   // listen for and handle auth.statusChange events -->
-      <!--   FB.Event.subscribe('auth.statusChange', function(response) { -->
-      <!--     if (response.authResponse) { -->
-      <!--       // user has auth'd your app and is logged into Facebook -->
-      <!--       FB.api('/me', function(me){ -->
-      <!--         if (me.name) { -->
-      <!--           document.getElementById('auth-displayname').innerHTML = me.name; -->
-
-      <!--         } -->
-      <!--       }) -->
-      <!--       document.getElementById('auth-loggedout').style.display = 'none'; -->
-      <!--       document.getElementById('auth-loggedin').style.display = 'block'; -->
-      <!--     } else { -->
-      <!--       // user has not auth'd your app, or is not logged into Facebook -->
-      <!--       window.top.location='http://www.nextclimate.org/'; -->
-      <!--       document.getElementById('auth-loggedout').style.display = 'block'; -->
-      <!--       document.getElementById('auth-loggedin').style.display = 'none'; -->
-      <!--     } -->
-      <!--   }); -->
-
-      <!--   // respond to clicks on the login and logout links -->
-      <!--   document.getElementById('auth-loginlink').addEventListener('click', function(){ -->
-      <!--     FB.login(); -->
-      <!--   }); -->
-      <!--   document.getElementById('auth-logoutlink').addEventListener('click', function(){ -->
-      <!--     FB.logout(); -->
-      <!--   });  -->
-
-      <!-- } -->
-
-
-      /* This code is called if the user clicks to post to facebook 
-         Handles initializing the facebook ui and populating it with  
-         site specific information. */
       function fbSharePage() {
 	FB.ui({
           method: 'feed',
-          name: 'Learn more about what climate change means for you.',
+          name: 'Learn more about what climate change means for {{city}}, {{state}}.',
 	  description: '{{place}}.',
           link: 'http://www.nextclimate.org',
-	  picture: 'http://www.nextclimate.org/images/circle_logo_transparent_128.png'
+	  picture: 'http://www.nextclimate.org/images/square_logo_small_medium.png'
          });
       }
+      </script>
 
+      <script>
       // This code is called if the users clicks to post to twitter. Handles
       // initializing the twitter ui and populating it with NextClimate info
       var popupWindow = null;
       function centeredPopup(){
-	url='https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org&text={{place}}. Learn more at ';
+	url='https://twitter.com/share?url=http%3A%2F%2Fwww.nextclimate.org&text={{place}}';
 	w = '500';
 	h = '300';
 	scroll='yes';
@@ -250,9 +200,9 @@
 	LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
 	TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
 	settings =
-	'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
-	popupWindow = window.open(url,winName,settings)
-      } 
+	'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable=no';
+	popupWindow = window.open(url,winName,settings);
+      }
     </script>
 
 
@@ -267,13 +217,13 @@
 
       <header>
 	<div class="row sixteen columns" style="margin-left:-5px; padding-left:0px; padding-top:5px">
-	  <a href="../" ><img src="../images/square_logo_small_white.png" /></a>
+	  <a href="http://www.nextclimate.org/" ><img src="http://www.nextclimate.org/images/square_logo_small_white.png" /></a>
       	<ul>
-      	  <li class='s2'><a href='static/about.html'>About</a> </li>
+      	  <li class='s2'><a href='http://www.nextclimate.org/static/about.html'>About</a> </li>
       	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
 	  <!-- <li class='s2'><a href="/actnow?zipcode_value={{zipcode}}">Act Now</a></li> -->
       	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
-      	  <li class='s2'><a href='static/donate.html'>Support</a></li>
+      	  <li class='s2'><a href='http://www.nextclimate.org/static/donate.html'>Support</a></li>
 	  <!-- if the user clicks logout, call FB.logout routine defined above -->
       	  <!-- <li class='s3'><a href='#' onclick='FB.logout()'>Logout (<span id="auth-displayname"></span>)</a></li> -->
       	</ul>
@@ -284,7 +234,7 @@
     <div class="sixteen columns" style="margin-top: 20px">
 <!--       <h1 class="remove-bottom" style="margin-top: 40px">Our shared climate future</h1> -->
     <div class="twelve columns">
-      <h3>The climate is changing at an unprecedented pace. What does this mean for where you live?</h3>
+      <h3>The climate is changing at an unprecedented pace. What does this mean for where you live? </h3>
       <br> 
       </div>
 
@@ -294,7 +244,7 @@
 
 	 qTrue will be greater than 0 if the zip code returns a successful
 	 area, and then this code will be executed  -->
-
+    
     {% if qTrue %}
       <br>
       <div class="row clearfix">
@@ -306,6 +256,11 @@
 
       <!-- create the tufte like bar graph -->
       <div id='temperature-graph' class='graph' style='width: 320px; height: 200px;'></div>
+      <noscript> 
+	    There were {{maxTobs_1990}} days above 90 degrees in a year during our parent\'s generation.
+            There will be {{maxTa1_2050}} days above 90 degrees in a year during our children\'s generation.
+            There will be {{maxTa1_2090}} days above 90 degrees in a year during our grandchildren\'s generation.
+      </noscript>
       <br>
       </div>
 
@@ -325,22 +280,24 @@
     </form>
 
     <!-- render twitter and facebook buttons -->
-    <div class="one columns">
-    <div id="custom-fb-button">
+    <div class="six columns"><h5 style="display:inline">Spread the word:</h5>
+
+    <div id="custom-fb-button" style="display:inline">
       <button onclick='fbSharePage()'>
-	<img style="padding-top:2px" src="../images/facebook-icon.ico">
+	<img style="padding-top:2px" src="http://www.nextclimate.org/images/facebook-icon.ico">
 	<span style="padding-left:5px; vertical-align:top; padding-top:0px">Share</span>
       </button>
     </div>	      
-    </div>
 
-    <div class="one columns">
-    <div id="custom-tweet-button">
+
+
+    <div id="custom-tweet-button" style="display:inline">
 <!-- href="https://twitter.com/share?url=https%3A%2F%2Fwww.nextclimate.org" -->
       <button onclick='centeredPopup()'>
 	<img style="padding-top:2px" src="http://a4.twimg.com/images/favicon.ico"><span style="padding-left:5px; vertical-align:top; padding-top:0px">Tweet</span></button>
     </div>
-    </div>
+
+</div>
     </div>
 
     </div>
@@ -367,6 +324,14 @@
  <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
 
   </div>
+<script type="text/javascript">
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/3xDskWRboasm49aJmMBviQ.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+</script>
   </body>
 </html>
 

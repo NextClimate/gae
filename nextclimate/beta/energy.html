@@ -32,8 +32,8 @@
 	<!-- Basic Page Needs
   ================================================== -->
 	<meta charset="utf-8">
-	<title>Our shared climate future</title>
-	<meta name="description" content="">
+	<title>Next Climate</title>
+	<meta name="description" content="NextClimate is a non-profit dedicated to inspiring people and communities to take action on climate change">
 	<meta name="author" content="">
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -46,7 +46,6 @@
 	<!-- javascript
   ================================================== -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/raphael.js"></script>
     <script type="text/javascript" src="javascripts/jquery.enumerable.js"></script>
 
 
@@ -84,6 +83,12 @@
     <script type="text/javascript">
       google.load('visualization', '1.1', {packages: ['corechart', 'table']});
     </script>
+    
+    <style type="text/css">
+      .google-visualization-table-td-number {
+      padding-right: 60px; font-size:18px;
+      }
+    </style>
 
     {{scriptList}}
 
@@ -108,10 +113,9 @@
 	   
 
         var data = google.visualization.arrayToDataTable([
-        ['Action','heating and cooling','water','lighting','appliances','Savings', 'Act!', 'complete'],
-/*        ['No action',            1,   1,    1,   1, ' ', ' '],*/
+        ['Action','heating and cooling','water','lighting','appliances','Emission Savings', 'Act!', 'complete'],
         {{energyList}}
-        ['Average in {{city}}', 6,   2,    1,    1, 'NA', 'NA',0]
+        /*['Average in {{city}}', 6,   2,    1,    1, 'NA', 'NA',0] */
       ]);
 
       // this is the row that holds the results shown in the barplot
@@ -120,7 +124,6 @@
       modRow = data.getNumberOfRows()-2
       // this has the average GHG emissions for the area of the user
       GHGrow = data.getNumberOfRows()-1
-      
 
       var i = 0;
 
@@ -160,9 +163,10 @@
 
       // draw the table 
       var table = new google.visualization.Table(document.getElementById('chart2'));
-      table.draw(viewTable, {width:300, allowHtml:true});
-      table.setSelection([{'row': 0}]);
 
+      table.draw(viewTable, {width:380, allowHtml:true});
+      table.setSelection([{'row': 0}]);
+		     
       data.setCell(0,0, 'Your emissions');
       var barchart = new google.visualization.ColumnChart(document.getElementById('chart1'));
       // draw the barchart 
@@ -183,7 +187,7 @@
 	}
 	var totalLbs = total/2;
        document.getElementById('totalOffset').innerHTML = 
-	"<p>Learn about how to <a href='http://store.terrapass.com/store/p/56-TerraPass-carbon-offsets-1-000lbs.html?qty="+totalLbs.toFixed()+"'>offset</a> the remaining "+total.toFixed()+" metric tons of greenhouse gases.</p>";
+	"<p>Can't fit these projects into your hectic schedule? Invest in emission reduction projects that can <a href='/offset?qty="+totalLbs.toFixed()+"'>offset</a> your remaining "+total.toFixed()+" tons of greenhouse gases.</p>";
 
 
       // event handlers for when a row in the table is selected
@@ -242,7 +246,7 @@
 	}
 	var totalLbs = total/2;
        document.getElementById('totalOffset').innerHTML = 
-	"<p>Learn about how to <a href='http://store.terrapass.com/store/p/56-TerraPass-carbon-offsets-1-000lbs.html?qty="+totalLbs.toFixed()+"'>offset</a> the remaining "+total.toFixed()+" metric tons of greenhouse gases.</p>";
+	"<p>Learn about how to <a href='http://store.terrapass.com/store/p/56-TerraPass-carbon-offsets-1-000lbs.html?qty="+totalLbs.toFixed()+"'>offset</a> the remaining "+total.toFixed()+" tons of greenhouse gases.</p>";
 
 
       });
@@ -292,7 +296,7 @@
          // the user is logged in and has authenticated your
          // app, and response.authResponse supplies
          // the user's ID, a valid access token, a signed
-         // request, and the time the access token 
+         // request, and the time the access token
          // and signed request each expire
           var uid = response.authResponse.userID;
           var accessToken = response.authResponse.accessToken;
@@ -300,12 +304,13 @@
             if (me.name) {
                 document.getElementById('user-image').alt = me.name;
               document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
-
+                document.getElementById('auth-loggedin').style.display = 'block';
             }
           })
         } else {
          // the user isn't logged in to Facebook.
-          window.top.location='../';          
+//          window.top.location='../';
+                  document.getElementById('auth-loggedin').style.display = 'none';
         }
       }, true);
 
@@ -320,15 +325,15 @@
               if (me.name) {
                 document.getElementById('user-image').alt = me.name;
                 document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
-
+                document.getElementById('auth-loggedin').style.display = 'block';
               }
             })
 
 
           } else {
             // user has not auth'd your app, or is not logged into Facebook
-            window.top.location='../';
-
+//            window.top.location='../';
+                  document.getElementById('auth-loggedin').style.display = 'none';
 
           }
         });
@@ -355,7 +360,7 @@
       	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
       	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
-      	  <li class='s3'><a href='../' onclick='FB.logout()'><span style="vertical-align:top">Logout</span> <img id="user-image" align="middle" style="border:1px solid #222; margin-left:5px; margin-top:-5px"></img></a></li>	  
+      	  <li class='s3' id="auth-loggedin"><a href='../' onclick='FB.logout()'><span style="vertical-align:top">Logout</span> <img id="user-image" align="middle" style="border:1px solid #222; margin-left:5px; margin-top:-5px"></img></a></li>	  
 <!-- (<span id="auth-displayname"></span>) -->
       	</ul>
 	</div>
@@ -367,11 +372,11 @@
       <div class="fourteen columns">
 	<!-- <h2>Act Now!</h2> -->
        <h4>We've searched our database to find energy-saving
-	 opportunities that work where you live. You can both save
+	 opportunities that reduce your greenhouse gas emissions. You can both save
 	 money and help protect future generations from dangerous
 	 climate change. Here are some suggestions.</h4>
 	 <p style="margin:10px 0px 0px 0px">Click an action in the table below and see the improvement in
-	 greenhouse gas emissions. </p><p style="margin:0px">Press the "Learn More" button to find out how
+	 your greenhouse gas emissions. </p><p style="margin:0px">Press the "Learn More" button to find out how
 	 to start this project.</p>
 
        <br> 
@@ -381,13 +386,13 @@
       <!-- render the table, barchart, and text about offsets -->
       <br>
       <div class="row">
-	<div class="six columns">
+	<div class="seven columns">
          <div style="" id="chart2"></div>
 	 <br>
 	 <div id="totalOffset"></div>
-	 <div> <p>Do you have a great way to save energy that works for your area? <a href="http://www.nextclimate.org/write_act">Share</a> what you know! (admin only)
-	 </p> </div>
-	 </div>
+	 <!-- <div> <p>Do you have a great way to save energy that works for your area? <a href="http://www.nextclimate.org/write_act">Share</a> what you know! (admin only) -->
+	 <!-- </p> </div> -->
+	</div>
 	<div class="six columns">
           <div  id="chart1"></div>
 	</div>
@@ -399,6 +404,14 @@
 <!-- this footer is on every page -->
  <footer><ul><li>Questions or comments? Contact us at <a href='mailto:info@nextclimate.org'>info@nextclimate.org</a>.</li></ul></footer>
 
+<script type="text/javascript">
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/3xDskWRboasm49aJmMBviQ.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+</script>
 
   </body>
 </html>

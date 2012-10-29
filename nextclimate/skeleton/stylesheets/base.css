@@ -200,13 +200,13 @@
 		text-align: center; }
 
 	#custom-fb-button button {
-	    display: block;
+	    display: inline;
 	    padding: 2px 5px 2px 5px;
 	    height: 30px;
 	}
 
 	#custom-tweet-button button {
-	    display: block;
+	    display: inline;
 	    padding: 2px 5px 2px 5px;
 	    height: 30px;
 	}

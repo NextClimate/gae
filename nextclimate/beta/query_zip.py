@@ -6,6 +6,7 @@ import datetime
 import urllib
 import wsgiref.handlers
 import string
+import re
 
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -145,7 +146,14 @@ class QueryZipPage(webapp.RequestHandler):
 	qTrue  = False
 	if (len(zipcode_value) > 0):
 	    qTrue = True
+	else:
+	    zipcode_value = re.findall("[0-9]{5}", self.request.path)[0]
+	    if (len(zipcode_value) == 5):
+		qTrue = True
 
+
+
+	    
 	# query the datastore, retrieve the record with this zipcode 
         zipcode_query = Zipcode.all()
         zipcodes = zipcode_query.filter("zipcode =",zipcode_value)
@@ -189,12 +197,14 @@ class QueryZipPage(webapp.RequestHandler):
 	    if v.maxTa1_2090 > 160:
 		place = p1 + "Phoenix, Arizona"
 	    if v.maxTa1_2090 > 180:
-		place = "The number of days above 90 degrees in your area will be greater than any place in the present-day continental US"
+		place = "The number of days above 90 degrees in %s will be greater than any place in the present-day US" % (string.capwords(v.city))
 
 	    # fill in these template values. These variables are passed to
 	    # the webpage and rendered on the page. Look for variables of
 	    # the form {{varname}} in the html; these values replace those {{}}
 	    # placeholders
+
+
 	    template_values = {
 	    'qTrue':qTrue,
             'zipcode': v.zipcode,
@@ -233,7 +243,6 @@ class QueryZipPage(webapp.RequestHandler):
 	#     template_values={'zipcode':result.ZIPCODE}
 
 	      
-
 
         path = os.path.join(os.path.dirname(__file__), 'query_zip.html')
         self.response.out.write(template.render(path, template_values))

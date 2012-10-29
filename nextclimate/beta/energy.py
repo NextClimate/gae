@@ -124,6 +124,16 @@ class EnergyPage(webapp.RequestHandler):
 	 else:
 	     city = 'your area'
 
+	# in the future, look up the energy use information for that area
+        # right now, just assign it
+
+	aveHeatCool = 6
+	aveWater = 2
+	aveLighting = 1
+	aveAppliance = 1
+	totalEnergy = aveHeatCool + aveWater + aveLighting + aveAppliance
+	annualElectricityCosts = 1200
+	
 
 	# pull all of the actions from the table
 	# and assemble into a javascript array.
@@ -150,31 +160,40 @@ class EnergyPage(webapp.RequestHandler):
 	script_all = """<script type="text/javascript">\n """
 	# iterate over all actions
 	for a in actions:
-	    # for each action, check if user has started it
+	    # calculate the electricity costs savings as well as the GHG emissions savings from this action
+	    dollarSave = int (annualElectricityCosts * elecMod * \
+		          (1 - ((aveHeatCool*a.effectHeatCool + aveWater*a.effectWater + aveLighting*a.effectLighting + aveAppliance*a.effectAppliance ) / totalEnergy)) )
+	    emisSave = min(-1, -1 * int( 1 + totalEnergy * elecMod * \
+			    (1 - ((aveHeatCool*a.effectHeatCool + aveWater*a.effectWater + aveLighting*a.effectLighting + aveAppliance*a.effectAppliance ) / totalEnergy)) ) )
+
+	    # for each action, check if user has started it			   
 	    for ua in userActions:
 		countAction = countAction + 1
 		if (ua.actionName == a.name) and (ua.complete == "started"):
-		    script_html = """ function selectAct%d() {window.location.href='/selectAct?id=%s&type=%s&zipcode=%s&electricity=%s&heat=%s';};\n """ % (countAction, FBid, a.name, zipcode_value, electricity, heat)
+		    script_html = """ function selectAct%d() {window.location.href='/selectAct?id=%s&type=%s&zipcode=%s&electricity=%s&heat=%s&save=%s';};\n """ % (countAction, FBid, a.name, zipcode_value, electricity, heat, dollarSave)
 		    script_all = script_all + script_html
 		    button_html = """<button style='width:90px' onclick='selectAct%d()'>%s</button>""" % (countAction, "Finish It")
-		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings, button_html, 0)
+		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, %d, "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, emisSave, button_html, 0)
 		    break
 		if (ua.actionName == a.name) and (ua.complete == "complete"):
 		    button_html = "<span style='text-align:center;width:90px'>Complete!<span>"
-		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, 1, 1, 1, 1, a.savings, button_html, 1)
+		    energy_list = energy_list + """[ '%s',%f, %f, %f, %f, %d, "%s", %d],""" % (a.name, 1, 1, 1, 1, emisSave, button_html, 1)
 		    heatCoolMod = heatCoolMod * a.effectHeatCool
 		    waterMod = waterMod * a.effectWater
 		    lightingMod = lightingMod * a.effectLighting
 		    applianceMod = applianceMod * a.effectAppliance
 		    break
 	    else:
-		script_html = """ function selectAct%d() {window.location.href='/selectAct?id=%s&type=%s&zipcode=%s&electricity=%s&heat=%s';};\n """ % (countAction, FBid, a.name, zipcode_value, electricity, heat)
+		countAction = countAction + 1		
+		script_html = """ function selectAct%d() {window.location.href='/selectAct?id=%s&type=%s&zipcode=%s&electricity=%s&heat=%s&save=%s';};\n """ % (countAction, FBid, a.name, zipcode_value, electricity, heat, dollarSave)
 		script_all = script_all + script_html
 		button_html = """<button style='width:90px' onclick='selectAct%d()'>%s</button>""" % (countAction, "Learn more")
 
-		energy_list = energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, a.savings, button_html, 0)
+		energy_list = energy_list + """[ '%s',%f, %f, %f, %f, %d, "%s", %d],""" % (a.name, a.effectHeatCool, a.effectWater, a.effectLighting, a.effectAppliance, emisSave, button_html, 0)
 	     
-	energy_list = """[ '%s',%f, %f, %f, %f, '%s', "%s",%d],""" % ("No new action",heatCoolMod, waterMod, lightingMod, applianceMod, ' ',' ',1) + energy_list + """[ '%s',%f, %f, %f, %f, '%s', "%s", %d],""" % ("Your baseline",heatCoolMod, waterMod, lightingMod, applianceMod, 'NA','NA',0)
+	energy_list = """[ '%s',%f, %f, %f, %f, %d, "%s",%d],""" % ("No new action",heatCoolMod, waterMod, lightingMod, applianceMod, 0,' ',1) + energy_list + \
+	              """[ '%s',%f, %f, %f, %f, %d, "%s", %d],""" % ("Your baseline",heatCoolMod, waterMod, lightingMod, applianceMod, 0,'NA',0) + \
+		      """[ '%s',%f, %f, %f, %f, %d, "%s", %d]""" % ("Average in " + city, aveHeatCool, aveWater, aveLighting, aveAppliance, 0,'NA',0) 
 
 	script_all = script_all + """</script> """
 	template_values = {'zipcode':zipcode_value,

@@ -42,7 +42,6 @@
 	<!-- javascript
   ================================================== -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/raphael.js"></script>
     <script type="text/javascript" src="javascripts/jquery.enumerable.js"></script>
 
 
@@ -215,6 +214,7 @@
       <div id="auth-status">
 	<!-- this area is rendered if you are _not_ logged in -->
         <div id="auth-loggedout">
+	  <div class="five columns">
 	  <h5 style="margin-bottom:10px"> Log in with Facebook to join.</h5>
           <button href="#" id="auth-loginlink" class="button_fbstyle"><img src="../images/facebook_smaller.png" style="vertical-align:top">
 	    <span style="padding-left:2px" >Login</span></button>
@@ -222,6 +222,18 @@
 	  doesn't give us access to your private facebook data, and we
 	  promise to abide by
 	  our <a href="static/privacy.html">privacy policy</a>.</p>
+	  </div>
+	  <div id="five columns" style="margin-left:10px">
+	  <h5 style="margin-bottom:10px"> Skip log in for now.</h5>	    
+	  <form action='/actnow' method='get' style="display:inline; margin-bottom:0px">
+	    <input type="hidden" name="zipcode" value="{{zipcode}}">
+          <button href="#" style="height:30px" type="submit">
+	    
+	    <span style="padding-left:2px" >Continue to NextClimate</span></button>
+	  </form>
+	  <p style="font-size:0.8em"> But, when you log in with Facebook on the left, you will be able to see your friends' comments and recommendations.</p>
+	  
+	  </div>
         </div>
 	<!-- this area is rendered if you are logged in -->
         <div id="auth-loggedin" style="display:none">

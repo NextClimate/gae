@@ -24,8 +24,8 @@
 	<!-- Basic Page Needs
   ================================================== -->
 	<meta charset="utf-8">
-	<title>Our shared climate future</title>
-	<meta name="description" content="">
+	<title>Next Climate</title>
+	<meta name="description" content="NextClimate is a non-profit dedicated to inspiring people and communities to take action on climate change">
 	<meta name="author" content="">
 
 	<!-- Here is a bunch of facebook meta-data that is needed for open graph.
@@ -134,12 +134,13 @@
             if (me.name) {
                 document.getElementById('user-image').alt = me.name;
                 document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
-
+                document.getElementById('auth-loggedin').style.display = 'block';
             }
           })
         } else {
          // the user isn't logged in to Facebook.
-          window.top.location='../';          
+         // window.top.location='../';          
+              document.getElementById('auth-loggedin').style.display = 'none';
         }
       }, true);
 
@@ -158,15 +159,15 @@
                 document.getElementById('start-form-locale').value = me.locale;
                 document.getElementById('user-image').alt = me.name;
                 document.getElementById('user-image').src = 'http://graph.facebook.com/'+me.id+'/picture?width=20';
-
+                document.getElementById('auth-loggedin').style.display = 'block';
 
               }
             })
 
           } else {
             // user has not auth'd your app, or is not logged into Facebook
-            window.top.location='../';
-
+            //window.top.location='../';
+                document.getElementById('auth-loggedin').style.display = 'none';
           }
         });
 
@@ -223,7 +224,7 @@
       	  <!-- <li class='s2'><a href='static/science.html'>Science</a> </li> -->
       	  <!-- <li class='s2'><a href='static/share.html'>Share</a> </li> -->
       	  <li class='s2'><a href='static/donate.html'>Support</a></li>
-      	  <li class='s3'><a href='../' onclick='FB.logout()'><span style="vertical-align:top">Logout</span> <img id="user-image" align="middle" style="border:1px solid #222; margin-left:5px; margin-top:-5px"></img></a></li>	  
+      	  <li class='s3' id="auth-loggedin"><a href='../' onclick='FB.logout()'><span style="vertical-align:top">Logout</span> <img id="user-image" align="middle" style="border:1px solid #222; margin-left:5px; margin-top:-5px"></img></a></li>	  
       	</ul>
 	</div>
       </header>
@@ -238,7 +239,7 @@
 	<h2>{{selectName}}</h2>
 	</div>
       <div class="eight columns">
-       <h4>{{selectDesc}}</h4>
+       <h4>{{selectDesc}} You can save ${{saveVal}} off your electricity bill over the next year.</h4>
        <br> 
        <!-- show the youtube video plugin -->
        {{selectYoutube}}
@@ -265,11 +266,12 @@
 		  <input type="hidden" name="locale" id="start-form-locale">
 		  <input type="hidden" name="type" value="{{selectType}}">
 		  <input type="hidden" name="actionName" value="{{selectName}}">
-		  <input type="hidden" name="professionals" value="{{selectProfessional}}">		  
+		  <input type="hidden" name="sponsors" value="{{selectSponsors}}">		  
 		  <input type="hidden" name="heat" value="{{heat}}">
 		  <input type="hidden" name="electricity" value="{{electricity}}">
 		  <input type="hidden" name="zipcode" value="{{zipcode}}">
 		  <input type="hidden" name="start" value="1">
+		  <input type="hidden" name="save" value="{{saveVal}}">
 		  <button type="submit"><h4>Start this project</h5></button>
 		</form>
 	{% endifequal %}
@@ -280,15 +282,28 @@
 		  <input type="hidden" name="email" id="start-form-email">
 		  <input type="hidden" name="name" id="start-form-name">
 		  <input type="hidden" name="actionName" value="{{selectName}}">
+		  <input type="hidden" name="sponsors" value="{{selectSponsors}}">		  
 		  <input type="hidden" name="heat" value="{{heat}}">
 		  <input type="hidden" name="electricity" value="{{electricity}}">
 		  <input type="hidden" name="zipcode" value="{{zipcode}}">
 		  <input type="hidden" name="complete" value="1">
 		  <button type="submit"><h4>I've finished it!</h4></button>
+		</form>
 	{% endifequal %}
 
 	{% ifequal status 'complete' %}
-	<!-- User has completed action. Perhaps share with others? -->
+	<!-- User has completed action. Perhaps share with others? Should not get here. -->
+	{% endifequal %}
+
+
+	{% ifequal status 'no_user' %}
+	<!-- There is no user associated with session. Do not render start button. Offer to send back. -->
+		<form action='/energy' method='get' style="display: inline; margin-bottom: 0px;">
+		  <input type="hidden" name="heat" value="{{heat}}">
+		  <input type="hidden" name="electricity" value="{{electricity}}">
+		  <input type="hidden" name="zipcode" value="{{zipcode}}">
+		  <button type="submit"><h4>Back to other options</h4></button>
+		</form>	
 	{% endifequal %}
 	
 	<!-- </div> -->

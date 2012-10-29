@@ -12,6 +12,17 @@ builtins:
 # goes down this lists and executes the first match.
 
 handlers:
+
+# this is for uploading robots.txt
+- url: /robots.txt
+  static_files: static/robots.txt
+  upload: static/robots.txt
+
+# this is for uploading sitemap.xml
+- url: /sitemap.xml
+  static_files: static/sitemap.xml
+  upload: static/stiemap.xml
+
 # this is for uploading data to the datastore. not for users.
 - url: /remote_api
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py

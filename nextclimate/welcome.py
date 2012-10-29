@@ -67,28 +67,36 @@ import selectAct
 import beta.selectAct
 import authUser
 import beta.authUser
+import offset
+import beta.offset
 
 applications = {
     'localhost:8081': webapp.WSGIApplication([('/', beta.base.WelcomePage),
 					      ('/queryZip', beta.query_zip.QueryZipPage),
+					      (r'/queryZip/[0-9]{5}/', beta.query_zip.QueryZipPage),
 					      ('/authUser', beta.authUser.AuthUserPage), 
 					      ('/actnow', beta.actnow.ActNowPage),
 					      ('/energy', beta.energy.EnergyPage),
-					      ('/selectAct', beta.selectAct.SelectActPage)
+					      ('/selectAct', beta.selectAct.SelectActPage),
+					      ('/offset', beta.offset.OffsetPage)					      
 					      ]),
     'www.nextclimate.org': webapp.WSGIApplication([('/', WelcomePage),
 						   ('/queryZip', query_zip.QueryZipPage),
+						   (r'/queryZip/[0-9]{5}/', query_zip.QueryZipPage),
 						   ('/authUser', authUser.AuthUserPage), 
 						   ('/actnow', actnow.ActNowPage),
 						   ('/energy', energy.EnergyPage),
-						   ('/selectAct', selectAct.SelectActPage)
+						   ('/selectAct', selectAct.SelectActPage),
+						   ('/offset', offset.OffsetPage)					      
 						   ]),
     'beta.nextclimate.org': webapp.WSGIApplication([('/', beta.base.WelcomePage),
 						    ('/queryZip', beta.query_zip.QueryZipPage),
+						    (r'/queryZip/[0-9]{5}/', beta.query_zip.QueryZipPage),
 						    ('/authUser', beta.authUser.AuthUserPage), 
 						    ('/actnow', beta.actnow.ActNowPage),
 						    ('/energy', beta.energy.EnergyPage),
-						    ('/selectAct', beta.selectAct.SelectActPage)
+						    ('/selectAct', beta.selectAct.SelectActPage),
+						    ('/offset', beta.offset.OffsetPage)					      
 						    ])
 }
 
