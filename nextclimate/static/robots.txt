@@ -1,0 +1,4 @@
+
+User-agent: *
+Sitemap: http://www.nextclimate.org/sitemap.xml
+
