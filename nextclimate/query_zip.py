@@ -147,11 +147,13 @@ class QueryZipPage(webapp.RequestHandler):
 	if (len(zipcode_value) > 0):
 	    qTrue = True
 	else:
-	    zipcode_value = re.findall("[0-9]{5}", self.request.path)[0]
-	    if (len(zipcode_value) == 5):
+	    zipcode_value=self.request.get('zip_code')
+	    if (len(zipcode_value) > 0):
 		qTrue = True
-
-
+	    else:
+		zipcode_value = re.findall("[0-9]{5}", self.request.path)[0]
+		if (len(zipcode_value) == 5):
+		    qTrue = True
 
 	    
 	# query the datastore, retrieve the record with this zipcode 
