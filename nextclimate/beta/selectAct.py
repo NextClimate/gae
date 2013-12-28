@@ -1,6 +1,8 @@
 
 import os
-from google.appengine.ext.webapp import template
+import jinja2
+import webapp2
+
 
 import cgi
 import datetime
@@ -14,9 +16,10 @@ import string
 
 from google.appengine.ext import db
 from google.appengine.api import users
-from google.appengine.ext import webapp
-from google.appengine.api import mail
-from google.appengine.ext.webapp.util import run_wsgi_app
+
+
+jinja_environment = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
 
 # this entity in the datastore includes the information
@@ -162,29 +165,36 @@ def get_local_professionals(zipcode, profession):
 	websites = re.findall('Website: <a href="?(.*?)"? target=_blank>', the_page)
 	rating = re.findall('</b>&nbsp;Customer Rating<br />(.*?)<p class="small"><u><b>Licensing:</b></u>', the_page)
 
-	def get_number_of_reviews(s):
-	    if (s == ''):
-		return 'No customer reviews'
-	    else:
-		percent_approve = re.findall('(.*?) would use this Company again',s)
-		number_reviews = re.findall('View (.*?) Customer Reviews',s)
-		review_website = re.findall('href="?(.*?)"', s)
-		return '''%s <a href="http://solar-estimate.org/%s" target="blank">reviews</a>, %s would use again''' % (number_reviews[0], review_website[0], percent_approve[0])
+	# change in solar-estimate.org webpage makes getting the total reviews more difficult. Need to fix this.
+	# def get_number_of_reviews(s):
+	#     if (s == ''):
+	# 	return 'No customer reviews'
+	#     else:
+	# 	percent_approve = re.findall('(.*?) would use this Company again',s)
+	# 	number_reviews = re.findall('View (.*?) Customer Reviews',s)
+	# 	review_website = re.findall('href="?(.*?)"', s)
+	# 	return '''%s <a href="http://solar-estimate.org/%s" target="blank">reviews</a>, %s would use again''' % (number_reviews[0], review_website[0], percent_approve[0])
 
-	reviews = map(get_number_of_reviews, rating)
+	# reviews = map(get_number_of_reviews, rating)
+
+	# return_string = ''
+	# for s, w, r in zip(siteNames, websites, reviews):
+	#     return_string = return_string +  ''' <li><a href="%s" target="_blank"> %s </a> <p style="padding:0px; font-size:0.8em">%s</p></li> ''' % (w,s.title(), r)
+	# return return_string
 
 	return_string = ''
-	for s, w, r in zip(siteNames, websites, reviews):
-	    return_string = return_string +  ''' <li><a href="%s" target="_blank"> %s </a> <p style="padding:0px; font-size:0.8em">%s</p></li> ''' % (w,s.title(), r)
+	for s, w in zip(siteNames, websites):
+	    return_string = return_string +  ''' <li><a href="%s" target="_blank"> %s </a> </li> ''' % (w,s.title())
 	return return_string
 
+	
 
     
 # this class is called when there is a request to /selectAct
 # it populates the selectAct.html page with the action information
 # for the energy saving action that the users has selected.
 
-class SelectActPage(webapp.RequestHandler):
+class SelectActPage(webapp2.RequestHandler):
     def get(self):
 	start_boolean = bool(self.request.get('start'))
 	FBid = self.request.get('id')
@@ -249,8 +259,10 @@ class SelectActPage(webapp.RequestHandler):
 		'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
 		}
 
-	path = os.path.join(os.path.dirname(__file__), 'selectAct.html')	    	
-        self.response.out.write(template.render(path, template_values))
+	    template = jinja_environment.get_template('selectAct.html')
+	    self.response.out.write(template.render(template_values))
+
+
 
     def post(self):
 
@@ -359,9 +371,10 @@ class SelectActPage(webapp.RequestHandler):
 			'selectMessage':'Hi, I am starting a project to improve my home\'s energy efficiency. Do you have a '+string.split(v.checklist,"|")[0].lower()+' that I could borrow?'
 		    }
 
-	    
+
 		    path = os.path.join(os.path.dirname(__file__), 'selectAct.html')	    	
-		    self.response.out.write(template.render(path, template_values))
+		    self.response.out.write(template.render(path, template_values))	    
+
 
 
 

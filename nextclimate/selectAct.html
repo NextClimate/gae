@@ -258,7 +258,7 @@
 	    <!-- </div> -->
 	    <!-- <div class="two columns"> -->
 
-  	    {% ifequal status 'new' %}
+  	    {% if status == 'new' %}
 		<form action='/selectAct' method='post' style="display: inline; margin-bottom: 0px;">
 		  <input type="hidden" name="id" id="start-form-id">
 		  <input type="hidden" name="email" id="start-form-email">
@@ -274,9 +274,9 @@
 		  <input type="hidden" name="save" value="{{saveVal}}">
 		  <button type="submit"><h4>Start this project</h5></button>
 		</form>
-	{% endifequal %}
+	{% endif %}
 
-	{% ifequal status 'started' %}
+	{% if status == 'started' %}
 		<form action='/selectAct' method='post' style="display: inline; margin-bottom: 0px;">
 		  <input type="hidden" name="id" id="start-form-id">
 		  <input type="hidden" name="email" id="start-form-email">
@@ -289,14 +289,14 @@
 		  <input type="hidden" name="complete" value="1">
 		  <button type="submit"><h4>I've finished it!</h4></button>
 		</form>
-	{% endifequal %}
+	{% endif %}
 
-	{% ifequal status 'complete' %}
+	{% if status == 'complete' %}
 	<!-- User has completed action. Perhaps share with others? Should not get here. -->
-	{% endifequal %}
+	{% endif %}
 
 
-	{% ifequal status 'no_user' %}
+	{% if status == 'no_user' %}
 	<!-- There is no user associated with session. Do not render start button. Offer to send back. -->
 		<form action='/energy' method='get' style="display: inline; margin-bottom: 0px;">
 		  <input type="hidden" name="heat" value="{{heat}}">
@@ -304,7 +304,7 @@
 		  <input type="hidden" name="zipcode" value="{{zipcode}}">
 		  <button type="submit"><h4>Back to other options</h4></button>
 		</form>	
-	{% endifequal %}
+	{% endif %}
 	
 	<!-- </div> -->
 	</div>
@@ -323,7 +323,7 @@
 
 
 	<!-- if the user hits the start button, render the facebook / twitter interface -->
-	{% ifequal status 'started' %}
+	{% if status == 'started' %}
 	<div class="row six columns">
 
 	  <h4>Do you have what you'll need?</h4>
@@ -352,7 +352,7 @@
 		</div>
 		</div>
 	</div>
-	{% endifequal %}
+	{% endif %}
 
 		<!-- end block for facebook / twitter interface -->
 

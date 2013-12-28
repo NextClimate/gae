@@ -1,6 +1,8 @@
 
 import os
-from google.appengine.ext.webapp import template
+import jinja2
+import webapp2
+
 
 import cgi
 import datetime
@@ -10,8 +12,9 @@ import string
 
 from google.appengine.ext import db
 from google.appengine.api import users
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
+
+jinja_environment = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
 
 # this class holds information about energy saving actions
@@ -90,7 +93,7 @@ def zipmsa_key(zipmsa_value=None):
 # be improved. 
 #
 
-class EnergyPage(webapp.RequestHandler):
+class EnergyPage(webapp2.RequestHandler):
     def get(self):
         zipcode_value=self.request.get('zipcode')
         electricity=self.request.get('electricity')
@@ -207,8 +210,9 @@ class EnergyPage(webapp.RequestHandler):
 
 	# there are more calculations in the javascript in energy.html
  	# user is shown what is in energy.html
-	path = os.path.join(os.path.dirname(__file__), 'energy.html')
-        self.response.out.write(template.render(path, template_values))
+	template = jinja_environment.get_template('energy.html')	      
+	self.response.out.write(template.render(template_values))
+
 
 
 

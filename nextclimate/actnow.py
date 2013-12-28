@@ -1,6 +1,8 @@
 
 import os
-from google.appengine.ext.webapp import template
+import jinja2
+import webapp2
+
 
 import cgi
 import datetime
@@ -10,8 +12,9 @@ import string
 
 from google.appengine.ext import db
 from google.appengine.api import users
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp.util import run_wsgi_app
+
+jinja_environment = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
  
 # this is a class for mapping zip codes to MSA (metro areas)
@@ -52,15 +55,14 @@ class UserNC(db.Model):
 
 
 
-class ActNowPage(webapp.RequestHandler):
+class ActNowPage(webapp2.RequestHandler):
     def get(self):
         zipcode_value=self.request.get('zipcode')
         FBid=self.request.get('id')
-
 	template_values = {'zipcode':zipcode_value}
+	template = jinja_environment.get_template('userInfo.html')	      
+	self.response.out.write(template.render(template_values))
 
-	path = os.path.join(os.path.dirname(__file__), 'userInfo.html')
-	
-        self.response.out.write(template.render(path, template_values))
+
 
 	

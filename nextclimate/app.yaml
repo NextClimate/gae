@@ -1,7 +1,8 @@
 application: nextclimate
 version: 1
-runtime: python
+runtime: python27
 api_version: 1
+threadsafe: false
 
 builtins:
 - remote_api: on
@@ -91,4 +92,8 @@ handlers:
 
 # anything else takes you to the intro page and the change to login
 - url: /.*
-  script: welcome.py
+  script: welcome.app
+
+libraries:
+- name: jinja2
+  version: latest

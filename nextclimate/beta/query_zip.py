@@ -1,5 +1,6 @@
 import os
-from google.appengine.ext.webapp import template
+import jinja2
+
 
 import cgi
 import datetime
@@ -7,12 +8,14 @@ import urllib
 import wsgiref.handlers
 import string
 import re
+import webapp2
+
 
 from google.appengine.ext import db
 from google.appengine.api import users
-from google.appengine.ext import webapp
+#from google.appengine.ext import webapp
 from google.appengine.api import mail
-from google.appengine.ext.webapp.util import run_wsgi_app
+
 
 
 # import sys, urllib, string, SOAPpy
@@ -20,6 +23,8 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 # from SOAPpy import SOAPProxy
 # from SOAPpy import *
 
+jinja_environment = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
 
 
@@ -90,7 +95,7 @@ def send_welcome_email(toEmail, toName):
 # comparing the future climate of this location to the present
 # climate of a current location. Finally, this is packaged in the variable
 # named template and pushed to 
-class QueryZipPage(webapp.RequestHandler):
+class QueryZipPage(webapp2.RequestHandler):
 
     def post(self):
 	# the welcome page does a form post with the user's info. This is
@@ -139,7 +144,9 @@ class QueryZipPage(webapp.RequestHandler):
 
 
     # execute this code at a get request
-    def get(self):
+    def get(self, zipcode_value=""):
+
+	
 	
 	# parse the zip code value out of the URL
         zipcode_value=self.request.get('zipcode_value')
@@ -244,12 +251,8 @@ class QueryZipPage(webapp.RequestHandler):
 
 	#     template_values={'zipcode':result.ZIPCODE}
 
-	      
+	template = jinja_environment.get_template('query_zip.html')	      
+        self.response.out.write(template.render(template_values))
 
-        path = os.path.join(os.path.dirname(__file__), 'query_zip.html')
-        self.response.out.write(template.render(path, template_values))
-
-	#class ZipcodeShow(webapp.RequestHandler):
-	#def 
 
 

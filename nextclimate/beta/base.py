@@ -9,7 +9,7 @@ import wsgiref.handlers
 import string
 #import json
 
-from django.utils import simplejson
+#from django.utils import simplejson
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.ext import webapp

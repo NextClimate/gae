@@ -107,18 +107,28 @@
 
     <!-- this populates the data and formats the tufte like bar graph -->
     <script type="text/javascript">
-      $(document).ready(function () {
-        jQuery('#temperature-graph').tufteBar({
-          data: [
-            [{{maxTobs_1990}}, {label: 'Our parent\'s generation '}],
-            [{{maxTa1_2050}}, {label: 'Our children\'s generation'}],
-            [{{maxTa1_2090}}, {label: 'Our grandchildren\'s generation'}],
-          ],
-          barWidth: 0.8,
-          barLabel:  function(index) { return this[0] + ' days' },
-          axisLabel: function(index) { return this[1].label },
-          color:     function(index) { return ['#FFE600', '#FF9900', '#F02311'][index] }
-        });
+      var newURL = "http://" + window.location.host + "/" + "api?zipcode_value={{zipcode}}";
+      $.getJSON(newURL,{},
+      function(data) {
+         maxTobs_1990 = data.maxTobs_1990;
+         maxTa1_2050 = data.maxTa1_2050;
+         maxTa1_2090 = data.maxTa1_2090;
+         document.getElementById('maxTb2_2090').innerHTML = data.maxTb2_2090;
+         document.getElementById('place').innerHTML = data.place;
+
+        $(document).ready(function () {
+          jQuery('#temperature-graph').tufteBar({
+           data: [
+             [maxTobs_1990, {label: 'Our parent\'s generation (1950s)'}],
+             [maxTa1_2050, {label: 'Our children\'s generation (2050s)'}],
+             [maxTa1_2090, {label: 'Grandchildren\'s generation (2090s)'}],
+           ],
+           barWidth: 0.8,
+           barLabel:  function(index) { return this[0] + ' days' },
+           axisLabel: function(index) { return this[1].label },
+           color:     function(index) { return ['#FFE600', '#FF9900', '#F02311'][index] }
+         });
+     });
    });
    </script>
 
@@ -262,15 +272,15 @@
             There will be {{maxTa1_2090}} days above 90 degrees in a year during our grandchildren\'s generation.
       </noscript>
       <div style="padding-top:25px">
-      <p><a style="text-decoration: none" href='http://www.nextclimate.org/static/science.html'>How is this calculated?</a> </p>
+      <p><a style="text-decoration: none; color:#239ADE" href='http://www.nextclimate.org/static/science.html'>How does NextClimate calculate this?</a> </p>
       </div>
       <br>
       </div>
 
     <div class="six columns ex">
       <!-- text about climate change in your local area -->
-    <h5> {{place}}.  By reducing our dependence on fossil fuels,
-      future warming in your area can be limited to {{maxTb2_2090}}
+    <h5> <span id="place"></span>.  By reducing our dependence on fossil fuels,
+      future warming in your area can be limited to <span style="color:#239ADE" id="maxTb2_2090"></span>
       days per year above 90 degrees. If
       we act now, we can protect
       our children and grandchildren from dangerous climate
