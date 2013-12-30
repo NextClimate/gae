@@ -64,7 +64,6 @@ app = webapp2.WSGIApplication([
 	webapp2.Route('/selectAct', handler=selectAct.SelectActPage),
 	webapp2.Route('/offset', handler=offset.OffsetPage),
 	webapp2.Route('/api', handler=api.Temperature), 
-	webapp2.Route('/mail', handler=mailPage), 
 	webapp2.Route('/', handler=WelcomePage, name='home'),
 
 
